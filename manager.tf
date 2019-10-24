@@ -12,7 +12,7 @@ resource "linode_instance" "drp_manager" {
   image  = "linode/centos7"
   label  = "rackn-manager-demo"
   region = "us-central"
-  type   = "g6-standard-1"
+  type   = "g6-standard-2"
   root_pass      = "r0cketsk8ts"
 
   stackscript_id = "549453"

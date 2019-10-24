@@ -11,6 +11,10 @@ dangerzone
 setup.ref
 
 linode.json
+linode.yaml
 linode/linode.json
+linode/linode.yaml
 multi-site-demo.json
+multi-site-demo.yaml
 multi-site/multi-site-demo.json
+multi-site/multi-site-demo.yaml

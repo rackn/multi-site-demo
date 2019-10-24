@@ -10,9 +10,8 @@ Templates:
       {{template "setup.tmpl" .}}
 
       # prepare machine for agent to take over
-      drpcli machines update $RS_UUID "{ \
-        \"Meta\":{\"BaseContext\":\"\", \"icon\":\"group\"}}"
-    
+      drpcli machines meta remove $RS_UUID key BaseContext
+
       exit 0
 
     Name: "clear"
