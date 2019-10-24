@@ -1,0 +1,13 @@
+Name: "discover-linode"
+Description: "Discover with Firewalld"
+Documentation: |
+  Discover plus opens ports required for Linode
+Stages:
+  - "discover"
+  - "network-firewalld"
+  - "runner-service"
+  - "complete-nobootenv"
+Meta:
+  color: "green"
+  icon: "linode"
+  title: "RackN Content"

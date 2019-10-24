@@ -9,3 +9,8 @@ dangerzone
 *.tfstate.backup
 .terraform
 setup.ref
+
+linode.json
+linode/linode.json
+multi-site-demo.json
+multi-site/multi-site-demo.json

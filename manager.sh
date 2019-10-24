@@ -27,10 +27,13 @@ echo "Setup Starting for endpoint export RS_ENDPOINT=$RS_ENDPOINT"
 drpcli contents upload rackn-license.json
 drpcli bootenvs uploadiso sledgehammer &
 
-
 drpcli catalog item install manager
 
-# ROB pull in the Linode Content Pack
+echo "Building Linode Content"
+cd linode
+drpcli contents bundle ../linode.json
+cd ..
+
 drpcli files upload linode.json to "rebar-catalog/linode/v1.0.0.json"
 drpcli plugins runaction manager buildCatalog
 drpcli contents upload $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
@@ -44,7 +47,11 @@ drpcli contents upload $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
 
 drpcli plugin_providers upload dangerzone from dangerzone
 
-drpcli contents bundle multi-site-demo.yaml && drpcli contents upload multi-site-demo.yaml
+echo "Building Multi-Site Content"
+cd multi-site
+drpcli contents bundle ../multi-site-demo.json
+cd ..
+drpcli contents upload multi-site-demo.json
 
 drpcli profiles set global set catalog_url to - <<< $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
 

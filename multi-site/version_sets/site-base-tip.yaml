@@ -15,6 +15,9 @@ Components:
 - Name: krib
   Type: ContentPackage
   Version: tip
+- Name: linode
+  Type: ContentPackage
+  Version: v1.0.0
 - Name: certs
   Type: PluginProvider
   Version: tip
@@ -24,5 +27,5 @@ Plugins:
 Prefs:
   defaultBootEnv: local
   defaultStage: none
-  defaultWorkflow: discover-base
+  defaultWorkflow: discover-linode
   unknownBootEnv: discovery
