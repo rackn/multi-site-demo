@@ -1,0 +1,12 @@
+---
+Name: "terraform-apply"
+Description: "Apply Terraform with DZ Context"
+Params:
+  terraform/plan-action: "apply"
+Tasks:
+  - "context:terraform"
+  - "terraform-apply"
+Meta:
+  icon: "sliders horizontal"
+  color: "black"
+  title: "RackN Content"

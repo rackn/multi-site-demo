@@ -1,0 +1,12 @@
+---
+Name: "linode/stackscript_id"
+Description: "linode Stackscript ID"
+Documentation: |
+  Stack Script (by ID) to use creating the node
+Schema:
+  type: integer
+  default: 549453
+Meta:
+  color: "black"
+  icon: "box"
+  title: "RackN Content"

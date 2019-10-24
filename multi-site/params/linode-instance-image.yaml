@@ -1,0 +1,12 @@
+---
+Name: "linode/instance-image"
+Description: "linode Machine Instance Type"
+Documentation: |
+  Machine Image to use in Terraform by default
+Schema:
+  type: "string"
+  default: "linode/centos7"
+Meta:
+  color: "black"
+  icon: "disk outline"
+  title: "RackN Content"

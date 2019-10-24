@@ -1,0 +1,44 @@
+---
+Id: manager-tip
+Description: "DRP Manager Only Items"
+Apply: true
+Meta:
+  icon: chess rook
+Components:
+- Name: multi-site-demo
+  Type: ContentPackage
+  Version: ignore
+- Name: rackn-catalog
+  Type: ContentPackage
+  Version: tip
+- Name: dangerzone
+  Type: PluginProvider
+  Version: ignore
+- Name: docker-context
+  Type: PluginProvider
+  Version: tip
+- Name: manager
+  Type: PluginProvider
+  Version: tip
+Global:
+  catalog_url: https://45.79.38.151:8092/files/rebar-catalog/catalog.json
+  demo/cluster-count: 3
+  linode/image: linode/centos7
+  linode/root-password: r0cketsk8ts
+  linode/stackscript_id: 549453
+  linode/type: g6-standard-1
+  network/firewalld-ports:
+  - 22/tcp
+  - 8091/tcp
+  - 8092/tcp
+  - 6443/tcp
+  - 8379/tcp
+  - 8380/tcp
+  - 10250/tcp
+Plugins:
+- Name: dangerzone
+  Provider: dangerzone
+- Name: docker-context
+  Provider: docker-context
+- Name: manager
+  Provider: manager

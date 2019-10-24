@@ -1,0 +1,10 @@
+---
+Name: "context-runner"
+Description: "Recover deleted Machines by return to Runner Context"
+Tasks:
+  - "context:runner"
+  - "context-runner"
+Meta:
+  icon: "share"
+  color: "black"
+  title: "RackN Content"

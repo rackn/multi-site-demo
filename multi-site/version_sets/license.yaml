@@ -1,0 +1,10 @@
+---
+Id: license
+Description: "RackN License"
+Apply: true
+Components:
+- Name: rackn-license
+  Type: ContentPackage
+  Version: tip
+Meta:
+  icon: law

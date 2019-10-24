@@ -1,0 +1,15 @@
+---
+Name: "terraform/state-username"
+Description: "DRP username used to save TF state files in /api/v3/files"
+Documentation: |
+  Username of the DRP account created with rights to create/update/delete files
+  This should be a limited rights account that can only access the files API
+
+  Defaults to superuser defaults.
+Schema:
+  type: "string"
+  default: "rocketskates"
+Meta:
+  color: "red"
+  icon: "user"
+  title: "RackN Content"

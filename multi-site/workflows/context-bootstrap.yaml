@@ -1,0 +1,11 @@
+Name: "context-bootstrap"
+Description: "Setup Contexts for Use"
+Documentation: |
+  Ensures that sytem can run the contexts that are defined
+Stages:
+  - "context-bootstrap"
+  - "complete-nobootenv"
+Meta:
+  color: "purple"
+  icon: "boxes"
+  title: "RackN Content"

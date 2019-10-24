@@ -1,0 +1,12 @@
+---
+Name: "linode/region"
+Description: "Linode Region"
+Documentation: |
+  Region for Linode to be used by Terraform
+Schema:
+  type: "string"
+  default: "us-west"
+Meta:
+  color: "green"
+  icon: "map outline"
+  title: "RackN Content"

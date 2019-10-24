@@ -1,0 +1,8 @@
+terraform {
+  backend "http" {
+    address = "{{ .ApiURL }}/api/v3/files/terraform-states/{{ .Machine.UUID }}"
+    username = "{{ .Param "terraform/state-username" }}"
+    password = "{{ .Param "terraform/state-password" }}"
+    skip_cert_verification = true
+  }
+}

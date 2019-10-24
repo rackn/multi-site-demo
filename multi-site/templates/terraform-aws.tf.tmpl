@@ -1,0 +1,5 @@
+provider "aws" {
+  region = "{{ .Param "aws/region" }}"
+  access_key = "{{ .Param "aws/access-key" }}"
+  secret_key = "{{ .Param "aws/secret-key" }}"
+}

@@ -1,0 +1,9 @@
+---
+Name: "runner"
+Description: "Run DRPCLI in Docker Context"
+Engine: "docker-context"
+Image: "digitalrebar-runner"
+Meta:
+  icon: "cube"
+  color: "blue"
+  title: "RackN Content"

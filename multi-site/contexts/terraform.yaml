@@ -1,0 +1,9 @@
+---
+Name: "terraform"
+Description: "Run Terraform in Docker Context"
+Engine: "docker-context"
+Image: "digitalrebar-terraform"
+Meta:
+  icon: "map"
+  color: "green"
+  title: "RackN Content"

@@ -1,0 +1,12 @@
+---
+Name: "linode/token"
+Description: "linode credential Token"
+Documentation: |
+  Token (secure) of the linode account created to be used by Terraform
+Secure: true
+Schema:
+  type: "string"
+Meta:
+  color: "red"
+  icon: "key"
+  title: "RackN Content"

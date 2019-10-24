@@ -1,0 +1,20 @@
+---
+Name: "dr-server-install"
+Description: "Install Digital Rebar Server"
+Documentation: |
+  Installs MINIMAL DRP assuming population by Multi-Site-Manager
+Documentation: |
+  Installs MINIMAL DRP assuming population by Multi-Site-Manager
+
+  Requires access to the internet to download the installer.
+
+  Future:
+    * allow download from DRP
+    * expand use of params
+Tasks:
+  - "context:"
+  - "dr-server-install"
+Meta:
+  icon: "heart"
+  color: "green"
+  title: "RackN Content"

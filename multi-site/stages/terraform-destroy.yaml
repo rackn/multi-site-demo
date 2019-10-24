@@ -1,0 +1,12 @@
+---
+Name: "terraform-destroy"
+Description: "Destroy Terraform with DZ Context"
+Params:
+  terraform/plan-action: "destroy"
+Tasks:
+  - "context:terraform"
+  - "terraform-apply"
+Meta:
+  icon: "map"
+  color: "red"
+  title: "RackN Content"

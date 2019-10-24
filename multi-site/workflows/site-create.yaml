@@ -1,0 +1,16 @@
+Name: "site-create"
+Description: "Create Remote Site using Terraform Plan"
+Documentation: |
+  Requires that operator has created a Context "dz" that can run Terraform
+Stages:
+  - "terraform-apply"
+  - "context-clear"
+  - "discover"
+  - "network-firewalld"
+  - "runner-service"
+  - "dr-server-install"
+  - "complete-nobootenv"
+Meta:
+  color: "purple"
+  icon: "sliders"
+  title: "RackN Content"
