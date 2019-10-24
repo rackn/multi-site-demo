@@ -1,0 +1,9 @@
+---
+Id: cluster-0
+Description: "Set Cluster Count to 0"
+Apply: true
+Meta:
+  icon: hashtag
+  color: black
+Global:
+  demo/cluster-count: 0

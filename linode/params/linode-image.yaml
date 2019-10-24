@@ -1,0 +1,12 @@
+---
+Name: "linode/image"
+Description: "Linode Image"
+Documentation: |
+  OS Image Type for Linode to be used by Terraform
+Schema:
+  type: "string"
+  default: "linode/centos7"
+Meta:
+  color: "black"
+  icon: "disk"
+  title: "RackN Content"

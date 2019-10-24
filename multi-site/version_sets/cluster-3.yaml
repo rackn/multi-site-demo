@@ -1,0 +1,10 @@
+---
+Id: cluster-3
+Description: "Set Cluster Count to 3"
+Apply: true
+Meta:
+  icon: hashtag
+  color: green
+Global:
+  demo/cluster-count: 3
+  
