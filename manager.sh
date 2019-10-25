@@ -38,8 +38,9 @@ drpcli catalog item install manager --version=tip
 echo "Building Linode Content"
 cd linode
 drpcli contents bundle linode.json
+mv linode.json ..
 cd ..
-drpcli contents upload linode/linode.json
+drpcli contents upload linode.json
 drpcli prefs set defaultWorkflow discover-linode unknownBootEnv discovery
 
 drpcli files upload linode.json to "rebar-catalog/linode/v1.0.0.json"
@@ -47,6 +48,7 @@ drpcli plugins runaction manager buildCatalog
 drpcli contents upload $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
 
 # cache the catalog items on the DRP Server
+drpcli profiles set global set catalog_url to - <<< $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
 (
   RS_ENDPOINT=$(terraform output drp_manager)
   drpcli catalog updateLocal 
@@ -60,10 +62,10 @@ drpcli plugin_providers upload dangerzone from dangerzone
 echo "Building Multi-Site Content"
 cd multi-site
 drpcli contents bundle multi-site-demo.json
+mv multi-site-demo.json ..
 cd ..
-drpcli contents upload multi-site/multi-site-demo.json
+drpcli contents upload multi-site-demo.json
 
-drpcli profiles set global set catalog_url to - <<< $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
 
 drpcli profiles set global set "linode/stackscript_id" to 548252
 drpcli profiles set global set "linode/image" to "linode/centos7"
