@@ -27,15 +27,15 @@ echo "Setup Starting for endpoint export RS_ENDPOINT=$RS_ENDPOINT"
 drpcli contents upload rackn-license.json
 drpcli bootenvs uploadiso sledgehammer &
 
-drpcli catalog item install drp-community-content
-drpcli catalog item install task-library
-drpcli catalog item install manager
+drpcli catalog item install drp-community-content --version=tip
+drpcli catalog item install task-library --version=tip
+drpcli catalog item install manager --version=tip
 
 echo "Building Linode Content"
 cd linode
-drpcli contents bundle ../linode.json
+drpcli contents bundle linode.json
 cd ..
-drpcli contents upload linode.json
+drpcli contents upload linode/linode.json
 drpcli prefs set defaultWorkflow discover-linode unknownBootEnv discovery
 
 drpcli files upload linode.json to "rebar-catalog/linode/v1.0.0.json"
@@ -48,19 +48,20 @@ drpcli contents upload $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
   drpcli catalog updateLocal 
   drpcli plugins runaction manager buildCatalog
   drpcli contents upload $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
+  echo "Catalog Updated and Ready for endpoint export RS_ENDPOINT=$RS_ENDPOINT"
 ) &
 
 drpcli plugin_providers upload dangerzone from dangerzone
 
 echo "Building Multi-Site Content"
 cd multi-site
-drpcli contents bundle ../multi-site-demo.json
+drpcli contents bundle multi-site-demo.json
 cd ..
-drpcli contents upload multi-site-demo.json
+drpcli contents upload multi-site/multi-site-demo.json
 
 drpcli profiles set global set catalog_url to - <<< $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
 
-drpcli profiles set global set "linode/stackscript_id" to 549453
+drpcli profiles set global set "linode/stackscript_id" to 548252
 drpcli profiles set global set "linode/image" to "linode/centos7"
 drpcli profiles set global set "linode/type" to "g6-standard-1"
 drpcli profiles set global set "linode/token" to "$LINODE_TOKEN"
@@ -103,7 +104,7 @@ echo "uploaded $(drpcli files list contexts/docker-context)"
 drpcli catalog item install docker-context
 
 echo "ADD CLUSTERS export RS_ENDPOINT=$RS_ENDPOINT"
-drpcli contents update multi-site-demo multi-site-demo.json
+drpcli contents update multi-site-demo multi-site/multi-site-demo.json
 
 # prepopulate containers
 sleep 15

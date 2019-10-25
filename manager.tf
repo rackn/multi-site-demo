@@ -15,7 +15,7 @@ resource "linode_instance" "drp_manager" {
   type   = "g6-standard-2"
   root_pass      = "r0cketsk8ts"
 
-  stackscript_id = "549453"
+  stackscript_id = "604895"
   stackscript_data = {
     "drp_version" = "stable"
     "drp_password" = "r0cketsk8ts"

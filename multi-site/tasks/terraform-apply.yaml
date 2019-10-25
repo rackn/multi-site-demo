@@ -19,7 +19,7 @@ Templates:
         type      = "{{ .Param "linode/instance-type" }}"
         root_pass = "{{ .Param "linode/root-password" }}"
 
-        stackscript_id = "548252"
+        stackscript_id = {{ .Param "linode/stackscript_id" }}
         stackscript_data = {
           "drp_ip" = "{{ .ProvisionerAddress }}"
           "drp_port" = "8091"

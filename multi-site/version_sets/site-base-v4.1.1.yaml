@@ -8,7 +8,7 @@ DRPVersion: v4.1.1
 Components:
 - Name: drp-community-content
   Type: ContentPackage
-  Version: v4.1.1
+  Version: tip
 - Name: task-library
   Type: ContentPackage
   Version: v4.1.1

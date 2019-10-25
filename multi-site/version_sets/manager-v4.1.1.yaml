@@ -16,25 +16,10 @@ Components:
   Version: ignore
 - Name: docker-context
   Type: PluginProvider
-  Version: v4.1.1
+  Version: ignore
 - Name: manager
   Type: PluginProvider
-  Version: v4.1.1
-Global:
-  catalog_url: https://45.79.38.151:8092/files/rebar-catalog/catalog.json
-  demo/cluster-count: 3
-  linode/image: linode/centos7
-  linode/root-password: r0cketsk8ts
-  linode/stackscript_id: 549453
-  linode/type: g6-standard-1
-  network/firewalld-ports:
-  - 22/tcp
-  - 8091/tcp
-  - 8092/tcp
-  - 6443/tcp
-  - 8379/tcp
-  - 8380/tcp
-  - 10250/tcp
+  Version: ignore
 Plugins:
 - Name: dangerzone
   Provider: dangerzone

@@ -5,7 +5,7 @@ Documentation: |
   Stack Script (by ID) to use creating the node
 Schema:
   type: integer
-  default: 549453
+  default: 548252
 Meta:
   color: "black"
   icon: "box"

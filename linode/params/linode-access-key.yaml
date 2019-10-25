@@ -6,6 +6,7 @@ Documentation: |
 Secure: true
 Schema:
   type: "string"
+  default: "not-set-required"
 Meta:
   color: "red"
   icon: "key"

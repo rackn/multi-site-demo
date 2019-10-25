@@ -1,7 +1,0 @@
----
-Name: complete-nobootenv
-Description: Stage that represents workflow completion without change to BootEnv
-Meta:
-  color: green
-  icon: check circle outline
-  title: Digital Rebar Community Content
