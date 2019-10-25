@@ -10,7 +10,11 @@ terraform apply -no-color -auto-approve --var="linode_token=$LINODE_TOKEN"
 RS_ENDPOINT=$(terraform output drp_manager)
 RS_IP=$(terraform output drp_ip)
 
-curl --compressed -o rackn-catalog.json https://s3-us-west-2.amazonaws.com/rebar-catalog/rackn-catalog.json
+if [[ ! -e "rackn-catalog.json" ]]; then
+  curl --compressed -o rackn-catalog.json https://s3-us-west-2.amazonaws.com/rebar-catalog/rackn-catalog.json
+else
+  echo "catalog files exist - skipping"
+fi
 
 if [[ ! -e "v4drp-install.zip" ]]; then
   curl -sfL -o v4drp-install.zip https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.1.0.zip

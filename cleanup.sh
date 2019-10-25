@@ -25,7 +25,6 @@ done
 terraform init -no-color
 terraform destroy -no-color -auto-approve --var="linode_token=$LINODE_TOKEN"
 
-rm rackn-catalog.json
 rm linode.json
 rm multi-site-demo.json
 rm digitalrebar-runner
