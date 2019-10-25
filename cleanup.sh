@@ -11,15 +11,21 @@ sites="us-central us-west us-east us-southeast"
 echo "setting machines to destroy"
 for mc in $sites;
 do
-  drpcli machines meta set Name:$mc key BaseContext to ""
-  drpcli machines workflow Name:$mc site-destroy
-  drpcli machines meta set Name:$mc key BaseContext to "terraform"
+  if drpcli machines exists Name:$mc ; then
+    drpcli machines meta set Name:$mc key BaseContext to ""
+    drpcli machines workflow Name:$mc site-destroy
+    drpcli machines meta set Name:$mc key BaseContext to "terraform"
+  else
+    echo "machine $mc already removed"
+  fi
 done
 
 echo "waiting for machines to destroy"
 for mc in $sites;
 do
-  drpcli machines wait Name:$mc Stage "complete-nobootenv" 120
+  if drpcli machines exists Name:$mc ; then
+    drpcli machines wait Name:$mc Stage "complete-nobootenv" 120
+  fi
 done
 
 terraform init -no-color
@@ -27,5 +33,5 @@ terraform destroy -no-color -auto-approve --var="linode_token=$LINODE_TOKEN"
 
 rm linode.json
 rm multi-site-demo.json
-rm digitalrebar-runner
-rm digitalrebar-terraform
+rm runner.tar
+rm terraform.tar
