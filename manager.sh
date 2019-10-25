@@ -51,7 +51,7 @@ drpcli contents upload $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
 drpcli profiles set global set catalog_url to - <<< $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
 (
   RS_ENDPOINT=$(terraform output drp_manager)
-  drpcli catalog updateLocal 
+  drpcli catalog updateLocal -c rackn-catalog.json
   drpcli plugins runaction manager buildCatalog
   drpcli contents upload $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
   echo "Catalog Updated and Ready for endpoint export RS_ENDPOINT=$RS_ENDPOINT"
