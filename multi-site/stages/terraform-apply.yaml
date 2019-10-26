@@ -1,6 +1,6 @@
 ---
 Name: "terraform-apply"
-Description: "Apply Terraform with DZ Context"
+Description: "Apply Terraform with Terraform Context"
 Params:
   terraform/plan-action: "apply"
 Tasks:

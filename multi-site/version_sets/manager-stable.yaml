@@ -10,7 +10,7 @@ Components:
   Version: ignore
 - Name: rackn-catalog
   Type: ContentPackage
-  Version: stable
+  Version: ignore
 - Name: dangerzone
   Type: PluginProvider
   Version: ignore

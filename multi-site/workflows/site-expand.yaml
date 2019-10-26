@@ -8,6 +8,7 @@ Documentation: |
 Params:
   - demo/cluster-count: 3
 Stages:
+  - "add-demo-profile"
   - "terraform-apply"
   - "complete-nobootenv"
 Meta:

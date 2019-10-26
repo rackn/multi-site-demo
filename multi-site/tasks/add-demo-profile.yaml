@@ -9,7 +9,8 @@ Templates:
       set -e
       {{template "setup.tmpl" .}}
 
-      drpcli profiles create '{
+      # has to be against REMOTE ENDPOINT, NOT LOCAL!
+      drpcli -E https://{{ .Machine.Address }}:8092 -U rocketskates -P r0cketsk8ts profiles create '{
         "Name":"k3s-demo",
         "Params":{
           "krib/cluster-profile": "k3s-demo"

@@ -1,6 +1,6 @@
 ---
 Name: "terraform-destroy"
-Description: "Destroy Terraform with DZ Context"
+Description: "Destroy Terraform with Terraform Context"
 Params:
   terraform/plan-action: "destroy"
 Tasks:
