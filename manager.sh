@@ -112,7 +112,7 @@ echo "ADD CLUSTERS export RS_ENDPOINT=$RS_ENDPOINT"
 drpcli contents update multi-site-demo multi-site-demo.json
 
 # prepopulate containers
-sleep 15
+sleep 30
 i=0
 for context in $contexts; do         
   image=$(jq -r -c -M ".[$i].Image" <<< "${raw}")

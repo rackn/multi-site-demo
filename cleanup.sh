@@ -15,6 +15,7 @@ do
     drpcli machines meta set Name:$mc key BaseContext to ""
     drpcli machines workflow Name:$mc site-destroy
     drpcli machines meta set Name:$mc key BaseContext to "terraform"
+    drpcli machines set Name:$mc param Runnable to true
   else
     echo "machine $mc already removed"
   fi
@@ -47,3 +48,6 @@ fi
 if [[ -e "terraform.tar" ]]; then
   rm terraform.tar
 fi
+
+docker rmi digitalrebar-runner
+docker rmi digitalrebar-terraform

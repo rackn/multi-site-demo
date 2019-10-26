@@ -1,7 +1,7 @@
 {
   "meta": {
     "Name": "rackn-catalog",
-    "Version": "v19.10.24-200",
+    "Version": "v19.10.25-7",
     "Description": "RackN Catalog",
     "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/rackn-catalog.json",
     "Documentation": "",
@@ -47,15 +47,15 @@
         "Id": "certs-stable",
         "Type": "catalog_items",
         "Name": "certs",
-        "ActualVersion": "v4.1.1",
+        "ActualVersion": "v4.1.2",
         "Version": "stable",
         "ContentType": "PluginProvider",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/certs/v4.1.1",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/certs/v4.1.2",
         "Shasum256": {
-          "amd64/darwin": "961cef5b50eaa4d759fb92169c2865d5e50d8a196eeca9e72d40c855f2aabdb0",
-          "amd64/linux": "137de08746687806ea0943b68d9402efc8578af85159834d4a3f853073ee38d8"
+          "amd64/darwin": "fefc0cade2d790804a0a2c00746778afce13d0d4c10f6dd97421535bb1e5012c",
+          "amd64/linux": "8ffd1dfcee8e18b57d34bea388e69f99b9ca1687620c741f3d6bef0ae86e06b5"
         },
-        "NOJQSource": "certs-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/certs/v4.1.1",
+        "NOJQSource": "certs-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/certs/v4.1.2",
         "Tip": false,
         "HotFix": true
       },
@@ -83,15 +83,15 @@
         "Id": "certs-tip",
         "Type": "catalog_items",
         "Name": "certs",
-        "ActualVersion": "v4.1.2-dev.2+g5b09db964da112ee72766f7a17d4bded67915471",
+        "ActualVersion": "v4.1.2",
         "Version": "tip",
         "ContentType": "PluginProvider",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/certs/v4.1.2-dev.2%2Bg5b09db964da112ee72766f7a17d4bded67915471",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/certs/v4.1.2",
         "Shasum256": {
-          "amd64/darwin": "4a86c23c38bf1e633895b5e0e4cb87e14d857e057098da2db316fe0fdf82bed6",
-          "amd64/linux": "917d4bbd5c39015efde4a23f99dc6c6788245bb54f3e4dfe951f08e16e1cefd9"
+          "amd64/darwin": "fefc0cade2d790804a0a2c00746778afce13d0d4c10f6dd97421535bb1e5012c",
+          "amd64/linux": "8ffd1dfcee8e18b57d34bea388e69f99b9ca1687620c741f3d6bef0ae86e06b5"
         },
-        "NOJQSource": "certs-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/certs/v4.1.2-dev.2%2Bg5b09db964da112ee72766f7a17d4bded67915471",
+        "NOJQSource": "certs-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/certs/v4.1.2",
         "Tip": true,
         "HotFix": false
       },
@@ -167,7 +167,7 @@
         "Tip": false,
         "HotFix": true
       },
-      "certs-v4.1.2-dev.2": {
+      "certs-v4.1.2": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -188,22 +188,22 @@
           "Tags": "kubernetes,enterprise,rackn,certs,certificate,roots"
         },
         "Endpoint": "",
-        "Id": "certs-v4.1.2-dev.2",
+        "Id": "certs-v4.1.2",
         "Type": "catalog_items",
         "Name": "certs",
-        "ActualVersion": "v4.1.2-dev.2+g5b09db964da112ee72766f7a17d4bded67915471",
-        "Version": "v4.1.2-dev.2",
+        "ActualVersion": "v4.1.2",
+        "Version": "v4.1.2",
         "ContentType": "PluginProvider",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/certs/v4.1.2-dev.2%2Bg5b09db964da112ee72766f7a17d4bded67915471",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/certs/v4.1.2",
         "Shasum256": {
-          "amd64/darwin": "4a86c23c38bf1e633895b5e0e4cb87e14d857e057098da2db316fe0fdf82bed6",
-          "amd64/linux": "917d4bbd5c39015efde4a23f99dc6c6788245bb54f3e4dfe951f08e16e1cefd9"
+          "amd64/darwin": "fefc0cade2d790804a0a2c00746778afce13d0d4c10f6dd97421535bb1e5012c",
+          "amd64/linux": "8ffd1dfcee8e18b57d34bea388e69f99b9ca1687620c741f3d6bef0ae86e06b5"
         },
-        "NOJQSource": "certs-v4.1.2-dev.2:::https://s3-us-west-2.amazonaws.com/rebar-catalog/certs/v4.1.2-dev.2%2Bg5b09db964da112ee72766f7a17d4bded67915471",
+        "NOJQSource": "certs-v4.1.2:::https://s3-us-west-2.amazonaws.com/rebar-catalog/certs/v4.1.2",
         "Tip": false,
         "HotFix": true
       },
-      "dev-library-stable": {
+      "classify-stable": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -213,168 +213,28 @@
           "CodeSource": "https://github.com/rackn/provision-content",
           "Color": "black",
           "Copyright": "RackN",
-          "Description": "A task and stage library for content developers",
-          "DisplayName": "Dev Library",
-          "DocUrl": "https://provision.readthedocs.io/en/latest/doc/content-packages/dev-library.html",
-          "Icon": "shopping basket",
+          "Description": "Defines custom actions on Machines if they match tests.",
+          "DisplayName": "Classify",
+          "DocUrl": "https://provision.readthedocs.io/en/latest/doc/content-packages/classify.html",
+          "Icon": "search",
           "License": "RackN",
-          "Name": "dev-library",
+          "Name": "classify",
           "Order": "1000",
           "Prerequisites": "",
-          "Tags": "advanced,rackn,tasks,linux,library,development"
+          "Tags": "advanced,enterprise,rackn,classify,linux,library"
         },
         "Endpoint": "",
-        "Id": "dev-library-stable",
+        "Id": "classify-stable",
         "Type": "catalog_items",
-        "Name": "dev-library",
-        "ActualVersion": "v4.1.1",
+        "Name": "classify",
+        "ActualVersion": "v4.1.2",
         "Version": "stable",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.1.1.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/classify/v4.1.2.json",
         "Shasum256": {
-          "any/any": "cab28d45946b4ba2b9ac6c0cc566702e7b6fc6f792c3425b9bf8edcfa28b6191"
+          "any/any": "b73808ec5b55b637cb77875baac06899987395f08c8a1e95b5fcbdf7f921e254"
         },
-        "NOJQSource": "dev-library-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.1.1.json",
-        "Tip": false,
-        "HotFix": true
-      },
-      "dev-library-tip": {
-        "Validated": false,
-        "Available": false,
-        "Errors": [],
-        "ReadOnly": false,
-        "Meta": {
-          "Author": "RackN",
-          "CodeSource": "https://github.com/rackn/provision-content",
-          "Color": "black",
-          "Copyright": "RackN",
-          "Description": "A task and stage library for content developers",
-          "DisplayName": "Dev Library",
-          "DocUrl": "https://provision.readthedocs.io/en/latest/doc/content-packages/dev-library.html",
-          "Icon": "shopping basket",
-          "License": "RackN",
-          "Name": "dev-library",
-          "Order": "1000",
-          "Prerequisites": "",
-          "Tags": "advanced,rackn,tasks,linux,library,development"
-        },
-        "Endpoint": "",
-        "Id": "dev-library-tip",
-        "Type": "catalog_items",
-        "Name": "dev-library",
-        "ActualVersion": "v4.1.2-dev.3+g770420b376f9bb184e45ebb87432ea60734a2604",
-        "Version": "tip",
-        "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.1.2-dev.3%2Bg770420b376f9bb184e45ebb87432ea60734a2604.json",
-        "Shasum256": {
-          "any/any": "0e5ab8c36ac612274c78e1c99fbb99fb96d9e7c45acf3bf7a79521e265429458"
-        },
-        "NOJQSource": "dev-library-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.1.2-dev.3%2Bg770420b376f9bb184e45ebb87432ea60734a2604.json",
-        "Tip": true,
-        "HotFix": false
-      },
-      "dev-library-v4.1.0": {
-        "Validated": false,
-        "Available": false,
-        "Errors": [],
-        "ReadOnly": false,
-        "Meta": {
-          "Author": "RackN",
-          "CodeSource": "https://github.com/rackn/provision-content",
-          "Color": "black",
-          "Copyright": "RackN",
-          "Description": "A task and stage library for content developers",
-          "DisplayName": "Dev Library",
-          "DocUrl": "https://provision.readthedocs.io/en/latest/doc/content-packages/dev-library.html",
-          "Icon": "shopping basket",
-          "License": "RackN",
-          "Name": "dev-library",
-          "Order": "1000",
-          "Prerequisites": "",
-          "Tags": "advanced,rackn,tasks,linux,library,development"
-        },
-        "Endpoint": "",
-        "Id": "dev-library-v4.1.0",
-        "Type": "catalog_items",
-        "Name": "dev-library",
-        "ActualVersion": "v4.1.0",
-        "Version": "v4.1.0",
-        "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.1.0.json",
-        "Shasum256": {
-          "any/any": "0fc2054bae1ae3a533778dba24cfe2359ca93ac48f39086a595bb751271e9b71"
-        },
-        "NOJQSource": "dev-library-v4.1.0:::https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.1.0.json",
-        "Tip": false,
-        "HotFix": false
-      },
-      "dev-library-v4.1.1": {
-        "Validated": false,
-        "Available": false,
-        "Errors": [],
-        "ReadOnly": false,
-        "Meta": {
-          "Author": "RackN",
-          "CodeSource": "https://github.com/rackn/provision-content",
-          "Color": "black",
-          "Copyright": "RackN",
-          "Description": "A task and stage library for content developers",
-          "DisplayName": "Dev Library",
-          "DocUrl": "https://provision.readthedocs.io/en/latest/doc/content-packages/dev-library.html",
-          "Icon": "shopping basket",
-          "License": "RackN",
-          "Name": "dev-library",
-          "Order": "1000",
-          "Prerequisites": "",
-          "Tags": "advanced,rackn,tasks,linux,library,development"
-        },
-        "Endpoint": "",
-        "Id": "dev-library-v4.1.1",
-        "Type": "catalog_items",
-        "Name": "dev-library",
-        "ActualVersion": "v4.1.1",
-        "Version": "v4.1.1",
-        "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.1.1.json",
-        "Shasum256": {
-          "any/any": "cab28d45946b4ba2b9ac6c0cc566702e7b6fc6f792c3425b9bf8edcfa28b6191"
-        },
-        "NOJQSource": "dev-library-v4.1.1:::https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.1.1.json",
-        "Tip": false,
-        "HotFix": true
-      },
-      "dev-library-v4.1.2-dev.3": {
-        "Validated": false,
-        "Available": false,
-        "Errors": [],
-        "ReadOnly": false,
-        "Meta": {
-          "Author": "RackN",
-          "CodeSource": "https://github.com/rackn/provision-content",
-          "Color": "black",
-          "Copyright": "RackN",
-          "Description": "A task and stage library for content developers",
-          "DisplayName": "Dev Library",
-          "DocUrl": "https://provision.readthedocs.io/en/latest/doc/content-packages/dev-library.html",
-          "Icon": "shopping basket",
-          "License": "RackN",
-          "Name": "dev-library",
-          "Order": "1000",
-          "Prerequisites": "",
-          "Tags": "advanced,rackn,tasks,linux,library,development"
-        },
-        "Endpoint": "",
-        "Id": "dev-library-v4.1.2-dev.3",
-        "Type": "catalog_items",
-        "Name": "dev-library",
-        "ActualVersion": "v4.1.2-dev.3+g770420b376f9bb184e45ebb87432ea60734a2604",
-        "Version": "v4.1.2-dev.3",
-        "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.1.2-dev.3%2Bg770420b376f9bb184e45ebb87432ea60734a2604.json",
-        "Shasum256": {
-          "any/any": "0e5ab8c36ac612274c78e1c99fbb99fb96d9e7c45acf3bf7a79521e265429458"
-        },
-        "NOJQSource": "dev-library-v4.1.2-dev.3:::https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.1.2-dev.3%2Bg770420b376f9bb184e45ebb87432ea60734a2604.json",
+        "NOJQSource": "classify-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/classify/v4.1.2.json",
         "Tip": false,
         "HotFix": true
       },
@@ -402,15 +262,15 @@
         "Id": "docker-context-stable",
         "Type": "catalog_items",
         "Name": "docker-context",
-        "ActualVersion": "v4.1.1",
+        "ActualVersion": "v4.1.2",
         "Version": "stable",
         "ContentType": "PluginProvider",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/docker-context/v4.1.1",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/docker-context/v4.1.2",
         "Shasum256": {
-          "amd64/darwin": "c99bc88f5d1c2a7484e3eddf5e54f044e788be0da759acc3fb5a4143df26d2dd",
-          "amd64/linux": "de1b9dc21764c2382a3ceda33813d1de82e3f460514699035fc1feecea8a3842"
+          "amd64/darwin": "f4a46749ba41f6df4f08b7fea18473c45059e9f64874c45f510f7a93a5d6704e",
+          "amd64/linux": "faa4a9e9a0f8026113890a3683056a1435d3f01faae0969165c4a137bbdd140a"
         },
-        "NOJQSource": "docker-context-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/docker-context/v4.1.1",
+        "NOJQSource": "docker-context-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/docker-context/v4.1.2",
         "Tip": false,
         "HotFix": true
       },
@@ -438,16 +298,52 @@
         "Id": "docker-context-tip",
         "Type": "catalog_items",
         "Name": "docker-context",
-        "ActualVersion": "v4.1.2-dev.2+g5ac3534a9b4f8869b88d9aebf5556ea1f8a21695",
+        "ActualVersion": "v4.1.2",
         "Version": "tip",
         "ContentType": "PluginProvider",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/docker-context/v4.1.2-dev.2%2Bg5ac3534a9b4f8869b88d9aebf5556ea1f8a21695",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/docker-context/v4.1.2",
         "Shasum256": {
-          "amd64/darwin": "14fad9b3024ac50e8a36ddf2d4ed143f8acbdb50f74e0c45f12bca04659c8349",
-          "amd64/linux": "85054870c781766afa57d5a76eedf6dc1ea35a6e8169c15fc7022179dbf8ceb8"
+          "amd64/darwin": "f4a46749ba41f6df4f08b7fea18473c45059e9f64874c45f510f7a93a5d6704e",
+          "amd64/linux": "faa4a9e9a0f8026113890a3683056a1435d3f01faae0969165c4a137bbdd140a"
         },
-        "NOJQSource": "docker-context-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/docker-context/v4.1.2-dev.2%2Bg5ac3534a9b4f8869b88d9aebf5556ea1f8a21695",
+        "NOJQSource": "docker-context-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/docker-context/v4.1.2",
         "Tip": true,
+        "HotFix": false
+      },
+      "docker-context-v4.1.0": {
+        "Validated": false,
+        "Available": false,
+        "Errors": [],
+        "ReadOnly": false,
+        "Meta": {
+          "Author": "RackN",
+          "CodeSource": "https://github.com/rackn/provision-plugins",
+          "Color": "black",
+          "Copyright": "RackN",
+          "Description": "Manage OCI container-based execution contexts",
+          "DisplayName": "Docker (OCI) Execution Context",
+          "DocUrl": "",
+          "Icon": "boxes",
+          "License": "",
+          "Name": "docker-context",
+          "Order": "1000",
+          "Prerequisites": "",
+          "Tags": "enterprise,context,integration"
+        },
+        "Endpoint": "",
+        "Id": "docker-context-v4.1.0",
+        "Type": "catalog_items",
+        "Name": "docker-context",
+        "ActualVersion": "v4.1.0",
+        "Version": "v4.1.0",
+        "ContentType": "PluginProvider",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/docker-context/v4.1.0",
+        "Shasum256": {
+          "amd64/darwin": "1d36258efa5cc67178fbfb1c97ced39d14fdf7b0baa0935955b9152fda6c5dae",
+          "amd64/linux": "9e5afb49e2b77955203b7d4d283a5cc00923be31b2bd279091c04edf6fddf88f"
+        },
+        "NOJQSource": "docker-context-v4.1.0:::https://s3-us-west-2.amazonaws.com/rebar-catalog/docker-context/v4.1.0",
+        "Tip": false,
         "HotFix": false
       },
       "docker-context-v4.1.1": {
@@ -486,7 +382,7 @@
         "Tip": false,
         "HotFix": true
       },
-      "docker-context-v4.1.2-beta.0": {
+      "docker-context-v4.1.2": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -507,90 +403,18 @@
           "Tags": "enterprise,context,integration"
         },
         "Endpoint": "",
-        "Id": "docker-context-v4.1.2-beta.0",
+        "Id": "docker-context-v4.1.2",
         "Type": "catalog_items",
         "Name": "docker-context",
-        "ActualVersion": "v4.1.2-beta.0+g08a2f5197693dc4366cb6840f7ce4aa69f669efa",
-        "Version": "v4.1.2-beta.0",
+        "ActualVersion": "v4.1.2",
+        "Version": "v4.1.2",
         "ContentType": "PluginProvider",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/docker-context/v4.1.2-beta.0%2Bg08a2f5197693dc4366cb6840f7ce4aa69f669efa",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/docker-context/v4.1.2",
         "Shasum256": {
-          "amd64/darwin": "f9effee2d9198bbad9bf396ad5de81e08a8a3d650313c83880d629e7269b0574",
-          "amd64/linux": "8899bf41b7e3e23f4bee79b7dd3d1c562d580c15423e9dca5096a8de886f9bd0"
+          "amd64/darwin": "f4a46749ba41f6df4f08b7fea18473c45059e9f64874c45f510f7a93a5d6704e",
+          "amd64/linux": "faa4a9e9a0f8026113890a3683056a1435d3f01faae0969165c4a137bbdd140a"
         },
-        "NOJQSource": "docker-context-v4.1.2-beta.0:::https://s3-us-west-2.amazonaws.com/rebar-catalog/docker-context/v4.1.2-beta.0%2Bg08a2f5197693dc4366cb6840f7ce4aa69f669efa",
-        "Tip": false,
-        "HotFix": false
-      },
-      "docker-context-v4.1.2-beta.2": {
-        "Validated": false,
-        "Available": false,
-        "Errors": [],
-        "ReadOnly": false,
-        "Meta": {
-          "Author": "RackN",
-          "CodeSource": "https://github.com/rackn/provision-plugins",
-          "Color": "black",
-          "Copyright": "RackN",
-          "Description": "Manage OCI container-based execution contexts",
-          "DisplayName": "Docker (OCI) Execution Context",
-          "DocUrl": "",
-          "Icon": "boxes",
-          "License": "",
-          "Name": "docker-context",
-          "Order": "1000",
-          "Prerequisites": "",
-          "Tags": "enterprise,context,integration"
-        },
-        "Endpoint": "",
-        "Id": "docker-context-v4.1.2-beta.2",
-        "Type": "catalog_items",
-        "Name": "docker-context",
-        "ActualVersion": "v4.1.2-beta.2+gcf2c6dc3fd0903965c08f6a7bb885615c84745af",
-        "Version": "v4.1.2-beta.2",
-        "ContentType": "PluginProvider",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/docker-context/v4.1.2-beta.2%2Bgcf2c6dc3fd0903965c08f6a7bb885615c84745af",
-        "Shasum256": {
-          "amd64/darwin": "ddf4e54a50d7c84d033b2bb76d4dc2441ee7a90e090869241621e21fc72dcf9d",
-          "amd64/linux": "39d5d1b119ece990e9fde3bd7aee757407d381193a2dd5ec5033c20aea3c7870"
-        },
-        "NOJQSource": "docker-context-v4.1.2-beta.2:::https://s3-us-west-2.amazonaws.com/rebar-catalog/docker-context/v4.1.2-beta.2%2Bgcf2c6dc3fd0903965c08f6a7bb885615c84745af",
-        "Tip": false,
-        "HotFix": true
-      },
-      "docker-context-v4.1.2-dev.2": {
-        "Validated": false,
-        "Available": false,
-        "Errors": [],
-        "ReadOnly": false,
-        "Meta": {
-          "Author": "RackN",
-          "CodeSource": "https://github.com/rackn/provision-plugins",
-          "Color": "black",
-          "Copyright": "RackN",
-          "Description": "Manage OCI container-based execution contexts",
-          "DisplayName": "Docker (OCI) Execution Context",
-          "DocUrl": "",
-          "Icon": "boxes",
-          "License": "",
-          "Name": "docker-context",
-          "Order": "1000",
-          "Prerequisites": "",
-          "Tags": "enterprise,context,integration"
-        },
-        "Endpoint": "",
-        "Id": "docker-context-v4.1.2-dev.2",
-        "Type": "catalog_items",
-        "Name": "docker-context",
-        "ActualVersion": "v4.1.2-dev.2+g5ac3534a9b4f8869b88d9aebf5556ea1f8a21695",
-        "Version": "v4.1.2-dev.2",
-        "ContentType": "PluginProvider",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/docker-context/v4.1.2-dev.2%2Bg5ac3534a9b4f8869b88d9aebf5556ea1f8a21695",
-        "Shasum256": {
-          "amd64/darwin": "14fad9b3024ac50e8a36ddf2d4ed143f8acbdb50f74e0c45f12bca04659c8349",
-          "amd64/linux": "85054870c781766afa57d5a76eedf6dc1ea35a6e8169c15fc7022179dbf8ceb8"
-        },
-        "NOJQSource": "docker-context-v4.1.2-dev.2:::https://s3-us-west-2.amazonaws.com/rebar-catalog/docker-context/v4.1.2-dev.2%2Bg5ac3534a9b4f8869b88d9aebf5556ea1f8a21695",
+        "NOJQSource": "docker-context-v4.1.2:::https://s3-us-west-2.amazonaws.com/rebar-catalog/docker-context/v4.1.2",
         "Tip": false,
         "HotFix": true
       },
@@ -618,14 +442,14 @@
         "Id": "drp-community-content-stable",
         "Type": "catalog_items",
         "Name": "drp-community-content",
-        "ActualVersion": "v4.1.1",
+        "ActualVersion": "v4.1.2",
         "Version": "stable",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.1.1.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.1.2.json",
         "Shasum256": {
-          "any/any": "2205035d108948c209a519d2fcddc52683a221fa17bd0a9abbc3536d4ca99a31"
+          "any/any": "856bcd7dc876ac9be16c322cab6c008c278ee4adfc47639f878fecdffe22e44d"
         },
-        "NOJQSource": "drp-community-content-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.1.1.json",
+        "NOJQSource": "drp-community-content-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.1.2.json",
         "Tip": false,
         "HotFix": true
       },
@@ -653,14 +477,14 @@
         "Id": "drp-community-content-tip",
         "Type": "catalog_items",
         "Name": "drp-community-content",
-        "ActualVersion": "v4.1.2-dev.3+g770420b376f9bb184e45ebb87432ea60734a2604",
+        "ActualVersion": "v4.1.2",
         "Version": "tip",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.1.2-dev.3%2Bg770420b376f9bb184e45ebb87432ea60734a2604.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.1.2.json",
         "Shasum256": {
-          "any/any": "e2a61c2810942fed49a5bd0451c83fe5a02c61790574fa8e90bce48580b82b2f"
+          "any/any": "856bcd7dc876ac9be16c322cab6c008c278ee4adfc47639f878fecdffe22e44d"
         },
-        "NOJQSource": "drp-community-content-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.1.2-dev.3%2Bg770420b376f9bb184e45ebb87432ea60734a2604.json",
+        "NOJQSource": "drp-community-content-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.1.2.json",
         "Tip": true,
         "HotFix": false
       },
@@ -734,7 +558,7 @@
         "Tip": false,
         "HotFix": true
       },
-      "drp-community-content-v4.1.2-dev.3": {
+      "drp-community-content-v4.1.2": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -755,51 +579,17 @@
           "Tags": "base,community,linux,APL,quick-start,ssh"
         },
         "Endpoint": "",
-        "Id": "drp-community-content-v4.1.2-dev.3",
+        "Id": "drp-community-content-v4.1.2",
         "Type": "catalog_items",
         "Name": "drp-community-content",
-        "ActualVersion": "v4.1.2-dev.3+g770420b376f9bb184e45ebb87432ea60734a2604",
-        "Version": "v4.1.2-dev.3",
+        "ActualVersion": "v4.1.2",
+        "Version": "v4.1.2",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.1.2-dev.3%2Bg770420b376f9bb184e45ebb87432ea60734a2604.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.1.2.json",
         "Shasum256": {
-          "any/any": "e2a61c2810942fed49a5bd0451c83fe5a02c61790574fa8e90bce48580b82b2f"
+          "any/any": "856bcd7dc876ac9be16c322cab6c008c278ee4adfc47639f878fecdffe22e44d"
         },
-        "NOJQSource": "drp-community-content-v4.1.2-dev.3:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.1.2-dev.3%2Bg770420b376f9bb184e45ebb87432ea60734a2604.json",
-        "Tip": false,
-        "HotFix": true
-      },
-      "drp-stable": {
-        "Validated": false,
-        "Available": false,
-        "Errors": [],
-        "ReadOnly": false,
-        "Meta": {
-          "Author": "RackN",
-          "CodeSource": "https://github.com/digitalrebar/provision",
-          "Color": "black",
-          "Copyright": "RackN",
-          "DisplayName": "Digital Rebar Provision",
-          "DocUrl": "https://provision.readthedocs.io/en/latest/",
-          "Icon": "cube",
-          "License": "APLv2",
-          "Name": "drp",
-          "Order": "1",
-          "Prerequisites": "",
-          "Tags": "drp,endpoint,rackn,service"
-        },
-        "Endpoint": "",
-        "Id": "drp-stable",
-        "Type": "catalog_items",
-        "Name": "drp",
-        "ActualVersion": "v4.1.1",
-        "Version": "stable",
-        "ContentType": "DRP",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.1.1.zip",
-        "Shasum256": {
-          "any/any": "9ff207210241ce45ad73c13ee7c1a58e7004f50815d963623155d572383c2f12"
-        },
-        "NOJQSource": "drp-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.1.1.zip",
+        "NOJQSource": "drp-community-content-v4.1.2:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.1.2.json",
         "Tip": false,
         "HotFix": true
       },
@@ -826,15 +616,49 @@
         "Id": "drp-tip",
         "Type": "catalog_items",
         "Name": "drp",
-        "ActualVersion": "v4.1.2-beta.2+g79b19a4bb6274c037f1a38f36df8f9e9fe02eb38",
+        "ActualVersion": "v4.1.2",
         "Version": "tip",
         "ContentType": "DRP",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.1.2-beta.2%2Bg79b19a4bb6274c037f1a38f36df8f9e9fe02eb38.zip",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.1.2.zip",
         "Shasum256": {
-          "any/any": "4b810a5e9bc3ed4d2ce6b67d06607d2ae5918af2aa4ae546095209fc540c9d24"
+          "any/any": "135770b779ac51e669ee13943f1e46926e9c09587613fbe626120500ecc27759"
         },
-        "NOJQSource": "drp-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.1.2-beta.2%2Bg79b19a4bb6274c037f1a38f36df8f9e9fe02eb38.zip",
+        "NOJQSource": "drp-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.1.2.zip",
         "Tip": true,
+        "HotFix": false
+      },
+      "drp-v4.1.0": {
+        "Validated": false,
+        "Available": false,
+        "Errors": [],
+        "ReadOnly": false,
+        "Meta": {
+          "Author": "RackN",
+          "CodeSource": "https://github.com/digitalrebar/provision",
+          "Color": "black",
+          "Copyright": "RackN",
+          "DisplayName": "Digital Rebar Provision",
+          "DocUrl": "https://provision.readthedocs.io/en/latest/",
+          "Icon": "cube",
+          "License": "APLv2",
+          "Name": "drp",
+          "Order": "1",
+          "Prerequisites": "",
+          "Tags": "drp,endpoint,rackn,service"
+        },
+        "Endpoint": "",
+        "Id": "drp-v4.1.0",
+        "Type": "catalog_items",
+        "Name": "drp",
+        "ActualVersion": "v4.1.0",
+        "Version": "v4.1.0",
+        "ContentType": "DRP",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.1.0.zip",
+        "Shasum256": {
+          "any/any": "05b9d8e46896dffe712d7a0f6b05bd1ce63eb50f9de5442c2e352a2831feee4c"
+        },
+        "NOJQSource": "drp-v4.1.0:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.1.0.zip",
+        "Tip": false,
         "HotFix": false
       },
       "drp-v4.1.1": {
@@ -871,7 +695,7 @@
         "Tip": false,
         "HotFix": true
       },
-      "drp-v4.1.2-beta.0": {
+      "drp-v4.1.2": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -891,51 +715,17 @@
           "Tags": "drp,endpoint,rackn,service"
         },
         "Endpoint": "",
-        "Id": "drp-v4.1.2-beta.0",
+        "Id": "drp-v4.1.2",
         "Type": "catalog_items",
         "Name": "drp",
-        "ActualVersion": "v4.1.2-beta.0+g33586a7186c895c80943d523d2e10a89eb2641a7",
-        "Version": "v4.1.2-beta.0",
+        "ActualVersion": "v4.1.2",
+        "Version": "v4.1.2",
         "ContentType": "DRP",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.1.2-beta.0%2Bg33586a7186c895c80943d523d2e10a89eb2641a7.zip",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.1.2.zip",
         "Shasum256": {
-          "any/any": "2e0c56469516102eccbbd7a128c98a2e025efe3da8c808d8dbf5ee213fdc6276"
+          "any/any": "135770b779ac51e669ee13943f1e46926e9c09587613fbe626120500ecc27759"
         },
-        "NOJQSource": "drp-v4.1.2-beta.0:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.1.2-beta.0%2Bg33586a7186c895c80943d523d2e10a89eb2641a7.zip",
-        "Tip": false,
-        "HotFix": false
-      },
-      "drp-v4.1.2-beta.2": {
-        "Validated": false,
-        "Available": false,
-        "Errors": [],
-        "ReadOnly": false,
-        "Meta": {
-          "Author": "RackN",
-          "CodeSource": "https://github.com/digitalrebar/provision",
-          "Color": "black",
-          "Copyright": "RackN",
-          "DisplayName": "Digital Rebar Provision",
-          "DocUrl": "https://provision.readthedocs.io/en/latest/",
-          "Icon": "cube",
-          "License": "APLv2",
-          "Name": "drp",
-          "Order": "1",
-          "Prerequisites": "",
-          "Tags": "drp,endpoint,rackn,service"
-        },
-        "Endpoint": "",
-        "Id": "drp-v4.1.2-beta.2",
-        "Type": "catalog_items",
-        "Name": "drp",
-        "ActualVersion": "v4.1.2-beta.2+g79b19a4bb6274c037f1a38f36df8f9e9fe02eb38",
-        "Version": "v4.1.2-beta.2",
-        "ContentType": "DRP",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.1.2-beta.2%2Bg79b19a4bb6274c037f1a38f36df8f9e9fe02eb38.zip",
-        "Shasum256": {
-          "any/any": "4b810a5e9bc3ed4d2ce6b67d06607d2ae5918af2aa4ae546095209fc540c9d24"
-        },
-        "NOJQSource": "drp-v4.1.2-beta.2:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.1.2-beta.2%2Bg79b19a4bb6274c037f1a38f36df8f9e9fe02eb38.zip",
+        "NOJQSource": "drp-v4.1.2:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.1.2.zip",
         "Tip": false,
         "HotFix": true
       },
@@ -962,16 +752,16 @@
         "Id": "drpcli-stable",
         "Type": "catalog_items",
         "Name": "drpcli",
-        "ActualVersion": "v4.1.1",
+        "ActualVersion": "v4.1.2",
         "Version": "stable",
         "ContentType": "DRPCLI",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.1.1",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.1.2",
         "Shasum256": {
-          "amd64/darwin": "db9b9e2a8c8217609131412ac8a26f1a8f79f6708635bf7b63ce69e9383db344",
-          "amd64/linux": "58cf936cc6928413d0de2de47f0f345cb109f328bf34bd9246ed65940e64a334",
-          "amd64/windows": "46826136ef44fe73645292d4b684f9fde7578a2461fb751ad20d5696396493a7"
+          "amd64/darwin": "aa180a978b070d8ac363dcac44138678abd87a113561a1eae9eda1287e6a9fd4",
+          "amd64/linux": "95426426ea5c3e4ada5077c1d4219850d115aa621ce66ccdaa5f4db82da5ed4f",
+          "amd64/windows": "b92f5a49fe8dadb1441c8ed0bf6067cf60f9c1ab11fe2d0fc1bc595375859878"
         },
-        "NOJQSource": "drpcli-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.1.1",
+        "NOJQSource": "drpcli-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.1.2",
         "Tip": false,
         "HotFix": true
       },
@@ -998,17 +788,53 @@
         "Id": "drpcli-tip",
         "Type": "catalog_items",
         "Name": "drpcli",
-        "ActualVersion": "v4.1.2-dev.6+g24d64f53e3da7e75aca8183b3f0e5c7c31c4ef5f",
+        "ActualVersion": "v4.1.2",
         "Version": "tip",
         "ContentType": "DRPCLI",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.1.2-dev.6%2Bg24d64f53e3da7e75aca8183b3f0e5c7c31c4ef5f",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.1.2",
         "Shasum256": {
-          "amd64/darwin": "19b5ee4b0639baab827514a467c4cfe308a14095b4d9119b643aacd7852f6092",
-          "amd64/linux": "5c66a85a2f014a41daa6f5ab32d8a0e1eac7eafaa1a5fb3a90764bd0f74ec2b7",
-          "amd64/windows": "fcbbcb2cac426002c6e9707b71d0e790563c64b518aca4ebc7c32224fa200e95"
+          "amd64/darwin": "aa180a978b070d8ac363dcac44138678abd87a113561a1eae9eda1287e6a9fd4",
+          "amd64/linux": "95426426ea5c3e4ada5077c1d4219850d115aa621ce66ccdaa5f4db82da5ed4f",
+          "amd64/windows": "b92f5a49fe8dadb1441c8ed0bf6067cf60f9c1ab11fe2d0fc1bc595375859878"
         },
-        "NOJQSource": "drpcli-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.1.2-dev.6%2Bg24d64f53e3da7e75aca8183b3f0e5c7c31c4ef5f",
+        "NOJQSource": "drpcli-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.1.2",
         "Tip": true,
+        "HotFix": false
+      },
+      "drpcli-v4.1.0": {
+        "Validated": false,
+        "Available": false,
+        "Errors": [],
+        "ReadOnly": false,
+        "Meta": {
+          "Author": "RackN",
+          "CodeSource": "https://github.com/rackn/provision-ux",
+          "Color": "black",
+          "Copyright": "RackN",
+          "DisplayName": "Digital Rebar Provision CLI",
+          "DocUrl": "https://provision.readthedocs.io/en/latest/",
+          "Icon": "setting",
+          "License": "RackN",
+          "Name": "drpcli",
+          "Order": "1",
+          "Prerequisites": "",
+          "Tags": "drp,ux,rackn"
+        },
+        "Endpoint": "",
+        "Id": "drpcli-v4.1.0",
+        "Type": "catalog_items",
+        "Name": "drpcli",
+        "ActualVersion": "v4.1.0",
+        "Version": "v4.1.0",
+        "ContentType": "DRPCLI",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.1.0",
+        "Shasum256": {
+          "amd64/darwin": "34a8246061af0fab6fdcd17aed64f9fa6766da0a220b6631c6bc6ea91177b0d1",
+          "amd64/linux": "02405fd65c6c52d08d4a18aee39981e4004ac9c0bf70a57c474670071e2f8337",
+          "amd64/windows": "8df01e3d8badbc05298c8ce7c982e1956eedd31c75ccc3d1b6dfc7b890c1ac78"
+        },
+        "NOJQSource": "drpcli-v4.1.0:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.1.0",
+        "Tip": false,
         "HotFix": false
       },
       "drpcli-v4.1.1": {
@@ -1047,7 +873,7 @@
         "Tip": false,
         "HotFix": true
       },
-      "drpcli-v4.1.2-beta.0": {
+      "drpcli-v4.1.2": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -1067,91 +893,19 @@
           "Tags": "drp,ux,rackn"
         },
         "Endpoint": "",
-        "Id": "drpcli-v4.1.2-beta.0",
+        "Id": "drpcli-v4.1.2",
         "Type": "catalog_items",
         "Name": "drpcli",
-        "ActualVersion": "v4.1.2-beta.0+gebb2a3682ed85a4c482eda8611cb4f02a4265a47",
-        "Version": "v4.1.2-beta.0",
+        "ActualVersion": "v4.1.2",
+        "Version": "v4.1.2",
         "ContentType": "DRPCLI",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.1.2-beta.0%2Bgebb2a3682ed85a4c482eda8611cb4f02a4265a47",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.1.2",
         "Shasum256": {
-          "amd64/darwin": "88d3c3bddf58a7d59a94201f0d77c7cbc1390dcbcbbdf15e67b0b8600de62518",
-          "amd64/linux": "c02539cdcfe79a346bf92bfcaaa11e5a76934a95fabc2415ea860a0b20122537",
-          "amd64/windows": "5f07cf4d102a9943fa2c9ff1d19e813f8592382b3084b7f81ef57eb03829fb0f"
+          "amd64/darwin": "aa180a978b070d8ac363dcac44138678abd87a113561a1eae9eda1287e6a9fd4",
+          "amd64/linux": "95426426ea5c3e4ada5077c1d4219850d115aa621ce66ccdaa5f4db82da5ed4f",
+          "amd64/windows": "b92f5a49fe8dadb1441c8ed0bf6067cf60f9c1ab11fe2d0fc1bc595375859878"
         },
-        "NOJQSource": "drpcli-v4.1.2-beta.0:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.1.2-beta.0%2Bgebb2a3682ed85a4c482eda8611cb4f02a4265a47",
-        "Tip": false,
-        "HotFix": false
-      },
-      "drpcli-v4.1.2-dev.4": {
-        "Validated": false,
-        "Available": false,
-        "Errors": [],
-        "ReadOnly": false,
-        "Meta": {
-          "Author": "RackN",
-          "CodeSource": "https://github.com/rackn/provision-ux",
-          "Color": "black",
-          "Copyright": "RackN",
-          "DisplayName": "Digital Rebar Provision CLI",
-          "DocUrl": "https://provision.readthedocs.io/en/latest/",
-          "Icon": "setting",
-          "License": "RackN",
-          "Name": "drpcli",
-          "Order": "1",
-          "Prerequisites": "",
-          "Tags": "drp,ux,rackn"
-        },
-        "Endpoint": "",
-        "Id": "drpcli-v4.1.2-dev.4",
-        "Type": "catalog_items",
-        "Name": "drpcli",
-        "ActualVersion": "v4.1.2-dev.4+g14cdf678307a0d2658ca664da2db03c577e49688",
-        "Version": "v4.1.2-dev.4",
-        "ContentType": "DRPCLI",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.1.2-dev.4%2Bg14cdf678307a0d2658ca664da2db03c577e49688",
-        "Shasum256": {
-          "amd64/darwin": "9e8e90da3c0c9de70243aa2a18e459e68aad873d20ed0f4ccb73444ccec68356",
-          "amd64/linux": "53603d584aa8a5ba22866931807ce22a55546ee2d0ae13a4ad27c4fa5abe11c1",
-          "amd64/windows": "38c4b171b29c2a5fa5abef612bd8263c77bcda74035533b6194e51e4b9122d25"
-        },
-        "NOJQSource": "drpcli-v4.1.2-dev.4:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.1.2-dev.4%2Bg14cdf678307a0d2658ca664da2db03c577e49688",
-        "Tip": false,
-        "HotFix": true
-      },
-      "drpcli-v4.1.2-dev.6": {
-        "Validated": false,
-        "Available": false,
-        "Errors": [],
-        "ReadOnly": false,
-        "Meta": {
-          "Author": "RackN",
-          "CodeSource": "https://github.com/rackn/provision-ux",
-          "Color": "black",
-          "Copyright": "RackN",
-          "DisplayName": "Digital Rebar Provision CLI",
-          "DocUrl": "https://provision.readthedocs.io/en/latest/",
-          "Icon": "setting",
-          "License": "RackN",
-          "Name": "drpcli",
-          "Order": "1",
-          "Prerequisites": "",
-          "Tags": "drp,ux,rackn"
-        },
-        "Endpoint": "",
-        "Id": "drpcli-v4.1.2-dev.6",
-        "Type": "catalog_items",
-        "Name": "drpcli",
-        "ActualVersion": "v4.1.2-dev.6+g24d64f53e3da7e75aca8183b3f0e5c7c31c4ef5f",
-        "Version": "v4.1.2-dev.6",
-        "ContentType": "DRPCLI",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.1.2-dev.6%2Bg24d64f53e3da7e75aca8183b3f0e5c7c31c4ef5f",
-        "Shasum256": {
-          "amd64/darwin": "19b5ee4b0639baab827514a467c4cfe308a14095b4d9119b643aacd7852f6092",
-          "amd64/linux": "5c66a85a2f014a41daa6f5ab32d8a0e1eac7eafaa1a5fb3a90764bd0f74ec2b7",
-          "amd64/windows": "fcbbcb2cac426002c6e9707b71d0e790563c64b518aca4ebc7c32224fa200e95"
-        },
-        "NOJQSource": "drpcli-v4.1.2-dev.6:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.1.2-dev.6%2Bg24d64f53e3da7e75aca8183b3f0e5c7c31c4ef5f",
+        "NOJQSource": "drpcli-v4.1.2:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.1.2",
         "Tip": false,
         "HotFix": true
       },
@@ -1179,14 +933,14 @@
         "Id": "krib-stable",
         "Type": "catalog_items",
         "Name": "krib",
-        "ActualVersion": "v4.1.1",
+        "ActualVersion": "v4.1.2",
         "Version": "stable",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/krib/v4.1.1.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/krib/v4.1.2.json",
         "Shasum256": {
-          "any/any": "3bac1ffbd94dd668af988328a4939ad369c6536f87a62b470b347310d520f4a5"
+          "any/any": "ba6d720a6f5b0eec2128020dacf8ac51170e2408a173d390d7a3765b7d101952"
         },
-        "NOJQSource": "krib-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/krib/v4.1.1.json",
+        "NOJQSource": "krib-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/krib/v4.1.2.json",
         "Tip": false,
         "HotFix": true
       },
@@ -1214,14 +968,14 @@
         "Id": "krib-tip",
         "Type": "catalog_items",
         "Name": "krib",
-        "ActualVersion": "v4.1.2-dev.3+g770420b376f9bb184e45ebb87432ea60734a2604",
+        "ActualVersion": "v4.1.2",
         "Version": "tip",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/krib/v4.1.2-dev.3%2Bg770420b376f9bb184e45ebb87432ea60734a2604.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/krib/v4.1.2.json",
         "Shasum256": {
-          "any/any": "84c36b7bd08e3ed8bdfa85c677fdcb71627d957a2a685bdd78c906da103d37f6"
+          "any/any": "ba6d720a6f5b0eec2128020dacf8ac51170e2408a173d390d7a3765b7d101952"
         },
-        "NOJQSource": "krib-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/krib/v4.1.2-dev.3%2Bg770420b376f9bb184e45ebb87432ea60734a2604.json",
+        "NOJQSource": "krib-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/krib/v4.1.2.json",
         "Tip": true,
         "HotFix": false
       },
@@ -1295,7 +1049,7 @@
         "Tip": false,
         "HotFix": true
       },
-      "krib-v4.1.2-dev.3": {
+      "krib-v4.1.2": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -1316,17 +1070,53 @@
           "Tags": "kubernetes,linux,rackn"
         },
         "Endpoint": "",
-        "Id": "krib-v4.1.2-dev.3",
+        "Id": "krib-v4.1.2",
         "Type": "catalog_items",
         "Name": "krib",
-        "ActualVersion": "v4.1.2-dev.3+g770420b376f9bb184e45ebb87432ea60734a2604",
-        "Version": "v4.1.2-dev.3",
+        "ActualVersion": "v4.1.2",
+        "Version": "v4.1.2",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/krib/v4.1.2-dev.3%2Bg770420b376f9bb184e45ebb87432ea60734a2604.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/krib/v4.1.2.json",
         "Shasum256": {
-          "any/any": "84c36b7bd08e3ed8bdfa85c677fdcb71627d957a2a685bdd78c906da103d37f6"
+          "any/any": "ba6d720a6f5b0eec2128020dacf8ac51170e2408a173d390d7a3765b7d101952"
         },
-        "NOJQSource": "krib-v4.1.2-dev.3:::https://s3-us-west-2.amazonaws.com/rebar-catalog/krib/v4.1.2-dev.3%2Bg770420b376f9bb184e45ebb87432ea60734a2604.json",
+        "NOJQSource": "krib-v4.1.2:::https://s3-us-west-2.amazonaws.com/rebar-catalog/krib/v4.1.2.json",
+        "Tip": false,
+        "HotFix": true
+      },
+      "manager-stable": {
+        "Validated": false,
+        "Available": false,
+        "Errors": [],
+        "ReadOnly": false,
+        "Meta": {
+          "Author": "RackN",
+          "CodeSource": "https://github.com/rackn/provision-plugins",
+          "Color": "black",
+          "Copyright": "RackN",
+          "Description": "Plugin that enables a single DRP to manage other DRP instances",
+          "DisplayName": "Multi-Site Manager",
+          "DocUrl": "https://provision.readthedocs.io/en/latest/doc/content-packages/manager.html",
+          "Icon": "chess rook",
+          "License": "RackN",
+          "Name": "manager",
+          "Order": "700",
+          "Prerequisites": "",
+          "Tags": "experimental,rackn,drp,manager,multi-site,edge"
+        },
+        "Endpoint": "",
+        "Id": "manager-stable",
+        "Type": "catalog_items",
+        "Name": "manager",
+        "ActualVersion": "v4.1.2",
+        "Version": "stable",
+        "ContentType": "PluginProvider",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/manager/v4.1.2",
+        "Shasum256": {
+          "amd64/darwin": "4e5c12efb65bf350cbec2751fa846fcecdde864a31b7e3fdc3427a81f829c920",
+          "amd64/linux": "269f07b6960153c025cf69cd9c1104d7123e586da891f6d1bd625527d9a4da71"
+        },
+        "NOJQSource": "manager-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/manager/v4.1.2",
         "Tip": false,
         "HotFix": true
       },
@@ -1354,16 +1144,52 @@
         "Id": "manager-tip",
         "Type": "catalog_items",
         "Name": "manager",
-        "ActualVersion": "v4.1.2-dev.2+g5ac3534a9b4f8869b88d9aebf5556ea1f8a21695",
+        "ActualVersion": "v4.1.2",
         "Version": "tip",
         "ContentType": "PluginProvider",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/manager/v4.1.2-dev.2%2Bg5ac3534a9b4f8869b88d9aebf5556ea1f8a21695",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/manager/v4.1.2",
         "Shasum256": {
-          "amd64/darwin": "33fab80b8d7bf033f866640fa554969ec4665c1060e3585515412f86cda539b5",
-          "amd64/linux": "38352de931106ac44cfe5e71e448df9fd5cc13581d3a1115827ad363ae9b9fd9"
+          "amd64/darwin": "4e5c12efb65bf350cbec2751fa846fcecdde864a31b7e3fdc3427a81f829c920",
+          "amd64/linux": "269f07b6960153c025cf69cd9c1104d7123e586da891f6d1bd625527d9a4da71"
         },
-        "NOJQSource": "manager-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/manager/v4.1.2-dev.2%2Bg5ac3534a9b4f8869b88d9aebf5556ea1f8a21695",
+        "NOJQSource": "manager-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/manager/v4.1.2",
         "Tip": true,
+        "HotFix": false
+      },
+      "manager-v4.1.0": {
+        "Validated": false,
+        "Available": false,
+        "Errors": [],
+        "ReadOnly": false,
+        "Meta": {
+          "Author": "RackN",
+          "CodeSource": "https://github.com/rackn/provision-plugins",
+          "Color": "black",
+          "Copyright": "RackN",
+          "Description": "Plugin that enables a single DRP to manage other DRP instances",
+          "DisplayName": "Multi-Site Manager",
+          "DocUrl": "https://provision.readthedocs.io/en/latest/doc/content-packages/manager.html",
+          "Icon": "chess rook",
+          "License": "RackN",
+          "Name": "manager",
+          "Order": "700",
+          "Prerequisites": "",
+          "Tags": "experimental,rackn,drp,manager,multi-site,edge"
+        },
+        "Endpoint": "",
+        "Id": "manager-v4.1.0",
+        "Type": "catalog_items",
+        "Name": "manager",
+        "ActualVersion": "v4.1.0",
+        "Version": "v4.1.0",
+        "ContentType": "PluginProvider",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/manager/v4.1.0",
+        "Shasum256": {
+          "amd64/darwin": "cafeaf741c0de56b19db091cf7b69cf9acd585069eb12f06a8570c6ccb10cfe9",
+          "amd64/linux": "45becbdb50c486e524acf7a8b74692ece509ce0b6c70ccc114d2e86cadc32f1d"
+        },
+        "NOJQSource": "manager-v4.1.0:::https://s3-us-west-2.amazonaws.com/rebar-catalog/manager/v4.1.0",
+        "Tip": false,
         "HotFix": false
       },
       "manager-v4.1.1": {
@@ -1402,7 +1228,7 @@
         "Tip": false,
         "HotFix": true
       },
-      "manager-v4.1.2-beta.0": {
+      "manager-v4.1.2": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -1423,90 +1249,18 @@
           "Tags": "experimental,rackn,drp,manager,multi-site,edge"
         },
         "Endpoint": "",
-        "Id": "manager-v4.1.2-beta.0",
+        "Id": "manager-v4.1.2",
         "Type": "catalog_items",
         "Name": "manager",
-        "ActualVersion": "v4.1.2-beta.0+g08a2f5197693dc4366cb6840f7ce4aa69f669efa",
-        "Version": "v4.1.2-beta.0",
+        "ActualVersion": "v4.1.2",
+        "Version": "v4.1.2",
         "ContentType": "PluginProvider",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/manager/v4.1.2-beta.0%2Bg08a2f5197693dc4366cb6840f7ce4aa69f669efa",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/manager/v4.1.2",
         "Shasum256": {
-          "amd64/darwin": "8d6defbd5512ef9005d664409e6ea8d8ad76ac2201515ab9781063f3e8f6a005",
-          "amd64/linux": "65420f69076f55a3d5b8dce54515873c0a34ab45470f0c8218b26e8922e030c4"
+          "amd64/darwin": "4e5c12efb65bf350cbec2751fa846fcecdde864a31b7e3fdc3427a81f829c920",
+          "amd64/linux": "269f07b6960153c025cf69cd9c1104d7123e586da891f6d1bd625527d9a4da71"
         },
-        "NOJQSource": "manager-v4.1.2-beta.0:::https://s3-us-west-2.amazonaws.com/rebar-catalog/manager/v4.1.2-beta.0%2Bg08a2f5197693dc4366cb6840f7ce4aa69f669efa",
-        "Tip": false,
-        "HotFix": false
-      },
-      "manager-v4.1.2-beta.2": {
-        "Validated": false,
-        "Available": false,
-        "Errors": [],
-        "ReadOnly": false,
-        "Meta": {
-          "Author": "RackN",
-          "CodeSource": "https://github.com/rackn/provision-plugins",
-          "Color": "black",
-          "Copyright": "RackN",
-          "Description": "Plugin that enables a single DRP to manage other DRP instances",
-          "DisplayName": "Multi-Site Manager",
-          "DocUrl": "https://provision.readthedocs.io/en/latest/doc/content-packages/manager.html",
-          "Icon": "chess rook",
-          "License": "RackN",
-          "Name": "manager",
-          "Order": "700",
-          "Prerequisites": "",
-          "Tags": "experimental,rackn,drp,manager,multi-site,edge"
-        },
-        "Endpoint": "",
-        "Id": "manager-v4.1.2-beta.2",
-        "Type": "catalog_items",
-        "Name": "manager",
-        "ActualVersion": "v4.1.2-beta.2+gcf2c6dc3fd0903965c08f6a7bb885615c84745af",
-        "Version": "v4.1.2-beta.2",
-        "ContentType": "PluginProvider",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/manager/v4.1.2-beta.2%2Bgcf2c6dc3fd0903965c08f6a7bb885615c84745af",
-        "Shasum256": {
-          "amd64/darwin": "a568bc2a577f23aba9425e8c95040e85c425ecec7ae875509d8eb497e1e579ea",
-          "amd64/linux": "fb9d68ee13241e428ddd86732e78c41418bba1dae396a7aaf80031c115948de2"
-        },
-        "NOJQSource": "manager-v4.1.2-beta.2:::https://s3-us-west-2.amazonaws.com/rebar-catalog/manager/v4.1.2-beta.2%2Bgcf2c6dc3fd0903965c08f6a7bb885615c84745af",
-        "Tip": false,
-        "HotFix": true
-      },
-      "manager-v4.1.2-dev.2": {
-        "Validated": false,
-        "Available": false,
-        "Errors": [],
-        "ReadOnly": false,
-        "Meta": {
-          "Author": "RackN",
-          "CodeSource": "https://github.com/rackn/provision-plugins",
-          "Color": "black",
-          "Copyright": "RackN",
-          "Description": "Plugin that enables a single DRP to manage other DRP instances",
-          "DisplayName": "Multi-Site Manager",
-          "DocUrl": "https://provision.readthedocs.io/en/latest/doc/content-packages/manager.html",
-          "Icon": "chess rook",
-          "License": "RackN",
-          "Name": "manager",
-          "Order": "700",
-          "Prerequisites": "",
-          "Tags": "experimental,rackn,drp,manager,multi-site,edge"
-        },
-        "Endpoint": "",
-        "Id": "manager-v4.1.2-dev.2",
-        "Type": "catalog_items",
-        "Name": "manager",
-        "ActualVersion": "v4.1.2-dev.2+g5ac3534a9b4f8869b88d9aebf5556ea1f8a21695",
-        "Version": "v4.1.2-dev.2",
-        "ContentType": "PluginProvider",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/manager/v4.1.2-dev.2%2Bg5ac3534a9b4f8869b88d9aebf5556ea1f8a21695",
-        "Shasum256": {
-          "amd64/darwin": "33fab80b8d7bf033f866640fa554969ec4665c1060e3585515412f86cda539b5",
-          "amd64/linux": "38352de931106ac44cfe5e71e448df9fd5cc13581d3a1115827ad363ae9b9fd9"
-        },
-        "NOJQSource": "manager-v4.1.2-dev.2:::https://s3-us-west-2.amazonaws.com/rebar-catalog/manager/v4.1.2-dev.2%2Bg5ac3534a9b4f8869b88d9aebf5556ea1f8a21695",
+        "NOJQSource": "manager-v4.1.2:::https://s3-us-west-2.amazonaws.com/rebar-catalog/manager/v4.1.2",
         "Tip": false,
         "HotFix": true
       },
@@ -1534,14 +1288,14 @@
         "Id": "task-library-stable",
         "Type": "catalog_items",
         "Name": "task-library",
-        "ActualVersion": "v4.1.1",
+        "ActualVersion": "v4.1.2",
         "Version": "stable",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.1.1.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.1.2.json",
         "Shasum256": {
-          "any/any": "3834567b0baca400e27a883bff4e2a7f555c15a53009fd5691f9d3d21735e1e8"
+          "any/any": "cefcc6e3226e39005f4054b3b502da9b5ae6f09fe925402c7023b124d137b2ee"
         },
-        "NOJQSource": "task-library-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.1.1.json",
+        "NOJQSource": "task-library-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.1.2.json",
         "Tip": false,
         "HotFix": true
       },
@@ -1569,14 +1323,14 @@
         "Id": "task-library-tip",
         "Type": "catalog_items",
         "Name": "task-library",
-        "ActualVersion": "v4.1.2-dev.3+g770420b376f9bb184e45ebb87432ea60734a2604",
+        "ActualVersion": "v4.1.2",
         "Version": "tip",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.1.2-dev.3%2Bg770420b376f9bb184e45ebb87432ea60734a2604.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.1.2.json",
         "Shasum256": {
-          "any/any": "52ca3898cb7c4dafce15fcad3ddfd16df05dd58ca30316127d47981473fd57dc"
+          "any/any": "cefcc6e3226e39005f4054b3b502da9b5ae6f09fe925402c7023b124d137b2ee"
         },
-        "NOJQSource": "task-library-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.1.2-dev.3%2Bg770420b376f9bb184e45ebb87432ea60734a2604.json",
+        "NOJQSource": "task-library-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.1.2.json",
         "Tip": true,
         "HotFix": false
       },
@@ -1650,7 +1404,7 @@
         "Tip": false,
         "HotFix": true
       },
-      "task-library-v4.1.2-dev.3": {
+      "task-library-v4.1.2": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -1671,17 +1425,17 @@
           "Tags": "base,rackn,tasks,linux,library"
         },
         "Endpoint": "",
-        "Id": "task-library-v4.1.2-dev.3",
+        "Id": "task-library-v4.1.2",
         "Type": "catalog_items",
         "Name": "task-library",
-        "ActualVersion": "v4.1.2-dev.3+g770420b376f9bb184e45ebb87432ea60734a2604",
-        "Version": "v4.1.2-dev.3",
+        "ActualVersion": "v4.1.2",
+        "Version": "v4.1.2",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.1.2-dev.3%2Bg770420b376f9bb184e45ebb87432ea60734a2604.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.1.2.json",
         "Shasum256": {
-          "any/any": "52ca3898cb7c4dafce15fcad3ddfd16df05dd58ca30316127d47981473fd57dc"
+          "any/any": "cefcc6e3226e39005f4054b3b502da9b5ae6f09fe925402c7023b124d137b2ee"
         },
-        "NOJQSource": "task-library-v4.1.2-dev.3:::https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.1.2-dev.3%2Bg770420b376f9bb184e45ebb87432ea60734a2604.json",
+        "NOJQSource": "task-library-v4.1.2:::https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.1.2.json",
         "Tip": false,
         "HotFix": true
       }

@@ -7,15 +7,22 @@ Templates:
       # RackN Copyright 2019
 
       set -e
-      {{template "setup.tmpl" .}}
 
-      # has to be against REMOTE ENDPOINT, NOT LOCAL!
-      drpcli -E https://{{ .Machine.Address }}:8092 -U rocketskates -P r0cketsk8ts profiles create '{
-        "Name":"k3s-demo",
-        "Params":{
-          "krib/cluster-profile": "k3s-demo"
-        }
-      }'
+      curl -X POST \
+        --user rocketskates:r0cketsk8ts \
+        --insecure \
+        -H "Content-Type: application/json" \
+        -d '{"Name":"k3s-demo",
+          "Description":"LOCAL Writable Profile for k3s build",
+          "Params":{
+            "krib/cluster-profile": "k3s-demo"
+          },
+          "Meta":{
+            "icon":"ship",
+            "color":"blue"
+          }
+        }' \
+        https://{{ .Machine.Address }}:8092/api/v3/profiles
 
       exit 0
 
