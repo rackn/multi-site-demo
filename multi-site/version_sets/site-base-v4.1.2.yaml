@@ -1,0 +1,31 @@
+---
+Id: site-base-v4.1.2
+Description: "Core Components needed by all Sites"
+Apply: true
+Meta:
+  icon: paw
+DRPVersion: v4.1.2
+Components:
+- Name: drp-community-content
+  Type: ContentPackage
+  Version: tip
+- Name: task-library
+  Type: ContentPackage
+  Version: v4.1.2
+- Name: krib
+  Type: ContentPackage
+  Version: v4.1.2
+- Name: linode
+  Type: ContentPackage
+  Version: v1.0.0
+- Name: certs
+  Type: PluginProvider
+  Version: v4.1.2
+Plugins:
+- Name: certs
+  Provider: certs
+Prefs:
+  defaultBootEnv: local
+  defaultStage: none
+  defaultWorkflow: discover-linode
+  unknownBootEnv: discovery

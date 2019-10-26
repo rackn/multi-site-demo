@@ -1,0 +1,9 @@
+---
+Name: "add-demo-profile"
+Description: "Add k3s-demo Profile to Edge"
+Tasks:
+  - "add-demo-profile"
+Meta:
+  icon: "ship"
+  color: "black"
+  title: "RackN Content"

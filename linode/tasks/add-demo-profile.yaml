@@ -1,0 +1,26 @@
+---
+Name: "add-demo-profile"
+Description: "Add k3s-demo profile"
+Templates:
+  - Contents: |-
+      #!/bin/bash
+      # RackN Copyright 2019
+
+      set -e
+      {{template "setup.tmpl" .}}
+
+      drpcli profiles create '{
+        "Name":"k3s-demo",
+        "Params":{
+          "krib/cluster-profile": "k3s-demo"
+        }
+      }'
+
+      exit 0
+
+    Name: "k3s-demo"
+Meta:
+  icon: "spy"
+  color: "purple"
+  title: "Digital Rebar Community Content"
+  feature-flags: "sane-exit-codes"

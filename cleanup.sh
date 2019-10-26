@@ -31,7 +31,19 @@ done
 terraform init -no-color
 terraform destroy -no-color -auto-approve --var="linode_token=$LINODE_TOKEN"
 
-rm linode.json
-rm multi-site-demo.json
-rm runner.tar
-rm terraform.tar
+
+if [[ -e "linode.json" ]]; then
+  rm linode.json
+fi
+
+if [[ -e "multi-site-demo.json" ]]; then
+  rm multi-site-demo.json
+fi
+
+if [[ -e "runner.tar" ]]; then
+  rm runner.tar
+fi
+
+if [[ -e "terraform.tar" ]]; then
+  rm terraform.tar
+fi

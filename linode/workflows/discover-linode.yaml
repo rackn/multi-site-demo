@@ -5,6 +5,7 @@ Documentation: |
 Stages:
   - "discover"
   - "network-firewalld"
+  - "add-demo-profile"
   - "runner-service"
   - "complete-nobootenv"
 Meta:
