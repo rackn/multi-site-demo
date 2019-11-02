@@ -24,9 +24,9 @@ Operation
 
 To setup the base site:
 
-  # Define LINODE_TOKEN
-  # Run the `manager.sh` command
-  # Login to your Endpoint(s)
+  1. Define LINODE_TOKEN
+  1. Run the `manager.sh` command
+  1. Login to your Endpoint(s)
   
 Once the machines are checked in as endpoints:
 
