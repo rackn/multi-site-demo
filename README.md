@@ -12,7 +12,7 @@ Prerequists
 The following files are required in the project root directory:
    * drpcli (v4.1 or later)
    * dangerzone plugin binary (available by request from RackN for trial purposes)
-   * RackN License file
+   * RackN License file (you can generate via self-service)
    * export LINODE_TOKEN=[your access token]
 
 You can bypass the dangerzone plugin requirement by installing Docker on your host by hand.  Dangerzone (which was not public at the time of the video) is only used for bootstrapping the manager host to run Docker.
