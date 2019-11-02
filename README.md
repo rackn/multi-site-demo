@@ -11,7 +11,7 @@ Prerequists
 
 The following files are required in the project root directory:
    * drpcli (v4.1 or later)
-   * dangerzone plugin binary
+   * dangerzone plugin binary (available by request from RackN for trial purposes)
    * RackN License file
    * export LINODE_TOKEN=[your access token]
 
