@@ -4,6 +4,13 @@
 
 set -e
 
+if [[ "$LINODE_TOKEN" == "" ]]; then
+    echo "you must export LINODE_TOKEN=[your token]"
+    exit 1
+else
+    echo "ready, LINODE_TOKEN set!"
+fi
+
 terraform init -no-color
 terraform apply -no-color -auto-approve --var="linode_token=$LINODE_TOKEN"
 
@@ -141,6 +148,7 @@ for mc in $sites;
 do
   echo "Adding $mc to install DRP"
   drpcli machines wait Name:$mc Stage "complete-nobootenv" 180
+  sleep 5
   machine=$(drpcli machines show Name:$mc)
   ip=$(jq -r -c -M .Address <<< "${machine}")
   echo "Adding $mc to Endpoints List"
