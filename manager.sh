@@ -1,8 +1,29 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # RackN Copyright 2019
 # Build Manager Demo
 
+export PATH=$PATH:$PWD
+
+check_tools() {
+  local tools=$*
+  local tool=""
+  local xit=""
+  for tool in $tools; do
+    if which $tool > /dev/null; then
+      echo "Found required tool:  $tool"
+    else
+      echo ">>> MISSING <<< required dependency tool:  $tool"
+      xit=fail
+    fi
+  done
+
+
+  [[ -n $xit ]] && exit 1 || echo "All necessary tools found."
+}
+
 set -e
+
+check_tools jq drpcli terraform curl docker dangerzone
 
 if [[ "$LINODE_TOKEN" == "" ]]; then
     echo "you must export LINODE_TOKEN=[your token]"
@@ -14,8 +35,8 @@ fi
 terraform init -no-color
 terraform apply -no-color -auto-approve --var="linode_token=$LINODE_TOKEN"
 
-RS_ENDPOINT=$(terraform output drp_manager)
-RS_IP=$(terraform output drp_ip)
+export RS_ENDPOINT=$(terraform output drp_manager)
+export RS_IP=$(terraform output drp_ip)
 
 if [[ ! -e "rackn-catalog.json" ]]; then
   curl --compressed -o rackn-catalog.json https://s3-us-west-2.amazonaws.com/rebar-catalog/rackn-catalog.json
@@ -25,12 +46,13 @@ fi
 
 if [[ ! -e "v4drp-install.zip" ]]; then
   curl -sfL -o v4drp-install.zip https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.1.0.zip
-  curl -sfL -o install.sh https://get.rebar.digital/tip
+  curl -sfL -o install.sh get.rebar.digital/tip
 else
   echo "install files exist - skipping"
 fi
 
 echo "Waiting for endpoint export RS_ENDPOINT=$RS_ENDPOINT"
+echo ">>> NOTE: 'Failed connect ...' messages are normal."
 sleep 10
 timeout 300 bash -c 'while [[ "$(curl -fsSLk -o /dev/null -w %{http_code} ${RS_ENDPOINT})" != "200" ]]; do sleep 5; done' || false
 
@@ -44,8 +66,7 @@ drpcli catalog item install manager --version=tip
 
 echo "Building Linode Content"
 cd linode
-drpcli contents bundle linode.json
-mv linode.json ..
+drpcli contents bundle ../linode.json
 cd ..
 drpcli contents upload linode.json
 drpcli prefs set defaultWorkflow discover-linode unknownBootEnv discovery
@@ -85,7 +106,8 @@ drpcli profiles set global param "network/firewalld-ports" to '[
 
 echo "BOOTSTRAP export RS_ENDPOINT=$RS_ENDPOINT"
 
-if ! drpcli machines exists Name:bootstrap ; then
+if ! drpcli machines exists Name:bootstrap > /dev/null; then
+  echo "Creating bootstrap machine object"
   drpcli machines create '{"Name":"bootstrap",
     "Workflow": "context-bootstrap",
     "Meta":{"BaseContext": "bootstrapper", "icon":"bolt"}}'
@@ -133,7 +155,7 @@ done
 sites="us-central us-west us-east us-southeast"
 for mc in $sites;
 do
-  if ! drpcli machines exists Name:$mc ; then
+  if ! drpcli machines exists Name:$mc > /dev/null; then
     echo "Creating $mc"
     drpcli machines create "{\"Name\":\"${mc}\", \
       \"Workflow\":\"site-create\",

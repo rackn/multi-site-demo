@@ -11,13 +11,13 @@ sites="us-central us-west us-east us-southeast"
 echo "setting machines to destroy"
 for mc in $sites;
 do
-  if drpcli machines exists Name:$mc ; then
+  if drpcli machines exists Name:$mc > /dev/null; then
     drpcli machines meta set Name:$mc key BaseContext to ""
     drpcli machines workflow Name:$mc site-destroy
     drpcli machines meta set Name:$mc key BaseContext to "terraform"
     drpcli machines set Name:$mc param Runnable to true
   else
-    echo "machine $mc already removed"
+    echo "machine $mc already does not exist"
   fi
 done
 
