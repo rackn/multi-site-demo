@@ -28,7 +28,7 @@ video) is only used for bootstrapping the manager host to run Docker.
 You must also have Terraform and Docker installed.
 
 For complete prerequisites information, please see the **Prerequisites
-Overview** below.
+Details** below.
 
 Operation
 ---------
@@ -43,8 +43,8 @@ Once the machines are checked in as endpoints:
 
   * TBD
 
-Prerequists Overview
---------------------
+Prerequists Details
+-------------------
 
 These prerequisites are specific to Linux.  They can be adapted to setup the
 requirements for MacOS X as well.  Please note that certain components are
