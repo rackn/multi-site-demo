@@ -15,6 +15,10 @@ that VM for control of the infrastructure.
 Prerequists Overview
 --------------------
 
+The following applications are required to be in your path:
+   * docker
+   * terraform
+
 The following files are required in the project root directory:
    * drpcli (v4.1 or later)
    * dangerzone plugin binary (available by request from RackN for trial purposes)
