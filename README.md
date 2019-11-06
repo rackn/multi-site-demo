@@ -52,10 +52,11 @@ ONLY available from RackN directly and you will not be able to complete these
 steps without contacting RackN.  Please email support@rackn.com for more
 details.
 
-Create a Linode Token if you haven't already from:
-https://cloud.linode.com/profile/tokens
+Create a Linode Token if you haven't already at: https://cloud.linode.com/profile/tokens
 
-# from your laptop/workstation - prep your bootstrap manager
+From your laptop/workstation - prep your bootstrap manager.
+
+```
 export MGR=<IP_of_your_bootstrap_VM>
 
 # make prep directory where github code and artifacts will be copied to
@@ -67,19 +68,25 @@ ssh root@$MGR "mkdir -p multi-site-demo"
 
 # copy your license file to Linode Manager
 scp ~/Downloads/rackn-license.json root@$MGR:./multi-site-demo/
+```
 
-# build dangerzone - MUST BE RACKN employee / git repo access
+Build dangerzone plugin - MUST BE RACKN employee / or have git repo access.
+```
 git clone https://github.com/rackn/provision-server.git
 cd provision-server
 export GOOS=linux
 export GOARCH=amd64
 tools/build-one.sh cmds/dangerzone
 scp bin/$GOOS/$GOARCH/dangerzone root@$MGR:./multi-site-demo/
+```
 
-# connect to your bootstrap manager VM
+Login / connect to your bootstrap manager VM.
+```
 ssh root@$MGR
+```
 
-# FROM the bootstrap manager
+FROM the bootstrap manager, setup the multi-site demo prerequisites.
+```
 git clone https://github.com/rackn/multi-site-demo/
 cd multi-site-demo
 curl -s -o drpcli https://rebar-catalog.s3-us-west-2.amazonaws.com/drpcli/v4.1.2/amd64/linux/drpcli
@@ -89,4 +96,10 @@ yum -y install unzip jq docker
 unzip tf.zip
 chmod 755 terraform drpcli
 rm tf.zip
+```
+IMPORTANT: set your``LINODE_TOKEN` environment variable!!!!
+```
 export LINODE_TOKEN=<<<YOUR_SECRET_TOKEN>>>
+```
+
+Now you can run the `manager.sh` script.
