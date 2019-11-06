@@ -4,7 +4,7 @@
 
 set -e
 
-RS_ENDPOINT=$(terraform output drp_manager)
+export RS_ENDPOINT=$(terraform output drp_manager)
 
 sites="us-central us-west us-east us-southeast"
 
@@ -24,7 +24,7 @@ done
 echo "waiting for machines to destroy"
 for mc in $sites;
 do
-  if drpcli machines exists Name:$mc ; then
+  if drpcli machines exists Name:$mc > /dev/null; then
     drpcli machines wait Name:$mc Stage "complete-nobootenv" 120
   fi
 done
