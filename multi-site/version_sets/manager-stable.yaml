@@ -19,7 +19,7 @@ Components:
   Version: ignore
 - Name: manager
   Type: PluginProvider
-  Version: ignore
+  Version: stable
 Plugins:
 - Name: dangerzone
   Provider: dangerzone
