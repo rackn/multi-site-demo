@@ -21,6 +21,9 @@ Components:
 - Name: certs
   Type: PluginProvider
   Version: stable
+- Name: ux-views
+  Type: PluginProvider
+  Version: stable
 Plugins:
 - Name: certs
   Provider: certs
