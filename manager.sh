@@ -44,6 +44,7 @@ else
   echo "catalog files exist - skipping"
 fi
 
+
 if [[ ! -e "v4drp-install.zip" ]]; then
   curl -sfL -o v4drp-install.zip https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.1.0.zip
   curl -sfL -o install.sh get.rebar.digital/tip
@@ -76,6 +77,7 @@ drpcli plugins runaction manager buildCatalog
 drpcli contents upload $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
 
 # cache the catalog items on the DRP Server
+drpcli files upload rackn-catalog.json to "files/rebar-catalog/rackn-catalog.json"
 drpcli profiles set global set catalog_url to - <<< $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
 (
   RS_ENDPOINT=$(terraform output drp_manager)
