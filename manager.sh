@@ -52,10 +52,23 @@ else
   echo "install files exist - skipping"
 fi
 
+echo "Building Multi-Site Content"
+cd multi-site
+drpcli contents bundle multi-site-demo.json
+mv multi-site-demo.json ..
+cd ..
+
+echo "Script is idempotent - restart if needed!"
 echo "Waiting for endpoint export RS_ENDPOINT=$RS_ENDPOINT"
-echo ">>> NOTE: 'Failed connect ...' messages are normal."
+echo ">>> NOTE: 'Failed to connect ...' messages are normal during system bring up."
 sleep 10
 timeout 300 bash -c 'while [[ "$(curl -fsSLk -o /dev/null -w %{http_code} ${RS_ENDPOINT})" != "200" ]]; do sleep 5; done' || false
+
+echo "FIRST, reset the tokens! export RS_ENDPOINT=$RS_ENDPOINT"
+# extract secretes from config
+baseTokenSecret=$(jq -r -c -M .sections.version_sets.credential.Prefs.baseTokenSecret multi-site-demo.json)
+systemGrantorSecret=$(jq -r -c -M .sections.version_sets.credential.Prefs.systemGrantorSecret multi-site-demo.json)
+drpcli prefs set baseTokenSecret "${baseTokenSecret}" systemGrantorSecret "${systemGrantorSecret}"
 
 echo "Setup Starting for endpoint export RS_ENDPOINT=$RS_ENDPOINT"
 drpcli contents upload rackn-license.json
@@ -74,11 +87,16 @@ drpcli prefs set defaultWorkflow discover-linode unknownBootEnv discovery
 
 drpcli files upload linode.json to "rebar-catalog/linode/v1.0.0.json"
 drpcli plugins runaction manager buildCatalog
+drpcli files upload rackn-catalog.json to "rebar-catalog/rackn-catalog.json"
 drpcli contents upload $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
 
 # cache the catalog items on the DRP Server
-drpcli files upload rackn-catalog.json to "files/rebar-catalog/rackn-catalog.json"
 drpcli profiles set global set catalog_url to - <<< $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
+if [[ ! -e "static-catalog.zip" ]]; then
+  drpcli files upload static-catalog.zip as "rebar-catalog/static-catalog.zip" --explode
+else
+  echo "no static catalog - will have to build catalog dynamically"
+fi
 (
   RS_ENDPOINT=$(terraform output drp_manager)
   drpcli catalog updateLocal -c rackn-catalog.json
@@ -88,11 +106,6 @@ drpcli profiles set global set catalog_url to - <<< $RS_ENDPOINT/files/rebar-cat
 
 drpcli plugin_providers upload dangerzone from dangerzone
 
-echo "Building Multi-Site Content"
-cd multi-site
-drpcli contents bundle multi-site-demo.json
-mv multi-site-demo.json ..
-cd ..
 drpcli contents upload multi-site-demo.json
 
 

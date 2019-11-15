@@ -21,9 +21,6 @@ Components:
 - Name: certs
   Type: PluginProvider
   Version: tip
-- Name: ux-views
-  Type: PluginProvider
-  Version: tip
 Plugins:
 - Name: certs
   Provider: certs
