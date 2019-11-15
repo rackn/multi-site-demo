@@ -73,9 +73,10 @@ There is a tricky hack to install k3s:
 Building your own static-catalog.zip
 ------------------------------------
 
-It is HIGHLY recommended that you do this demo with a static-catalog.
+This demo uses a static-catalog to reduce downloads.  If you change the catalog
+reference file you should build your own catalog from it.
 
-You can download a version from: https://rackn-private.s3-us-west-2.amazonaws.com/static-catalog.zip
+If you don't create one, the script will download a version from: https://rackn-private.s3-us-west-2.amazonaws.com/static-catalog.zip
 
 To build your own static-catalog.zip:
 

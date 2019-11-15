@@ -39,7 +39,8 @@ export RS_ENDPOINT=$(terraform output drp_manager)
 export RS_IP=$(terraform output drp_ip)
 
 if [[ ! -e "rackn-catalog.json" ]]; then
-  curl --compressed -o rackn-catalog.json https://s3-us-west-2.amazonaws.com/rebar-catalog/rackn-catalog.json
+  echo "Missing rackn-catalog.json... using the provided .ref version"
+  cp rackn-catalog.ref rackn-catalog.json
 else
   echo "catalog files exist - skipping"
 fi
@@ -93,10 +94,12 @@ drpcli contents upload $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
 # cache the catalog items on the DRP Server
 drpcli profiles set global set catalog_url to - <<< $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
 if [[ ! -e "static-catalog.zip" ]]; then
-  drpcli files upload static-catalog.zip as "rebar-catalog/static-catalog.zip" --explode
+  echo "downloading static from s3"
+  curl --compressed -o static-catalog.zip https://rackn-private.s3-us-west-2.amazonaws.com/static-catalog.zip
 else
-  echo "no static catalog - will have to build catalog dynamically"
+  echo "using found static-catalog.zip"
 fi
+drpcli files upload static-catalog.zip as "rebar-catalog/static-catalog.zip" --explode
 (
   RS_ENDPOINT=$(terraform output drp_manager)
   drpcli catalog updateLocal -c rackn-catalog.json
