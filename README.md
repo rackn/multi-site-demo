@@ -73,6 +73,25 @@ There is a tricky hack to install k3s:
    1. since the profile also exists at the manager level the object the single-pane-of-glass updates will work.
    1. this will be addressed in a more elegant way in future versions.
 
+Building your own static-catalog.zip
+------------------------------------
+
+It is HIGHLY recommended that you do this demo with a static-catalog.
+
+You can download a version from: https://rackn-private.s3-us-west-2.amazonaws.com/static-catalog.zip
+
+To build your own static-catalog.zip:
+
+  1. install a local dr-server
+  1. upload your catalog
+    1. drpcli files upload rackn-catalog.json to "rebar-catalog/rackn-catalog.json"
+    1. drpcli contents upload rackn-catalog.json
+  1. build the catalog in your dr-server
+    1. drpcli catalog updateLocal -c rackn-catalog.json
+    1. drpcli plugins runaction manager buildCatalog
+  1. zip the local /var/lib/dr-server/tftpboot/files/rebar-catalog
+
+
 Prerequists Details
 -------------------
 
