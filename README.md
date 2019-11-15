@@ -82,11 +82,11 @@ To build your own static-catalog.zip:
 
   1. install a local dr-server
   1. upload your catalog
-     1. drpcli files upload rackn-catalog.json to "rebar-catalog/rackn-catalog.json"
-     1. drpcli contents upload rackn-catalog.json
+     1. `drpcli files upload rackn-catalog.json to "rebar-catalog/rackn-catalog.json"`
+     1. `drpcli contents upload rackn-catalog.json`
   1. build the catalog in your dr-server
-     1. drpcli catalog updateLocal -c rackn-catalog.json
-     1. drpcli plugins runaction manager buildCatalog
+     1. `drpcli catalog updateLocal -c rackn-catalog.json`
+     1. `drpcli plugins runaction manager buildCatalog`
   1. zip the local /var/lib/dr-server/tftpboot/files/rebar-catalog
 
 
