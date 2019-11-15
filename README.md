@@ -60,9 +60,6 @@ As a bonus, try to add something from the catalog at an edge site.  The manager 
 To expand the cluster, you need to run the `site-expand` workflow on all the edges.
 
    1. the `cluster-3` version set is required to set the node count to 3 instead of 0
-   1. in v4.1 there is a known issue with contexts being lost after the DRP token is reset (this is not surprising since all tokens are invalidated)
-      1. for all the edit site machines, clear the `Context` and `Meta.BaseContext` values.  UX will show Context is "" (or an empty circle)
-      1. for all the edit site machines, set `Meta.BaseContext` to `runner`
    1. set the `site-expand` workflow
 
 There is a tricky hack to install k3s:
