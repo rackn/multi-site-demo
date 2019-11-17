@@ -45,7 +45,6 @@ else
   echo "catalog files exist - skipping"
 fi
 
-
 if [[ ! -e "v4drp-install.zip" ]]; then
   curl -sfL -o v4drp-install.zip https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.1.0.zip
   curl -sfL -o install.sh get.rebar.digital/tip
@@ -99,7 +98,12 @@ if [[ ! -e "static-catalog.zip" ]]; then
 else
   echo "using found static-catalog.zip"
 fi
-drpcli files upload static-catalog.zip as "rebar-catalog/static-catalog.zip" --explode
+catalog_sum=$(drpcli files exists rebar-catalog/static-catalog.zip || true)
+if [[ "$catalog_sum" == "" ]]; then
+  drpcli files upload static-catalog.zip as "rebar-catalog/static-catalog.zip" --explode
+else
+  echo "catalog already uploaded, skipping...($catalog_sum)"
+fi;
 (
   RS_ENDPOINT=$(terraform output drp_manager)
   drpcli catalog updateLocal -c rackn-catalog.json
@@ -129,12 +133,17 @@ if ! drpcli machines exists Name:bootstrap > /dev/null; then
   drpcli machines create '{"Name":"bootstrap",
     "Workflow": "context-bootstrap",
     "Meta":{"BaseContext": "bootstrapper", "icon":"bolt"}}'
-  echo "upload install files..."
-  drpcli files upload v4drp-install.zip as "bootstrap/v4drp-install.zip"
-  drpcli files upload install.sh as "bootstrap/install.sh"
-  sleep 5
+  install_sum=$(drpcli files exists bootstrap/v4drp-install.zip || true)
+  if [[ "$install_sum" == "" ]]; then
+    echo "upload install files..."
+    drpcli files upload v4drp-install.zip as "bootstrap/v4drp-install.zip"
+    drpcli files upload install.sh as "bootstrap/install.sh"
+    sleep 5
+  else
+    echo "found installed files $install_sum"
+  fi
 else
-  echo "Boostrap machine exists"
+  echo "Bootstrap machine exists"
 fi
 
 drpcli machines wait Name:bootstrap Stage "complete-nobootenv" 45
@@ -147,9 +156,16 @@ i=0
 for context in $contexts; do
   image=$(jq -r -c -M ".[$i].Image" <<< "${raw}")
   echo "Uploading Container for $context named [$image] using [$context-dockerfile]"
-  docker build --tag=$image --file="$context-dockerfile" .
-  docker save $image > $context.tar
-  drpcli files upload $context.tar as "contexts/docker-context/$image"
+  container_sum=$(drpcli files exists "contexts/docker-context/$image" || true)
+  if [[ "$container_sum" == "" ]]; then
+    echo "  Building Container"
+    docker build --tag=$image --file="$context-dockerfile" .
+    docker save $image > $context.tar
+    echo "  Uploading Container"
+    drpcli files upload $context.tar as "contexts/docker-context/$image"
+  else
+    echo "  Found $container_sum, skipping upload"
+  fi
   i=$(($i + 1))
 done
 echo "uploaded $(drpcli files list contexts/docker-context)"
