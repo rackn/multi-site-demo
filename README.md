@@ -143,6 +143,9 @@ yum -y install unzip jq docker
 unzip tf.zip
 chmod 755 terraform drpcli
 rm tf.zip
+systemctl daemon-reload
+systemctl enable docker
+systemctl start docker
 ```
 IMPORTANT: set your``LINODE_TOKEN` environment variable!!!!
 ```
