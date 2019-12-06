@@ -4,6 +4,42 @@
 
 export PATH=$PATH:$PWD
 
+xiterr() { [[ $1 =~ ^[0-9]+$ ]] && { XIT=$1; shift; } || XIT=1; printf "FATAL: $*\n"; exit $XIT; }
+
+usage() {
+  echo "USAGE:  $0 [ -p ] [ -b site-base-VER ]"
+  echo "           [ -L label ] [ -P password ] [ -R region ] [ -I image ] [ -T type ]"
+  echo "WHERE:"
+  echo "          -p                prep manager (lowercase 'p')"
+  echo "                            set the global manager to apply VersionSets"
+  echo "                            automatically - by default specifying the"
+  echo "                            site-base-stable VersionSet, if there is an"
+  echo "                            additional option to 'prep-manager', that"
+  echo "                            will be used in place of 'site-base-stable'"
+  echo ""
+  echo "           -L label         set Manager Label (endpoint name)"
+  echo "                            defaults to 'rackn-manager-demo'"
+  echo "           -P password      set Manager Password for root user"
+  echo "                            defaults to 'r0cketsk8ts'"
+  echo "           -R region        set Manager Region to be installed in"
+  echo "                            defaults to 'us-west'"
+  echo "           -I image         set Manager Image name as supported by Linode"
+  echo "                            defaults to 'linode/centos7'"
+  echo "           -T type          set Manager Type of virtual machine"
+  echo "                            defaults to 'g6-standard-2'"
+  echo ""
+  echo ""
+  echo "          -b site-base-VER  (optional) VersionSet to use for the site-base"
+  echo ""
+  echo "NOTES:  * 'prep-manager site-base-v4.1.2' would replace the 'site-base-stable'":
+  echo "          version set with the v4.1.2 version"
+  echo ""
+  echo "        * if 'site-base-VER' is specified, 'prep-manager' must also"
+  echo ""
+	echo "        * Regions: ca-central, us-central, us-west, us-southeast, us-east"
+  echo ""
+}
+
 check_tools() {
   local tools=$*
   local tool=""
@@ -24,6 +60,60 @@ check_tools() {
 set -e
 
 check_tools jq drpcli terraform curl docker dangerzone
+
+###
+#  some defaults - note that Manager defaults are written to a tfvars
+#  file which is used to set the manager.tf variables values
+#
+#  WARNING:  no input checking is performed on the values at this time
+#            you must insure your input is sane and matches real values
+#            that can be set for the terraform provider (linode)
+###
+PREP=false
+BASE="site-base-stable"
+OPTS=""
+MGR_LBL="rackn-manager-demo"
+MGR_PWD="r0cketsk8ts"
+MGR_RGN="us-west"
+MGR_IMG="linode/centos7"
+MGR_TYP="g6-standard-2"
+
+while getopts ":pb:t:L:P:R:I:T:u" CmdLineOpts
+do
+  case $CmdLineOpts in
+    p) PREP="true"            ;;
+    b) BASE=${OPTARG}         ;;
+    t) LINODE_TOKEN=${OPTARG} ;;
+    L) MGR_LBL=${OPTARG}      ;;
+    P) MGR_PWD=${OPTARG}      ;;
+    R) MGR_RGN=${OPTARG}      ;;
+    I) MGR_IMG=${OPTARG}      ;;
+    T) MGR_TYP=${OPTARG}      ;;
+    u) usage; exit 0          ;;
+    \?)
+      echo "Incorrect usage.  Invalid flag '${OPTARG}'."
+      usage
+      exit 1
+      ;;
+  esac
+done
+variable "manager_label" {
+  type      = string
+  default   = "rackn-manager-demo"
+}
+
+# write terraform manager.tfvars file - setting our Manager characteristics
+cat <<EO_MANAGER_VARS > manager.tfvars
+manager_label = $MGR_LBL
+manager_password = $MGR_PWD
+manaager_region = $MGR_RGN
+manager_image = $MGR_IMG
+manager_type = $MGR_TYP
+EO_MANAGER_VARS
+
+# verify our command line flags and validate site-base requested
+AVAIL=$(ls multi-site/version_sets/site-base*.yaml | sed 's|^.*sets/\(.*\)\.yaml$|\1|g')
+( echo "$AVAIL" | grep -q "$BASE" ) || xiterr 1 "Unsupportes 'site-base', availalbe values are: \n$AVAIL"
 
 if [[ "$LINODE_TOKEN" == "" ]]; then
     echo "you must export LINODE_TOKEN=[your token]"
@@ -177,7 +267,7 @@ drpcli contents update multi-site-demo multi-site-demo.json
 # prepopulate containers
 sleep 30
 i=0
-for context in $contexts; do         
+for context in $contexts; do
   image=$(jq -r -c -M ".[$i].Image" <<< "${raw}")
   echo "Installing Container for $context named from $image"
   drpcli plugins runaction docker-context imageUpload \
@@ -200,6 +290,53 @@ do
   fi
 done
 
+###################################
+################################### THIS IS COMPLETELY UNTESTED CODE
+###################################
+if [[ "$PREP" == "true" ]]
+then
+  # TODO: Need to get endpoint name dynamically if it's different going forward
+  MGR="rackn-manager-demo"
+
+  # start at 1, do COUNT iterations of WAIT length (10 mins by default)
+  COUNT=1
+  BAIL=120
+  WAIT=5
+
+  drpcli extended -l endpoints update $MGR '{"VersionSets":["cluster-3","credential","license","manager-ignore","'$BASE'"]}'
+  drpcli extended -l endpoints update $MGR '{"Apply":true]}'
+
+  # need to "wait" - monitor that we've finish applying this ...
+
+  # check if apply set to true
+  if [[ "$(drpcli extended -l endpoints show $MGR  | jq -r '.Apply')" == "true" ]]
+
+  while (( COUNT <= BAIL ))
+  do
+    SEC=1
+    # if Actions object goes away, we've drained the queue of work
+    [[ "$(drpcli extended -l endpoints show $MGR | jq -r '.Actions')" == "null" ]] && break
+    printf "Waiting for VersionSet Actions to drain ... (sleep $WAIT seconds ) $SEC "
+    while (( SEC <= WAIT ))
+    do
+      sleep $WAIT
+      printf "%s " $SEC
+      (( SEC++ ))
+    done
+    (( COUNT++ ))
+  done
+
+  if [[ "$(drpcli extended -l endpoints show $MGR | jq -r '.Actions')" != "null" ]]
+  then
+    (( TOT = SEC * WAIT ))
+    xiterr 1 "VersionSet apply actions FAILED to complete in $TOT seconds."
+  fi
+
+fi # end if PREP
+###################################
+################################### end of COMPLETELY UNTESTED CODE
+###################################
+
 for mc in $sites;
 do
   echo "Adding $mc to install DRP"
@@ -211,4 +348,7 @@ do
   drpcli plugins runaction manager addEndpoint manager/url https://$ip:8092 manager/username rocketskates manager/password r0cketsk8ts
 done
 
-echo "DONE export RS_ENDPOINT=$RS_ENDPOINT"
+echo ""
+echo "DONE !!! Example export for Endpoint:"
+echo "export RS_ENDPOINT=$RS_ENDPOINT"
+echo ""
