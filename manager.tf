@@ -5,28 +5,23 @@ variable "linode_token" {
 
 variable "manager_label" {
   type      = string
-  default   = "rackn-manager-demo"
 }
 
 # Regions ca-central, us-central, us-west, us-southeast, us-east
-variable "manaager_region" {
+variable "manager_region" {
   type      = string
-  default   = "us-west"
 }
 
 variable "manager_image" {
   type      = string
-  default   = "linode/centos7"
 }
 
 variable "manager_type" {
   type      = string
-  default   = "g6-standard-2"
 }
 
 variable "manager_password" {
   type      = string
-  default   = "r0cketsk8ts"
 }
 
 provider "linode" {

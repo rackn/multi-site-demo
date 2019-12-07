@@ -7,8 +7,11 @@ export PATH=$PATH:$PWD
 xiterr() { [[ $1 =~ ^[0-9]+$ ]] && { XIT=$1; shift; } || XIT=1; printf "FATAL: $*\n"; exit $XIT; }
 
 usage() {
-  echo "USAGE:  $0 [ -p ] [ -b site-base-VER ]"
-  echo "           [ -L label ] [ -P password ] [ -R region ] [ -I image ] [ -T type ]"
+  local _l=$(echo $0 |wc -c | awk ' { print $NF } ')
+  echo ""
+  printf "USAGE:  %${_l}s [ -p ] [ -b site-base-VER ] \ \n" "$0"
+  printf "        %${_l}s [ -L label ] [ -P password ] [ -R region ] [ -I image ] [ -T type ]\n" " "
+  echo ""
   echo "WHERE:"
   echo "          -p                prep manager (lowercase 'p')"
   echo "                            set the global manager to apply VersionSets"
@@ -31,12 +34,8 @@ usage() {
   echo ""
   echo "          -b site-base-VER  (optional) VersionSet to use for the site-base"
   echo ""
-  echo "NOTES:  * 'prep-manager site-base-v4.1.2' would replace the 'site-base-stable'":
-  echo "          version set with the v4.1.2 version"
-  echo ""
-  echo "        * if 'site-base-VER' is specified, 'prep-manager' must also"
-  echo ""
-	echo "        * Regions: ca-central, us-central, us-west, us-southeast, us-east"
+  echo "NOTES:  * if '-b site-base-VER' is specified, 'prep-manager' must also be"
+  echo "        * Regions: ca-central, us-central, us-west, us-southeast, us-east"
   echo ""
 }
 
@@ -59,8 +58,6 @@ check_tools() {
 
 set -e
 
-check_tools jq drpcli terraform curl docker dangerzone
-
 ###
 #  some defaults - note that Manager defaults are written to a tfvars
 #  file which is used to set the manager.tf variables values
@@ -77,6 +74,7 @@ MGR_PWD="r0cketsk8ts"
 MGR_RGN="us-west"
 MGR_IMG="linode/centos7"
 MGR_TYP="g6-standard-2"
+LINODE_TOKEN=${LINODE_TOKEN:-""}
 
 while getopts ":pb:t:L:P:R:I:T:u" CmdLineOpts
 do
@@ -97,16 +95,14 @@ do
       ;;
   esac
 done
-variable "manager_label" {
-  type      = string
-  default   = "rackn-manager-demo"
-}
+
+check_tools jq drpcli terraform curl docker dangerzone
 
 # write terraform manager.tfvars file - setting our Manager characteristics
-cat <<EO_MANAGER_VARS > manager.tfvars
+cat <<EO_MANAGER_VARS > terraform.tfvars
 manager_label = $MGR_LBL
 manager_password = $MGR_PWD
-manaager_region = $MGR_RGN
+manager_region = $MGR_RGN
 manager_image = $MGR_IMG
 manager_type = $MGR_TYP
 EO_MANAGER_VARS
@@ -119,11 +115,11 @@ if [[ "$LINODE_TOKEN" == "" ]]; then
     echo "you must export LINODE_TOKEN=[your token]"
     exit 1
 else
-    echo "ready, LINODE_TOKEN set!"
+    echo "Ready, LINODE_TOKEN set!"
 fi
 
 terraform init -no-color
-terraform apply -no-color -auto-approve --var="linode_token=$LINODE_TOKEN"
+terraform apply -no-color -auto-approve -var="linode_token=$LINODE_TOKEN"
 
 export RS_ENDPOINT=$(terraform output drp_manager)
 export RS_IP=$(terraform output drp_ip)

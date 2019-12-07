@@ -22,4 +22,4 @@ multi-site/multi-site-demo.json
 multi-site/multi-site-demo.yaml
 endpoint-exec
 static-catalog.zip
-manager.tfvars
+terraform.tfvars
