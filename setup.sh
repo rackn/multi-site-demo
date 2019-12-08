@@ -23,13 +23,28 @@ done
 echo "Waiting for unzip processes to complete..."
 wait
 
+source /etc/os-release
+case $ID in
+  centos|rhel|fedora) $PKG="yum -y" ;;
+  ubuntu|debian)      $PKG="apt -y" ;;
+  *) xiterr 1 "Unsupported platform '$ID', don't know how to install pkg dependencies."
+    ;;
+esac
+
 # install packages
 echo "Installing required packages..."
-yum -y install epel-release
-yum -y install git jq docker wget curl vim unzip
-systemctl daemon-reload
-systemctl enable docker
-systemctl start docker
+$PKG install epel-release
+$PKG install git jq docker wget curl vim unzip
+
+# just assuming we're all one big happy systemd family
+if $(which systemctl > /dev/null 2>&1 )
+then
+  systemctl daemon-reload
+  systemctl enable docker
+  systemctl start docker
+else
+  echo "!!! WARNING - didn't start Docker, no 'systemctl' daemon - make sure Docker is started correctly."
+fi
 echo ""
 
 # fixup PATHs
@@ -37,10 +52,13 @@ printf "Writing updated PATH to .bashrc... "
 echo "PATH=$HOME/multi-site-demo:$PATH" >> $HOME/.bashrc
 echo "done"
 
-# collect LINOD infoz:
+# collect LINODE infoz:
 
-read -p "Enter LINODE_TOKEN:  " LINODE_TOKEN
-export LINODE_TOKEN
+if [[ -z "$LINODE_TOKEN" ]]
+then
+  read -p "Enter LINODE_TOKEN:  " LINODE_TOKEN
+  export LINODE_TOKEN
+fi
 
 echo ""
 printf "Writing LINODE_TOKEN to .bashrc... "

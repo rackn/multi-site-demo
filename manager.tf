@@ -39,7 +39,7 @@ resource "linode_instance" "drp_manager" {
   stackscript_data = {
     "drp_version" = "stable"
     "drp_password" = var.manager_password
-    "drp_id" = "rackn-manager-demo"
+    "drp_id" = var.manager_label
   }
 }
 

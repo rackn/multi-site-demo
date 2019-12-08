@@ -14,6 +14,7 @@ do
 	gzip $FILE &
 done
 
+echo "Waiting for zip processes to finish..."
 wait
 
 echo ""
@@ -32,8 +33,10 @@ rm -f terraform.tfstate terraform.tfstate.BACKUP
 echo "done"
 
 echo ""
-echo "Done - now pack things up by running: "
+echo "Done - creating TGZ file... "
 echo ""
-echo "  cd $HOME"
-echo "  tar -czvf multi-site-demo.tgz multi-site-demo/"
+tar -czvf $HOME/multi-site-demo.tgz multi-site-demo/
+echo ""
+echo "Updated TGZ is at:"
+ls -lh $HOME/multi-site-demo.tgz
 echo ""
