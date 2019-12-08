@@ -7,6 +7,15 @@ set -e
 export RS_ENDPOINT=$(terraform output drp_manager)
 
 sites="us-central us-west us-east us-southeast"
+if [[ -r manager.tfvars ]]
+then
+  PRE=$(cat manager.tfvars | grep cluster_prefix | cut -d '"' -f2)
+  for S in $sites
+  do
+    s+="$PRE-$s "
+  done
+  sites=$s
+fi
 
 echo "setting machines to destroy"
 for mc in $sites;

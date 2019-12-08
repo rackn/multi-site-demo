@@ -48,6 +48,11 @@ usage() {
             machine names will be prefixed with '<cluster-prefix>-REGION
             eg. foo-us-west
           * cluster_prefix is prepended to Manager Label
+
+          * SHANE's preferred start up:
+
+            ./manager.sh -p -c sg -L global
+
 EO_USAGE
 }
 
@@ -149,6 +154,7 @@ manager_region   = "$MGR_RGN"
 manager_image    = "$MGR_IMG"
 manager_type     = "$MGR_TYP"
 linode_token     = "$LINODE_TOKEN"
+cluster-prefix   = "$PREFIX"
 EO_MANAGER_VARS
 
 # verify our command line flags and validate site-base requested
@@ -314,11 +320,13 @@ done
 for mc in $SITES;
 do
   if ! drpcli machines exists Name:$mc > /dev/null; then
+    reg=$mc
+    [[ -n "$PREFIX" ]] && reg=$(echo $mc | sed 's/'${PREFIX}'-//g')
     echo "Creating $mc"
     echo "drpcli machines create \"{\"Name\":\"${mc}\", ... "
     drpcli machines create "{\"Name\":\"${mc}\", \
       \"Workflow\":\"site-create\",
-      \"Params\":{\"linode/region\": \"${mc}\", \"network\\firewalld-ports\":[\"22/tcp\",\"8091/tcp\",\"8092/tcp\"] }, \
+      \"Params\":{\"linode/region\": \"${reg}\", \"network\\firewalld-ports\":[\"22/tcp\",\"8091/tcp\",\"8092/tcp\"] }, \
       \"Meta\":{\"BaseContext\":\"runner\", \"icon\":\"cloud\"}}"
   else
     echo "machine $mc already exists"
