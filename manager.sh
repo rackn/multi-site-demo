@@ -13,44 +13,44 @@ usage() {
 
   cat <<EO_USAGE
 
-  $0 [ -p ] [ -b site-base-VER ] [ -c cluster_prefix ] \\
+  $0 [ -d ] [ -p ] [ -b site-base-VER ] [ -c cluster_prefix ] [ -S sites ] \\
   $PAD [ -L label ] [ -P password ] [ -R region ] [ -I image ] [ -T type ]
   
   WHERE:
-            -p                  prep manager (lowercase 'p')
-                                set the global manager to apply VersionSets
-                                automatically - by default specifying the
-                                site-base-stable VersionSet, if there is an
-                                additional option to 'prep-manager', that
-                                will be used in place of 'site-base-stable'
-             -b site-base-VER   Sets the VER (eg 'v4.1.2') for site-base
-                                REQUIRES '-p' used
-             -c cluster_prefix  sets cluster members with a prefix name for
-                                uniqueness
-             -L label           set Manager Label (endpoint name)
-                                defaults to 'rackn-manager-demo'
-                                NOTE: '-c cluster_prefix', added to MGR too
-             -P password        set Manager Password for root user
-                                defaults to 'r0cketsk8ts'
-             -R region          set Manager Region to be installed in
-                                defaults to 'us-west'
-             -I image           set Manager Image name as supported by Linode
-                                defaults to 'linode/centos7'
-             -T type            set Manager Type of virtual machine
-                                defaults to 'g6-standard-2'
+          -p                 prep manager (lowercase 'p')
+                             set the global manager to apply VersionSets
+                             automatically - by default specifying the
+                             $BASE VersionSet, if there is an
+                             additional option to 'prep-manager', that
+                             will be used in place of '$BASE'
+          -b site-base-VER   Sets the VER (eg 'v4.1.2') for site-base
+                             implies/sets '-p' if not specified
+          -c cluster_prefix  sets cluster members with a prefix name for
+                             uniqueness
+          -L label           set Manager Label (endpoint name)
+                             defaults to 'rackn-manager-demo'
+                             NOTE: '-c cluster_prefix', added to MGR too
+          -P password        set Manager Password for root user
+                             defaults to 'r0cketsk8ts'
+          -R region          set Manager Region to be installed in
+                             defaults to 'us-west'
+          -I image           set Manager Image name as supported by Linode
+                             defaults to 'linode/centos7'
+          -T type            set Manager Type of virtual machine
+                             defaults to 'g6-standard-2'
+          -S sites           list of Sites to build regional controllers in
+                             (comma, semi-colon, colon, dash, underscore, or
+                             space separated list - normal shell rules apply
+          -d                 enable debugging mode
 
-
-            -b site-base-VER  (optional) VersionSet to use for the site-base
-
-  NOTES:  * if '-b site-base-VER' is specified, 'prep-manager' must also be
-          * Regions: ca-central, us-central, us-west, us-southeast, us-east
+  NOTES:  * if '-b site-base-VER' specified, '-p' (prep-manager) is implied
+          * Regions: $SITES
           * if cluster_prefix is set, then Regional Controllers, and LINDOE
             machine names will be prefixed with '<cluster-prefix>-REGION
-            eg. foo-us-west
-          * cluster_prefix is prepended to Manager Label
+            eg. '-c foo' produces a region controller named 'foo-us-west'
+          * cluster_prefix is prepended to Manager Label and regional managers
 
           * SHANE's preferred start up:
-
             ./manager.sh -p -c sg -L global
 
 EO_USAGE
@@ -74,7 +74,7 @@ check_tools() {
 }
 
 _drpcli() {
-  echo "drpcli $*"
+  echo ">>> DBG: drpcli $*"
   drpcli $*
 }
 
@@ -89,7 +89,7 @@ set -e
 #            that can be set for the terraform provider (linode)
 ###
 PREP=false
-BASE="site-base-stable"
+BASE="site-base-v4.1.2"           # "stable" is not fully available in the catalog
 OPTS=""
 MGR_LBL="rackn-manager-demo"
 MGR_PWD="r0cketsk8ts"
@@ -97,13 +97,15 @@ MGR_RGN="us-west"
 MGR_IMG="linode/centos7"
 MGR_TYP="g6-standard-2"
 LINODE_TOKEN=${LINODE_TOKEN:-""}
-SITES="us-central us-west us-east us-southeast"
+SITES="us-central us-east us-west us-southeast"
+DBG=0
 
-while getopts ":pb:c:t:L:P:R:I:T:u" CmdLineOpts
+while getopts ":dpb:c:t:L:P:R:I:T:S:u" CmdLineOpts
 do
   case $CmdLineOpts in
     p) PREP="true"            ;;
-    b) BASE=${OPTARG}         ;;
+    b) BASE=${OPTARG}
+       PREP="true"            ;;
     c) PREFIX=${OPTARG}       ;;
     t) LINODE_TOKEN=${OPTARG} ;;
     L) MGR_LBL=${OPTARG}      ;;
@@ -111,6 +113,8 @@ do
     R) MGR_RGN=${OPTARG}      ;;
     I) MGR_IMG=${OPTARG}      ;;
     T) MGR_TYP=${OPTARG}      ;;
+    S) STS=${OPTARG}          ;;
+    d) DBG=1; set -x          ;;
     u) usage; exit 0          ;;
     \?)
       echo "Incorrect usage.  Invalid flag '${OPTARG}'."
@@ -119,6 +123,9 @@ do
       ;;
   esac
 done
+
+# if -S sites called, transform patterns to space separated list
+[[ -n "$STS" ]] && SITES=$(echo $STS | tr '[ ,;:-:]' ' ' | sed 's/  //g')
 
 check_tools jq drpcli terraform curl docker dangerzone
 
@@ -133,7 +140,7 @@ fi
 # TODO: turn this in to a variable list of SITES to support
 if [[ -n "$PREFIX" ]]
 then
-  [[ -n "$PREFIX" ]] && MGR_LBL="$PREFIX-$MGR_LBL"
+  MGR_LBL="$PREFIX-$MGR_LBL"
 
   for site in $SITES
   do
@@ -141,8 +148,8 @@ then
   done
   SITES="$s"
 fi
-echo "Manager name set to:  $MGR_LBL"
-echo "Sites set to:  $SITES"
+(( $DBG )) && echo "Manager name set to:  $MGR_LBL"
+(( $DBG )) && echo "Sites set to:  $SITES"
 
 # write terraform manager.tfvars file - setting our Manager characteristics
 # manager.sh relies on 'manaer.tfvars' - to parse for our MGR details
@@ -154,15 +161,17 @@ manager_region   = "$MGR_RGN"
 manager_image    = "$MGR_IMG"
 manager_type     = "$MGR_TYP"
 linode_token     = "$LINODE_TOKEN"
-cluster-prefix   = "$PREFIX"
+cluster_prefix   = "$PREFIX"
 EO_MANAGER_VARS
+
+(( $DBG )) && { echo "manager.tfvars set to:"; cat manager.tfvars; }
 
 # verify our command line flags and validate site-base requested
 AVAIL=$(ls multi-site/version_sets/site-base*.yaml | sed 's|^.*sets/\(.*\)\.yaml$|\1|g')
 ( echo "$AVAIL" | grep -q "$BASE" ) || xiterr 1 "Unsupported 'site-base', availalbe values are: \n$AVAIL"
 
 terraform init -no-color
-terraform apply  -no-color -auto-approve -var-file=manager.tfvars
+terraform apply -no-color -auto-approve -var-file=manager.tfvars
 
 export RS_ENDPOINT=$(terraform output drp_manager)
 export RS_IP=$(terraform output drp_ip)
