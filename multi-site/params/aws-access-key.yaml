@@ -1,0 +1,13 @@
+---
+Name: "aws/access-key"
+Description: "Key Needed for API access to AWS"
+Documentation: |
+  Access Key (secure) of the AWS 
+Secure: true
+Schema:
+  type: "string"
+Meta:
+  color: "black"
+  icon: "key"
+  title: "RackN Content"
+  password: "hideme"

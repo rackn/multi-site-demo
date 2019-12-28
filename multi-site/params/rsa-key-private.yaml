@@ -1,0 +1,12 @@
+---
+Name: "rsa/key-private"
+Description: "PrivateRSA Key for SSH"
+Documentation: |
+  Private SSH Key (secure)
+Secure: true
+Schema:
+  type: "string"
+Meta:
+  color: "black"
+  icon: "lock"
+  title: "RackN Content"

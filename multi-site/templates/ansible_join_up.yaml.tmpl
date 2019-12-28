@@ -1,0 +1,75 @@
+---
+### provision AWS EC2 instance
+{{ $openblock := "\x7B\x7B" }}
+{{ $closeblock := "\x7D\x7D" }}
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  user: ec2-user
+  vars:
+    region: "us-west-2"
+
+  tasks:
+    - name: "Upload Generated Keypair for Machine"
+      ec2_key:
+        name: "digitalrebar-temp-for-{{ .Machine.Name }}"
+        key_material: "{{ $openblock }} lookup('file', 'rsa-{{.Machine.Name}}.pub') {{ $closeblock }}"
+        region: "{{ $openblock }} region {{ $closeblock }}"
+        force: true
+        aws_access_key: "{{ .Param "aws/access-key" }}"
+        aws_secret_key: "{{ .Param "aws/secret-key" }}"
+  
+    - name: Provision machine instance for DigitalRebar workflow
+      local_action:
+        module: ec2
+        key_name: "digitalrebar-{{ .Machine.Name }}"
+        group: "Public"
+        instance_type: "t2.micro"
+        image: "ami-08d489468314a58df"
+        vpc_subnet_id: "subnet-09daa46f606be3ec3"
+        region: "{{ $openblock }} region {{ $closeblock }}"
+        instance_tags:
+          name: "{{.Machine.Name}}"
+          uuid: "{{.Machine.Uuid}}"
+        wait: true
+        assign_public_ip: true
+        volumes:
+          - device_name: "/dev/xvda"
+            volume_type: gp2
+            volume_size: "8"
+            delete_on_termination: true
+        aws_access_key: "{{ .Param "aws/access-key" }}"
+        aws_secret_key: "{{ .Param "aws/secret-key" }}"
+      register: ec2
+
+    - debug:
+        msg: "Public IP: {{ $openblock }} item.public_ip {{ $closeblock }}"
+      with_items: "{{ $openblock }} ec2.instances {{ $closeblock }}"
+
+    - name: Wait for the instances to boot by checking the ssh port
+      wait_for:
+        host: "{{ $openblock }} item.public_ip {{ $closeblock }}"
+        port: 22
+        delay: 15
+        timeout: 300
+        state: "started"
+      with_items: "{{ $openblock }} ec2.instances {{ $closeblock }}"
+    
+    - local_action: copy
+      content: "{{ $openblock }} ec2.instances {{ $closeblock }}"
+      dest: "{{ .Machine.Name }}.json"
+    # run join command in new instance
+    - name: run cmd
+      shell: |
+        echo "{{.Machine.Uuid}}" > /etc/rs-uuid
+        curl -fsSL {{ .ProvisionerAddress }}/machines/join-up.sh | sudo bash --
+      with_items: "{{ $openblock }} ec2.instances {{ $closeblock }}"
+
+
+    - name: "Remove key pair by name"
+      ec2_key:
+        name: "digitalrebar-temp-for-{{ .Machine.Name }}"
+        region: "{{ $openblock }} region {{ $closeblock }}"
+        state: absent
+        aws_access_key: "{{ .Param "aws/access-key" }}"
+        aws_secret_key: "{{ .Param "aws/secret-key" }}"

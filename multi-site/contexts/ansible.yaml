@@ -1,0 +1,9 @@
+---
+Name: "ansible"
+Description: "Run Ansible Playbook in Docker Context"
+Engine: "docker-context"
+Image: "digitalrebar-ansible"
+Meta:
+  icon: "cog"
+  color: "green"
+  title: "RackN Content"

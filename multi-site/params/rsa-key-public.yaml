@@ -1,0 +1,11 @@
+---
+Name: "rsa/key-public"
+Description: "Public RSA Key for SSH"
+Documentation: |
+  Public SSH Key
+Schema:
+  type: "string"
+Meta:
+  color: "black"
+  icon: "key"
+  title: "RackN Content"

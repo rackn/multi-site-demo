@@ -1,0 +1,12 @@
+---
+Name: "ansible-apply"
+Description: "Apply Ansible Playbook with Ansible Context"
+Params:
+  "ansible/playbook-templates": ["ansible_ec2_provision.yaml.tmpl"]
+Tasks:
+  - "context:ansible"
+  - "ansible-apply"
+Meta:
+  icon: "cog"
+  color: "black"
+  title: "RackN Content"

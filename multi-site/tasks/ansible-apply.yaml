@@ -1,0 +1,85 @@
+---
+Name: "ansible-apply"
+Description: "A task run Ansible Templates"
+RequiredParams:
+  - aws/access-key
+  - aws/secret-key
+  - ansible/playbook-templates
+OptionalParams:
+  - rsa/key-private
+  - rsa/key-public
+Templates:
+  - Contents: |-
+      #!/bin/bash
+      # RackN Copyright 2019
+
+      set -e
+
+      {{template "setup.tmpl" .}}
+
+      # we need a keypair for Ansible
+      {{ if .ParamExists "rsa/key-private" }}
+      echo "Retrieving SSH key from Machine Params rsa/key-*"
+      tee rsa-{{.Machine.Name}} >/dev/null << EOF
+      {{.Param "rsa/key-private"}}
+      EOF
+      tee rsa-{{.Machine.Name}}.pub >/dev/null << EOF
+      {{.Param "rsa/key-public"}}
+      EOF
+      {{ else }}
+      if [[ ! -e rsa-{{.Machine.Name}} ]]; then
+        echo "Generating single use keypair for initialization"
+        ssh-keygen -t rsa -N "{{.Machine.Uuid}}" -f "rsa-{{.Machine.Name}}"
+      else
+        echo "Using existing key: rsa-{{.Machine.Name}}.pub"
+      fi
+      echo "Saving local key to Machine $RS_UUID"
+      ls -la
+      drpcli machines set $RS_UUID param "rsa/key-private" to "\"$(cat rsa-{{.Machine.Name}})\""
+      drpcli machines set $RS_UUID param "rsa/key-public" to "\"$(cat rsa-{{.Machine.Name}}.pub)\""
+      {{ end }}
+
+      {{ $machine := .Machine.Name -}}
+      {{ range $index, $template := (.Param "ansible/playbook-templates") -}}
+      {{ $playbook := printf "%s" $template -}}
+
+      ## Build Playbook
+      echo "============== Playbook {{$index}} =============="
+      echo "Building from Template {{ $playbook }}"
+      tee playbook.yaml >/dev/null << EOF
+      {{$.CallTemplate $playbook $}}
+      EOF
+      #      
+
+      echo "Run Playbook {{$index}} using $(ansible-playbook --version)"
+      ansible-playbook \
+        -i localhost \
+        --private-key="rsa-{{$machine}}" \
+        playbook.yaml
+
+      echo "ZEHICLE"
+      ls -la
+
+      # capture address (if any) from run
+      if [[ -e {{$machine}}-address.txt ]]; then
+        drpcli machines update $RS_UUID "{\"Address\":\"$(cat {{$machine}}-address.txt)\"}"
+      else
+        echo "No address file from Playbook.  Needs to create {{$machine}}-address.txt"
+      fi
+
+      # capture results from run
+      if [[ -e {{$machine}}.json ]]; then
+        drpcli machines set $RS_UUID param ansible/output to "$(cat {{$machine}}.json)"
+      else
+        echo "No output file from Playbook.  Needs to create {{$machine}}.json"
+      fi
+      {{ end }}
+
+      echo "Done"
+      exit 1
+    Name: "Run Playbooks"
+Meta:
+  icon: "map"
+  color: "blue"
+  title: "Digital Rebar Community Content"
+  feature-flags: "sane-exit-codes"
