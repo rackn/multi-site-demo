@@ -23,7 +23,7 @@ usage() {
                              $BASE VersionSet, if there is an
                              additional option to 'prep-manager', that
                              will be used in place of '$BASE'
-          -b site-base-VER   Sets the VER (eg 'v4.1.2') for site-base
+          -b site-base-VER   Sets the VER (eg 'v4.2.0') for site-base
                              implies/sets '-p' if not specified
           -c cluster_prefix  sets cluster members with a prefix name for
                              uniqueness
@@ -89,7 +89,7 @@ set -e
 #            that can be set for the terraform provider (linode)
 ###
 PREP=false
-BASE="site-base-v4.1.2"           # "stable" is not fully available in the catalog
+BASE="site-base-v4.2.0"           # "stable" is not fully available in the catalog
 OPTS=""
 MGR_LBL="rackn-manager-demo"
 MGR_PWD="r0cketsk8ts"
@@ -185,7 +185,7 @@ else
 fi
 
 if [[ ! -e "v4drp-install.zip" ]]; then
-  curl -sfL -o v4drp-install.zip https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.1.0.zip
+  curl -sfL -o v4drp-install.zip https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.1.3.zip
   curl -sfL -o install.sh get.rebar.digital/tip
 else
   echo "install files exist - skipping"
