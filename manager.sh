@@ -99,7 +99,7 @@ MGR_TYP="g6-standard-2"
 LINODE_TOKEN=${LINODE_TOKEN:-""}
 SITES="us-central us-east us-west us-southeast"
 DBG=0
-SLEEP_LOOP=15
+LOOP_WAIT=15
 
 while getopts ":dpb:c:t:L:P:R:I:T:S:u" CmdLineOpts
 do
@@ -339,7 +339,7 @@ do
       \"Workflow\":\"site-create\",
       \"Params\":{\"linode/region\": \"${reg}\", \"network\\firewalld-ports\":[\"22/tcp\",\"8091/tcp\",\"8092/tcp\"] }, \
       \"Meta\":{\"BaseContext\":\"runner\", \"icon\":\"cloud\"}}"
-    sleep $SLEEP_LOOP
+    sleep $LOOP_WAIT
   else
     echo "machine $mc already exists"
   fi
