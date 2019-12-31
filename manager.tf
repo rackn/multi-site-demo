@@ -24,6 +24,10 @@ variable "manager_password" {
   type      = string
 }
 
+variable "cluster_prefix" {
+  type      = string
+}
+
 provider "linode" {
   token     = var.linode_token
 }

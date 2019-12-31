@@ -12,18 +12,24 @@ then
   PRE=$(cat manager.tfvars | grep cluster_prefix | cut -d '"' -f2)
   for S in $sites
   do
-    s+="$PRE-$s "
+    s+="$PRE-$S "
   done
   sites=$s
 fi
 
+echo ""
+echo "sites set to:"
+echo $sites
+
 echo "setting machines to destroy"
 for mc in $sites;
 do
-  if drpcli machines exists Name:$mc > /dev/null; then
+  if drpcli machines exists Name:$mc > /dev/null
+  then
     drpcli machines meta set Name:$mc key BaseContext to ""
-    drpcli machines workflow Name:$mc site-destroy
-    drpcli machines meta set Name:$mc key BaseContext to "terraform"
+    drpcli machines workflow Name:$mc site-destroy > /dev/null
+    # backslash escape seems to be needed, otherwise it's being intepreted as YAML input
+    drpcli machines meta set Name:$mc key BaseContext to \"terraform\"
     drpcli machines set Name:$mc param Runnable to true
   else
     echo "machine $mc already does not exist"
@@ -33,7 +39,8 @@ done
 echo "waiting for machines to destroy"
 for mc in $sites;
 do
-  if drpcli machines exists Name:$mc > /dev/null; then
+  if drpcli machines exists Name:$mc > /dev/null
+  then
     drpcli machines wait Name:$mc Stage "complete-nobootenv" 120
   fi
 done

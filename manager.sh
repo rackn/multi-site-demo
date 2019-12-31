@@ -99,6 +99,7 @@ MGR_TYP="g6-standard-2"
 LINODE_TOKEN=${LINODE_TOKEN:-""}
 SITES="us-central us-east us-west us-southeast"
 DBG=0
+SLEEP_LOOP=15
 
 while getopts ":dpb:c:t:L:P:R:I:T:S:u" CmdLineOpts
 do
@@ -250,9 +251,7 @@ fi;
 ) &
 
 _drpcli plugin_providers upload dangerzone from dangerzone
-
 _drpcli contents upload multi-site-demo.json
-
 
 _drpcli profiles set global set "linode/stackscript_id" to 548252
 _drpcli profiles set global set "linode/image" to "linode/centos7"
@@ -266,6 +265,9 @@ drpcli profiles set global param "network/firewalld-ports" to '[
 ]'
 
 echo "BOOTSTRAP export RS_ENDPOINT=$RS_ENDPOINT"
+
+echo "Waiting for backgrounded 'buildCatalog' to complete..."
+wait
 
 if ! drpcli machines exists Name:bootstrap > /dev/null; then
   echo "Creating bootstrap machine object"
@@ -337,6 +339,7 @@ do
       \"Workflow\":\"site-create\",
       \"Params\":{\"linode/region\": \"${reg}\", \"network\\firewalld-ports\":[\"22/tcp\",\"8091/tcp\",\"8092/tcp\"] }, \
       \"Meta\":{\"BaseContext\":\"runner\", \"icon\":\"cloud\"}}"
+    sleep $SLEEP_LOOP
   else
     echo "machine $mc already exists"
   fi
@@ -353,7 +356,6 @@ then
   _drpcli extended -l endpoints update $MGR_LBL '{"Apply":true}'
 
   # need to "wait" - monitor that we've finish applying this ...
-
   # check if apply set to true
   if [[ "$(drpcli extended -l endpoints show $MGR_LBL  | jq -r '.Apply')" == "true" ]]
   then
