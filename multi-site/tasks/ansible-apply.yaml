@@ -1,13 +1,24 @@
 ---
 Name: "ansible-apply"
 Description: "A task run Ansible Templates"
+Documentation: |
+  Runs one or more Ansible Playbook templates as defined by the
+  `ansible/playbook-templates` variable in the `ansible-apply` stage.
+
+  Requires an `ansible` context.
+
+  Information can be chained together by having the playbook
+  write `[Machine.Uuid].json` as a file.  This will be saved on the
+  machine as `Param.ansible/output` and then fed into the next
+  Playbook as the `digitalrebar` variable so it is available.
 RequiredParams:
+  - ansible/playbook-templates
+  - rsa/key-public
+  - rsa/key-user
+  - rsa/key-private
+OptionalParams:
   - aws/access-key
   - aws/secret-key
-  - ansible/playbook-templates
-OptionalParams:
-  - rsa/key-private
-  - rsa/key-public
 Templates:
   - Contents: |-
       #!/bin/bash
@@ -37,6 +48,7 @@ Templates:
       ls -la
       drpcli machines set $RS_UUID param "rsa/key-private" to "\"$(cat rsa-{{.Machine.Name}})\""
       drpcli machines set $RS_UUID param "rsa/key-public" to "\"$(cat rsa-{{.Machine.Name}}.pub)\""
+      drpcli machines set $RS_UUID param "rsa/key-user" to "ec2-user"
       {{ end }}
 
       {{ $machine := .Machine.Name -}}
@@ -49,29 +61,37 @@ Templates:
       tee playbook.yaml >/dev/null << EOF
       {{$.CallTemplate $playbook $}}
       EOF
-      #      
+
+      ## Pull data for playbook from Machine
+      ADDRESS=$(drpcli machines show $RS_UUID | jq -r .Address)
+      if [[ "$ADDRESS" == "" ]]; then
+        ADDRESS="localhost"
+      else
+        ADDRESS="$ADDRESS,"
+      fi
+      INPUT=$(drpcli machines show $RS_UUID)
 
       echo "Run Playbook {{$index}} using $(ansible-playbook --version)"
       ansible-playbook \
-        -i localhost \
+        -i $ADDRESS \
+        -e digitalrebar="${INPUT}" \
         --private-key="rsa-{{$machine}}" \
         playbook.yaml
 
-      echo "ZEHICLE"
-      ls -la
-
       # capture address (if any) from run
-      if [[ -e {{$machine}}-address.txt ]]; then
+      if [[ -f {{$machine}}-address.txt ]]; then
+        echo "Saving {{$machine}}-address.txt to Machine.Address"
         drpcli machines update $RS_UUID "{\"Address\":\"$(cat {{$machine}}-address.txt)\"}"
       else
-        echo "No address file from Playbook.  Needs to create {{$machine}}-address.txt"
+        echo "No address file from Playbook.  If desired, create {{$machine}}-address.txt"
       fi
 
       # capture results from run
-      if [[ -e {{$machine}}.json ]]; then
+      if [[ -f {{$machine}}.json ]]; then
+        echo "Saving Ouput from {{$machine}}.json to Machine.Paarams anisble/output."
         drpcli machines set $RS_UUID param ansible/output to "$(cat {{$machine}}.json)"
       else
-        echo "No output file from Playbook.  Needs to create {{$machine}}.json"
+        echo "No output file from Playbook.  If desired, create {{$machine}}.json"
       fi
       {{ end }}
 

@@ -1,11 +1,9 @@
 ---
 ### provision AWS EC2 instance
-{{ $openblock := "\x7B\x7B" }}
-{{ $closeblock := "\x7D\x7D" }}
 - hosts: localhost
   connection: local
   gather_facts: false
-  user: ec2-user
+  user: {{ .Param "rsa/key-user" }}
   vars:
     region: "us-west-2"
 
@@ -16,9 +14,9 @@
         {{ if .ParamExists "rsa/key-public" }}
         key_material: "{{ .Param "rsa/key-public" }}"
         {{ else }}
-        key_material: "{{ $openblock }} lookup('file', 'rsa-{{.Machine.Name}}.pub') {{ $closeblock }}"
+        key_material: "{{`{{ lookup('file', 'rsa-{{.Machine.Name}}.pub') }}`}}"
         {{ end }}
-        region: "{{ $openblock }} region {{ $closeblock }}"
+        region: "{{`{{region}}`}}"
         force: true
         aws_access_key: "{{ .Param "aws/access-key" }}"
         aws_secret_key: "{{ .Param "aws/secret-key" }}"
@@ -31,7 +29,7 @@
         instance_type: "t2.micro"
         image: "ami-08d489468314a58df"
         vpc_subnet_id: "subnet-09daa46f606be3ec3"
-        region: "{{ $openblock }} region {{ $closeblock }}"
+        region: "{{`{{region}}`}}"
         instance_tags:
           name: "{{.Machine.Name}}"
           uuid: "{{.Machine.Uuid}}"
@@ -49,13 +47,23 @@
     - name: output address
       local_action:
         module: copy
-        content: "{{ $openblock }} item.public_ip {{ $closeblock }}"
+        content: "{{`{{ item.public_ip }}`}}"
         dest: "{{ .Machine.Name }}-address.txt"
-      with_items: "{{ $openblock }} ec2.instances {{ $closeblock }}"
+      with_items: "{{`{{ ec2.instances }}`}}"
 
     - name: output from playbook
       local_action:
         module: copy
-        content: "{{ $openblock }} item {{ $closeblock }}"
+        content: "{{`{{ item }}`}}"
         dest: "{{ .Machine.Name }}.json"
-      with_items: "{{ $openblock }} ec2.instances {{ $closeblock }}"
+      with_items: "{{`{{ ec2.instances }}`}}"
+
+    - name: Wait for the instances to boot by checking the ssh port
+      wait_for:
+        host: "{{`{{ item.public_ip }}`}}"
+        port: 22
+        delay: 15
+        timeout: 300
+        state: "started"
+      with_items: "{{`{{ ec2.instances }}`}}"
+    

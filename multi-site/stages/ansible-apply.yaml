@@ -1,8 +1,20 @@
 ---
 Name: "ansible-apply"
 Description: "Apply Ansible Playbook with Ansible Context"
+Documentation: |
+  Runs one or more Ansible Playbook templates with the `ansible-apply` task.
+
+  Requires an `ansible` context.
+
+  Information can be chained together by having the playbook
+  write `[Machine.Uuid].json` as a file.  This will be saved on the
+  machine as `Param.ansible/output` and then fed into the next
+  Playbook as the `digitalrebar` variable so it is available.
+
+  Captures the IP address of the machine if the playbook writes
+  the address into a `[Machine.Uuid]-address.txt` file.
 Params:
-  "ansible/playbook-templates": ["ansible_ec2_provision.yaml.tmpl"]
+  "ansible/playbook-templates": ["ansible_ec2_provision.yaml.tmpl","ansible_join_up.yaml.tmpl"]
 Tasks:
   - "context:ansible"
   - "ansible-apply"

@@ -1,11 +1,9 @@
 ---
 ### provision AWS EC2 instance
-{{ $openblock := "\x7B\x7B" }}
-{{ $closeblock := "\x7D\x7D" }}
 - hosts: localhost
   connection: local
   gather_facts: false
-  user: ec2-user
+  user: {{ .Param "rsa/key-user" }}
   vars:
     region: "us-west-2"
 
@@ -14,7 +12,5 @@
     - name: "Remove key pair by name"
       ec2_key:
         name: "digitalrebar-temp-for-{{ .Machine.Name }}"
-        region: "{{ $openblock }} region {{ $closeblock }}"
+        region: "{{`{{ region }}`}}"
         state: absent
-        aws_access_key: "{{ .Param "aws/access-key" }}"
-        aws_secret_key: "{{ .Param "aws/secret-key" }}"
