@@ -44,6 +44,7 @@ resource "linode_instance" "drp_manager" {
     "drp_version" = "stable"
     "drp_password" = var.manager_password
     "drp_id" = var.manager_label
+    "drp_bootstrap" = "do_not_create"
   }
 }
 
