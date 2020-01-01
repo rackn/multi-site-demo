@@ -1,4 +1,4 @@
-Name: "ansible-create"
+Name: "ansible-linode-create"
 Description: "Create Remote Machine Using Ansible"
 Documentation: |
   Requires that operator has created a Contexts for "runner" and "ansible"
@@ -6,7 +6,7 @@ Documentation: |
 
   Leaves the machines in a Runner Context not on the machine
 Stages:
-  - "ansible-apply"
+  - "ansible-linode-create"
   - "context-clear"
 Meta:
   color: "purple"

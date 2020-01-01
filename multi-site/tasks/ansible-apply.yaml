@@ -16,9 +16,6 @@ RequiredParams:
   - rsa/key-public
   - rsa/key-user
   - rsa/key-private
-OptionalParams:
-  - aws/access-key
-  - aws/secret-key
 Templates:
   - Contents: |-
       #!/bin/bash
@@ -29,7 +26,6 @@ Templates:
       {{template "setup.tmpl" .}}
 
       # we need a keypair for Ansible
-      {{ if .ParamExists "rsa/key-private" }}
       echo "Retrieving SSH key from Machine Params rsa/key-*"
       tee rsa-{{.Machine.Name}} >/dev/null << EOF
       {{.Param "rsa/key-private"}}
@@ -37,19 +33,6 @@ Templates:
       tee rsa-{{.Machine.Name}}.pub >/dev/null << EOF
       {{.Param "rsa/key-public"}}
       EOF
-      {{ else }}
-      if [[ ! -e rsa-{{.Machine.Name}} ]]; then
-        echo "Generating single use keypair for initialization"
-        ssh-keygen -t rsa -N "{{.Machine.Uuid}}" -f "rsa-{{.Machine.Name}}"
-      else
-        echo "Using existing key: rsa-{{.Machine.Name}}.pub"
-      fi
-      echo "Saving local key to Machine $RS_UUID"
-      ls -la
-      drpcli machines set $RS_UUID param "rsa/key-private" to "\"$(cat rsa-{{.Machine.Name}})\""
-      drpcli machines set $RS_UUID param "rsa/key-public" to "\"$(cat rsa-{{.Machine.Name}}.pub)\""
-      drpcli machines set $RS_UUID param "rsa/key-user" to "ec2-user"
-      {{ end }}
 
       {{ $machine := .Machine.Name -}}
       {{ range $index, $template := (.Param "ansible/playbook-templates") -}}
@@ -69,13 +52,13 @@ Templates:
       else
         ADDRESS="$ADDRESS,"
       fi
-      INPUT=$(drpcli machines show $RS_UUID)
+      INPUT="$(drpcli machines show $RS_UUID)"
 
       echo "Run Playbook {{$index}} using $(ansible-playbook --version)"
       ansible-playbook \
         -i $ADDRESS \
         -e digitalrebar="${INPUT}" \
-        --private-key="rsa-{{$machine}}" \
+        --private-key="./rsa-{{$machine}}" \
         playbook.yaml
 
       # capture address (if any) from run
