@@ -96,7 +96,6 @@ Templates:
       {{ end }}
 
       echo "Done"
-      exit 1
     Name: "Run Playbooks"
 Meta:
   icon: "map"

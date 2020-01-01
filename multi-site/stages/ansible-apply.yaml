@@ -14,9 +14,10 @@ Documentation: |
   Captures the IP address of the machine if the playbook writes
   the address into a `[Machine.Uuid]-address.txt` file.
 Params:
-  "ansible/playbook-templates": ["ansible_ec2_provision.yaml.tmpl","ansible_join_up.yaml.tmpl"]
+  "ansible/playbook-templates": ["ansible_linode_provision.yaml.tmpl","ansible_join_up.yaml.tmpl"]
 Tasks:
   - "context:ansible"
+  - "rsa-key-create"
   - "ansible-apply"
 Meta:
   icon: "cog"

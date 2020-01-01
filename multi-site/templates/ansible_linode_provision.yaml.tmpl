@@ -1,0 +1,49 @@
+---
+### provision Linode instance
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  user: {{ .Param "rsa/key-user" }}
+
+  tasks:
+
+    - name: Create a new Linode.
+      linode_v4:
+        label: "{{ .Machine.Name }}"
+        access_token: "{{ .Param "linode/token" }}"
+        type: "{{ .Param "linode/instance-type" }}"
+        region: "{{ .Param "linode/region" }}"
+        image: "{{ .Param "linode/instance-image" }}"
+        root_pass: "{{ .Param "linode/root-password" }}"
+        authorized_keys:
+          - '{{ .Param "rsa/key-public" }}'
+        tags:
+          - {{ .Machine.Uuid }}        
+          - "digitalrebar"
+        state: present
+      register: new_linode
+
+    - name: debug
+      debug:
+        var: new_linode.instance.ipv4[0]
+
+    - name: output address
+      local_action:
+        module: copy
+        content: "{{`{{ new_linode.instance.ipv4[0] }}`}}"
+        dest: "{{ .Machine.Name }}-address.txt"
+
+    - name: output from playbook
+      local_action:
+        module: copy
+        content: "{{`{{ new_linode.instance }}`}}"
+        dest: "{{ .Machine.Name }}.json"
+
+    - name: Wait for the instances to boot by checking the ssh port
+      wait_for:
+        host: "{{`{{ new_linode.instance.ipv4[0] }}`}}"
+        port: 22
+        delay: 15
+        timeout: 300
+        state: "started"
+    
