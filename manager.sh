@@ -205,8 +205,8 @@ timeout 300 bash -c 'while [[ "$(curl -fsSLk -o /dev/null -w %{http_code} ${RS_E
 
 echo "FIRST, reset the tokens! export RS_ENDPOINT=$RS_ENDPOINT"
 # extract secretes from config
-baseTokenSecret=$(jq -r -c -M .sections.version_sets.credential.Prefs.baseTokenSecret multi-site-demo.json)
-systemGrantorSecret=$(jq -r -c -M .sections.version_sets.credential.Prefs.systemGrantorSecret multi-site-demo.json)
+baseTokenSecret=$(jq -r .sections.version_sets.credential.Prefs.baseTokenSecret multi-site-demo.json)
+systemGrantorSecret=$(jq -r .sections.version_sets.credential.Prefs.systemGrantorSecret multi-site-demo.json)
 _drpcli prefs set baseTokenSecret "${baseTokenSecret}" systemGrantorSecret "${systemGrantorSecret}"
 
 echo "Setup Starting for endpoint export RS_ENDPOINT=$RS_ENDPOINT"
@@ -293,10 +293,10 @@ _drpcli machines wait Name:bootstrap Stage "complete-nobootenv" 45
 echo "SETUP DOCKER-CONTEXT export RS_ENDPOINT=$RS_ENDPOINT"
 
 raw=$(drpcli contexts list Engine=docker-context)
-contexts=$(jq -r -c -M ".[].Name" <<< "${raw}")
+contexts=$(jq -r ".[].Name" <<< "${raw}")
 i=0
 for context in $contexts; do
-  image=$(jq -r -c -M ".[$i].Image" <<< "${raw}")
+  image=$(jq -r ".[$i].Image" <<< "${raw}")
   echo "Uploading Container for $context named [$image] using [$context-dockerfile]"
   container_sum=$(drpcli files exists "contexts/docker-context/$image" || true)
   if [[ "$container_sum" == "" ]]; then
@@ -316,11 +316,13 @@ _drpcli catalog item install docker-context
 echo "ADD CLUSTERS export RS_ENDPOINT=$RS_ENDPOINT"
 _drpcli contents update multi-site-demo multi-site-demo.json
 
+# make sure any background tasks complete
+wait
+
 # prepopulate containers
-sleep 30
 i=0
 for context in $contexts; do
-  image=$(jq -r -c -M ".[$i].Image" <<< "${raw}")
+  image=$(jq -r ".[$i].Image" <<< "${raw}")
   echo "Installing Container for $context named from $image"
   _drpcli plugins runaction docker-context imageUpload \
     context/image-name ${image} \
@@ -393,7 +395,7 @@ do
   _drpcli machines wait Name:$mc Stage "complete-nobootenv" 180
   sleep 5
   machine=$(drpcli machines show Name:$mc)
-  ip=$(jq -r -c -M .Address <<< "${machine}")
+  ip=$(jq -r .Address <<< "${machine}")
   echo "Adding $mc to Endpoints List"
   _drpcli plugins runaction manager addEndpoint manager/url https://$ip:8092 manager/username rocketskates manager/password r0cketsk8ts
 done
