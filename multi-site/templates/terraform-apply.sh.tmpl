@@ -32,7 +32,7 @@ if [[ $ip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
 fi
 # capture all the output vars in the parms
 for key in $(jq -r 'keys[]' <<< ${out}); do
-	drpcli machines set $RS_UUID param "TF_VAR/$key" to "$(jq -r -c -M ".$key.value" <<< ${out})"
+	drpcli machines set $RS_UUID param "TF_VAR/$key" to "$(jq -r ".$key.value" <<< ${out})"
 done
 
 echo "=== DONE ===="
