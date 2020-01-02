@@ -1,0 +1,31 @@
+---
+### provision Linode instance
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  user: {{ .Param "rsa/key-user" }}
+
+  tasks:
+
+    - name: Remove A Linode.
+      linode_v4:
+        label: "{{ .Machine.Name }}"
+        access_token: "{{ .Param "linode/token" }}"
+        tags:
+          - {{ .Machine.Uuid }}        
+          - "digitalrebar"
+        state: absent
+      register: new_linode
+
+    - name: output address
+      local_action:
+        module: copy
+        content: ""
+        dest: "{{ .Machine.Name }}-address.txt"
+
+    - name: output from playbook
+      local_action:
+        module: copy
+        content: "{{`{{ new_linode.instance }}`}}"
+        dest: "{{ .Machine.Name }}.json"
+        

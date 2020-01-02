@@ -1,0 +1,13 @@
+Name: "ansible-linode-destroy"
+Description: "Destroy Remote Machine Using Ansible"
+Documentation: |
+  Requires that operator has created a Contexts for "runner" and "ansible"
+  that can run DRP Angent and Terraform
+
+  Leaves the machines in a Runner Context not on the machine
+Stages:
+  - "ansible-linode-destroy"
+Meta:
+  color: "purple"
+  icon: "cog"
+  title: "RackN Content"

@@ -1,0 +1,22 @@
+---
+Name: "ansible-linode-destroy"
+Description: "Use Ansible Playbook to Destroy Linode Machine"
+Documentation: |
+  Runs one or more Ansible Playbook templates with the `ansible-apply` task.
+
+  Requires an `ansible` context.
+
+  Clears the Machine.Address
+
+Params:
+  "context/name": "runner"
+  "ansible/playbook-templates": ["ansible_linode_destroy.yaml.tmpl"]
+Tasks:
+  - "context:ansible"
+  - "ansible-apply"
+  - "context:runner"
+  - "context-set"
+Meta:
+  icon: "cog"
+  color: "black"
+  title: "RackN Content"
