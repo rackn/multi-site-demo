@@ -1,10 +1,9 @@
 ---
-### provision AWS EC2 instance
+### Run Join-Up via Ansible
 - hosts: all
-  remote_user: {{ .Param "rsa/key-user" }}
+  remote_user: "{{ .Param "rsa/key-user" }}"
+  connection: "ssh"
   gather_facts: false
-  become: yes
-  become_method: su
 
   tasks:
 
@@ -19,6 +18,7 @@
     - name: download join-up script
       get_url:
         url: http://{{ .ProvisionerAddress }}/machines/join-up.sh
+        dest: join-up.sh
         mode: 0755
 
     - name: run join-up script

@@ -30,7 +30,8 @@ Templates:
             exit 1
         else
           echo "Generating single use keypair for initialization"
-          ssh-keygen -t rsa -N "{{.Machine.Uuid}}" -f "rsa-{{.Machine.Name}}"
+          ssh-keygen -t rsa -q -N "" -f "rsa-{{.Machine.Name}}"
+          cat rsa-{{.Machine.Name}} | tr "\n" "|" > rsa-{{.Machine.Name}}.safe
         fi
 
       else
@@ -40,8 +41,8 @@ Templates:
       fi
 
       echo "Saving key to Machine $RS_UUID"
-      drpcli machines set $RS_UUID param "rsa/key-private" to "\"$(cat rsa-{{.Machine.Name}})\""
-      drpcli machines set $RS_UUID param "rsa/key-public" to "\"$(cat rsa-{{.Machine.Name}}.pub)\""
+      drpcli machines set $RS_UUID param "rsa/key-private" to - < rsa-{{.Machine.Name}}.safe
+      drpcli machines set $RS_UUID param "rsa/key-public" to - < rsa-{{.Machine.Name}}.pub
       {{ end }}
 
     Name: "RSA Generate"

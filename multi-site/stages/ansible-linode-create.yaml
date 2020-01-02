@@ -1,6 +1,6 @@
 ---
-Name: "ansible-apply"
-Description: "Apply Ansible Playbook with Ansible Context"
+Name: "ansible-linode-create"
+Description: "Use Ansible Playbook to Create Linode Machine"
 Documentation: |
   Runs one or more Ansible Playbook templates with the `ansible-apply` task.
 

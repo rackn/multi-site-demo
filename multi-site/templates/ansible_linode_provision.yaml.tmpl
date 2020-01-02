@@ -23,10 +23,6 @@
         state: present
       register: new_linode
 
-    - name: debug
-      debug:
-        var: new_linode.instance.ipv4[0]
-
     - name: output address
       local_action:
         module: copy
@@ -43,7 +39,7 @@
       wait_for:
         host: "{{`{{ new_linode.instance.ipv4[0] }}`}}"
         port: 22
-        delay: 15
+        delay: 0
         timeout: 300
         state: "started"
     

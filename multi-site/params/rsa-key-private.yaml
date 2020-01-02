@@ -3,6 +3,16 @@ Name: "rsa/key-private"
 Description: "PrivateRSA Key for SSH"
 Documentation: |
   Private SSH Key (secure)
+
+  To preserve formatting, `|` is used instead of `\n`.
+
+  When writing the key, you should use the following template:
+    ::
+      tee id_rsa >/dev/null << EOF
+      {{.Param "rsa/key-private" | replace "|" "\n" }}
+      EOF
+      chmod 600 id_rsa
+
 Secure: true
 Schema:
   type: "string"
