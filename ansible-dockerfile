@@ -1,8 +1,8 @@
 FROM alpine:latest
 MAINTAINER eng@rackn.com
 RUN echo "===> Adding Python runtime..."  && \
-    apk --update add openssh-client python3 openssl ca-certificates    && \
-    apk --update add --virtual build-dependencies \
+    apk --no-cache --update add openssh-client python3 openssl ca-certificates    && \
+    apk --no-cache --update add --virtual build-dependencies \
                 python3-dev libffi-dev openssl-dev build-base  && \
     pip3 install --upgrade pip cffi
 RUN echo "===> Installing Ansible..."  && \
@@ -23,7 +23,8 @@ RUN echo "===> Installing Libraries..."  && \
         git \
         curl \
         openssh-client \
-        openssh-keygen
+        openssh-keygen && \
+    rm -rf /var/cache/apk/*
 RUN pip3 install --no-cache-dir --upgrade yq
 # AWS EC2
 RUN pip3 install --no-cache-dir --upgrade mitogen boto3

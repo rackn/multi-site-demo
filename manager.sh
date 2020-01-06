@@ -14,7 +14,8 @@ usage() {
   cat <<EO_USAGE
 
   $0 [ -d ] [ -p ] [ -b site-base-VER ] [ -c cluster_prefix ] [ -S sites ] \\
-  $PAD [ -L label ] [ -P password ] [ -R region ] [ -I image ] [ -T type ]
+  $PAD [ -L label ] [ -P password ] [ -R region ] [ -I image ] [ -T type ] \\
+  $PAD [ -v version_content ]
   
   WHERE:
           -p                 prep manager (lowercase 'p')
@@ -28,7 +29,7 @@ usage() {
           -c cluster_prefix  sets cluster members with a prefix name for
                              uniqueness
           -L label           set Manager Label (endpoint name)
-                             defaults to 'rackn-manager-demo'
+                             defaults to 'global-manager'
                              NOTE: '-c cluster_prefix', added to MGR too
           -P password        set Manager Password for root user
                              defaults to 'r0cketsk8ts'
@@ -41,6 +42,8 @@ usage() {
           -S sites           list of Sites to build regional controllers in
                              (comma, semi-colon, colon, dash, underscore, or
                              space separated list - normal shell rules apply
+          -v version         specify what DRP content version to install, by
+                             default install "stable" version
           -d                 enable debugging mode
 
   NOTES:  * if '-b site-base-VER' specified, '-p' (prep-manager) is implied
@@ -91,7 +94,7 @@ set -e
 PREP=false
 BASE="site-base-v4.2.0"           # "stable" is not fully available in the catalog
 OPTS=""
-MGR_LBL="rackn-manager-demo"
+MGR_LBL="global-manager"
 MGR_PWD="r0cketsk8ts"
 MGR_RGN="us-west"
 MGR_IMG="linode/centos7"
@@ -100,8 +103,9 @@ LINODE_TOKEN=${LINODE_TOKEN:-""}
 SITES="us-central us-east us-west us-southeast"
 DBG=0
 LOOP_WAIT=15
+VER_CONTENT="stable"
 
-while getopts ":dpb:c:t:L:P:R:I:T:S:u" CmdLineOpts
+while getopts ":dpb:c:t:L:P:R:I:T:S:v:u" CmdLineOpts
 do
   case $CmdLineOpts in
     p) PREP="true"            ;;
@@ -115,6 +119,7 @@ do
     I) MGR_IMG=${OPTARG}      ;;
     T) MGR_TYP=${OPTARG}      ;;
     S) STS=${OPTARG}          ;;
+    v) VER_CONTENT=${OPTARG}  ;;
     d) DBG=1; set -x          ;;
     u) usage; exit 0          ;;
     \?)
@@ -213,9 +218,9 @@ echo "Setup Starting for endpoint export RS_ENDPOINT=$RS_ENDPOINT"
 _drpcli contents upload rackn-license.json
 _drpcli bootenvs uploadiso sledgehammer &
 
-_drpcli catalog item install drp-community-content --version=tip
-_drpcli catalog item install task-library --version=tip
-_drpcli catalog item install manager --version=tip
+_drpcli catalog item install drp-community-content --version=$VER_CONTENT
+_drpcli catalog item install task-library --version=$VER_CONTENT
+_drpcli catalog item install manager --version=$VER_CONTENT
 
 echo "Building Linode Content"
 cd linode
