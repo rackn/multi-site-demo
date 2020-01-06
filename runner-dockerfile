@@ -1,5 +1,5 @@
 FROM alpine:latest
-RUN apk add bash curl
+RUN apk --no-cache add bash curl
 COPY drpcli /usr/bin/drpcli
 RUN chmod 755 /usr/bin/drpcli
 RUN ln -s /usr/bin/drpcli /usr/bin/jq
