@@ -239,7 +239,9 @@ echo "Setup Starting for endpoint export RS_ENDPOINT=$RS_ENDPOINT"
 _drpcli contents upload rackn-license.json
 
 _drpcli catalog item install drp-community-content --version=$VER_CONTENT
+sleep 1
 _drpcli catalog item install task-library --version=$VER_CONTENT
+sleep 1
 _drpcli catalog item install manager --version=$VER_CONTENT
 
 echo "Building Linode Content"
