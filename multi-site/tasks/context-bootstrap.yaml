@@ -1,6 +1,10 @@
 ---
 Description: "Setup Containers for Docker-Context"
 Name: "context-bootstrap"
+ExtraClaims:
+  - scope: "*"
+    action: "*"
+    specific: "*"
 Templates:
   - Contents: |-
       #!/bin/bash
@@ -21,9 +25,14 @@ Templates:
       service docker start
 
       echo "Docker installed successfully"
+
+      echo "Install the Docker Context"
+      drpcli catalog item install docker-context
+
+      echo "done"
       exit 0
 
-    Name: "demo"
+    Name: "docker-context"
 Meta:
   icon: "spy"
   color: "purple"

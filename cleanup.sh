@@ -50,7 +50,7 @@ if [[ "$(drpcli machines list | jq length)" == "1" ]]; then
 
   echo "removing manager"
   terraform init -no-color
-  terraform destroy -no-color -auto-approve --var="linode_token=$LINODE_TOKEN"
+  terraform destroy -no-color -auto-approve -var-file=manager.tfvars
 
   if [[ -e "linode.json" ]]; then
     rm linode.json

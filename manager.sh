@@ -91,7 +91,7 @@ set -e
 #            you must insure your input is sane and matches real values
 #            that can be set for the terraform provider (linode)
 ###
-PREP=false
+PREP="false"
 BASE="site-base-v4.2.0"           # "stable" is not fully available in the catalog
 OPTS=""
 MGR_LBL="global-manager"
@@ -290,9 +290,6 @@ drpcli profiles set global param "network/firewalld-ports" to '[
 
 echo "BOOTSTRAP export RS_ENDPOINT=$RS_ENDPOINT"
 
-echo "Waiting for backgrounded 'buildCatalog' to complete..."
-wait
-
 if ! drpcli machines exists Name:"$MGR_LBL" > /dev/null; then  
   echo "Error - Boostrap Machine($MGR_LBL) was not created!"
   exit 1
@@ -312,7 +309,6 @@ else
   echo "found installed files $install_sum"
 fi
 
-_drpcli machines wait Name:"$MGR_LBL" Stage "complete-nobootenv" 45
 
 echo "SETUP DOCKER-CONTEXT export RS_ENDPOINT=$RS_ENDPOINT"
 
@@ -338,13 +334,13 @@ for context in $contexts; do
   fi
   i=$(($i + 1))
 done
-echo "uploaded $(drpcli files list contexts/docker-context)"
-_drpcli catalog item install docker-context
 
 echo "ADD CLUSTERS export RS_ENDPOINT=$RS_ENDPOINT"
 _drpcli contents update multi-site-demo multi-site-demo.json
 
 # make sure any background tasks complete
+_drpcli machines wait Name:"$MGR_LBL" Stage "complete-nobootenv" 45
+echo "Waiting for backgrounded 'buildCatalog' to complete..."
 wait
 
 # prepopulate containers
@@ -367,7 +363,7 @@ do
     echo "drpcli machines create \"{\"Name\":\"${mc}\", ... "
     drpcli machines create "{\"Name\":\"${mc}\", \
       \"Workflow\":\"site-create\",
-      \"Params\":{\"linode/region\": \"${reg}\", \"network\\firewalld-ports\":[\"22/tcp\",\"8091/tcp\",\"8092/tcp\"] }, \
+      \"Params\":{\"linode/region\": \"${reg}\", \"network\firewalld-ports\":[\"22/tcp\",\"8091/tcp\",\"8092/tcp\"] }, \
       \"Meta\":{\"BaseContext\":\"runner\", \"icon\":\"cloud\"}}"
     sleep $LOOP_WAIT
   else

@@ -1,6 +1,10 @@
 ---
 Description: "Setup Sledgehammer ISO"
 Name: "iso-bootstrap"
+ExtraClaims:
+  - scope: "*"
+    action: "*"
+    specific: "*"
 Templates:
   - Contents: |-
       #!/bin/bash
