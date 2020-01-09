@@ -18,6 +18,7 @@ Templates:
         region    = "{{ .Param "linode/region" }}"
         type      = "{{ .Param "linode/instance-type" }}"
         root_pass = "{{ .Param "linode/root-password" }}"
+        tags      = [ "{{ .Info.Id }}" ]
 
         stackscript_id = {{ .Param "linode/stackscript_id" }}
         stackscript_data = {
@@ -35,6 +36,7 @@ Templates:
         region    = "{{ .Param "linode/region" }}"
         type      = "{{ .Param "linode/instance-type" }}"
         root_pass = "{{ .Param "linode/root-password" }}"
+        tags      = [ "{{ .Info.Id }}" ]
 
         stackscript_id = "548252"
         stackscript_data = {

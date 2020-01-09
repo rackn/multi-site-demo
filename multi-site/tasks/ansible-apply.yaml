@@ -72,8 +72,19 @@ Templates:
 
       # capture address (if any) from run
       if [[ -f {{$machine}}-address.txt ]]; then
-        echo "Saving {{$machine}}-address.txt to Machine.Address"
-        drpcli machines update $RS_UUID "{\"Address\":\"$(cat {{$machine}}-address.txt)\"}" | jq .Address
+        NEWADDRESS=$(cat {{$machine}}-address.txt)
+        echo "reading $NEWADDRESS from {{$machine}}-address.txt"
+        if [[ "$NEWADDRESS" == "REMOVE" ]]; then
+          echo "Remove address from machine"
+          drpcli machines update $RS_UUID "{\"Address\":\"\"}" | jq .Address
+        else
+          if [[ "$NEWADDRESS," == "$ADDRESS" ]]; then
+            echo "Address did not change, not saving"
+          else
+            echo "Saving $NEWADDRESS to Machine.Address"
+            drpcli machines update $RS_UUID "{\"Address\":\"$NEWADDRESS\"}" | jq .Address
+          fi
+        fi
       else
         echo "No address file from Playbook.  If desired, create {{$machine}}-address.txt"
       fi

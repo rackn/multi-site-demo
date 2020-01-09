@@ -7,7 +7,6 @@ Documentation: |
   Leaves the machines in a Runner Context not on the machine
 Stages:
   - "ansible-linode-create"
-  - "context-clear"
 Meta:
   color: "purple"
   icon: "cog"

@@ -133,7 +133,7 @@ done
 # if -S sites called, transform patterns to space separated list
 [[ -n "$STS" ]] && SITES=$(echo $STS | tr '[ ,;:-:]' ' ' | sed 's/  //g')
 
-check_tools jq drpcli terraform curl docker dangerzone
+check_tools jq drpcli terraform curl docker
 
 if [[ "$LINODE_TOKEN" == "" ]]; then
     echo "you must export LINODE_TOKEN=[your token]"
@@ -214,9 +214,29 @@ baseTokenSecret=$(jq -r .sections.version_sets.credential.Prefs.baseTokenSecret 
 systemGrantorSecret=$(jq -r .sections.version_sets.credential.Prefs.systemGrantorSecret multi-site-demo.json)
 _drpcli prefs set baseTokenSecret "${baseTokenSecret}" systemGrantorSecret "${systemGrantorSecret}"
 
+if [[ -f rackn-license.json ]]; then
+  echo "Checking Online License for rackn-license updates"
+  LICENSE=$(cat rackn-license.json)
+  LICENSEBASE=$(jq -r '.sections.profiles["rackn-license"].Params["rackn/license-object"]' <<< ${LICENSE})
+  CONTACTID="$(jq -r .ContactId <<< ${LICENSEBASE})"
+  OWNERID="$(jq -r .OwnerId <<< ${LICENSEBASE})"
+  KEY="$(jq -r '.sections.profiles["rackn-license"].Params["rackn/license"]' <<< ${LICENSE})"
+  VERSION="$(jq -r .Version <<< ${LICENSEBASE})"
+  curl -X GET "https://1p0q9a8qob.execute-api.us-west-2.amazonaws.com/v40/license" \
+    -H "rackn-contactid: ${CONTACTID}" \
+    -H "rackn-ownerid: ${OWNERID}" \
+    -H "rackn-endpointid: ${MGR_LBL}" \
+    -H "rackn-key: ${KEY}" \
+    -H "rackn-version: ${VERSION}" \
+    -o rackn-license.json
+  echo "License Verified"
+else
+  echo "MISSING REQUIRED RACKN-LICENSE FILE"
+  exit 1
+fi
+
 echo "Setup Starting for endpoint export RS_ENDPOINT=$RS_ENDPOINT"
 _drpcli contents upload rackn-license.json
-_drpcli bootenvs uploadiso sledgehammer &
 
 _drpcli catalog item install drp-community-content --version=$VER_CONTENT
 _drpcli catalog item install task-library --version=$VER_CONTENT
@@ -255,11 +275,10 @@ fi;
   echo "Catalog Updated and Ready for endpoint export RS_ENDPOINT=$RS_ENDPOINT"
 ) &
 
-_drpcli plugin_providers upload dangerzone from dangerzone
 _drpcli contents upload multi-site-demo.json
 
 _drpcli profiles set global set "linode/stackscript_id" to 548252
-_drpcli profiles set global set "linode/image" to "linode/centos7"
+_drpcli profiles set global set "linode/instance-image" to "linode/centos7"
 _drpcli profiles set global set "linode/type" to "g6-standard-1"
 _drpcli profiles set global set "linode/token" to "$LINODE_TOKEN"
 _drpcli profiles set global set "linode/root-password" to "r0cketsk8ts"
@@ -274,26 +293,26 @@ echo "BOOTSTRAP export RS_ENDPOINT=$RS_ENDPOINT"
 echo "Waiting for backgrounded 'buildCatalog' to complete..."
 wait
 
-if ! drpcli machines exists Name:bootstrap > /dev/null; then
-  echo "Creating bootstrap machine object"
-  echo 'drpcli machines create {"Name":"bootstrap" ... '
-  drpcli machines create '{"Name":"bootstrap",
-    "Workflow": "context-bootstrap",
-    "Meta":{"BaseContext": "bootstrapper", "icon":"bolt"}}'
-  install_sum=$(drpcli files exists bootstrap/v4drp-install.zip || true)
-  if [[ "$install_sum" == "" ]]; then
-    echo "upload install files..."
-    _drpcli files upload v4drp-install.zip as "bootstrap/v4drp-install.zip"
-    _drpcli files upload install.sh as "bootstrap/install.sh"
-    sleep 5
-  else
-    echo "found installed files $install_sum"
-  fi
+if ! drpcli machines exists Name:"$MGR_LBL" > /dev/null; then  
+  echo "Error - Boostrap Machine($MGR_LBL) was not created!"
+  exit 1
 else
-  echo "Bootstrap machine exists"
+  echo "Bootstrap machine exists as $MGR_LBL... starting bootstrap workflow"
+  _drpcli machines workflow Name:"$MGR_LBL" "manager-bootstrap"
 fi
 
-_drpcli machines wait Name:bootstrap Stage "complete-nobootenv" 45
+# Upload install files
+install_sum=$(drpcli files exists bootstrap/v4drp-install.zip || true)
+if [[ "$install_sum" == "" ]]; then
+  echo "upload install files..."
+  _drpcli files upload v4drp-install.zip as "bootstrap/v4drp-install.zip"
+  _drpcli files upload install.sh as "bootstrap/install.sh"
+  sleep 5
+else
+  echo "found installed files $install_sum"
+fi
+
+_drpcli machines wait Name:"$MGR_LBL" Stage "complete-nobootenv" 45
 
 echo "SETUP DOCKER-CONTEXT export RS_ENDPOINT=$RS_ENDPOINT"
 
@@ -305,10 +324,14 @@ for context in $contexts; do
   echo "Uploading Container for $context named [$image] using [$context-dockerfile]"
   container_sum=$(drpcli files exists "contexts/docker-context/$image" || true)
   if [[ "$container_sum" == "" ]]; then
-    echo "  Building Container"
-    docker build --tag=$image --file="$context-dockerfile" .
-    docker save $image > $context.tar
-    echo "  Uploading Container"
+    if [[ -f $context.tar ]]; then
+      echo "  Skipping Build (found Container Tar $context.tar)"
+    else
+      echo "  Building Container --tag=$image --file=$context-dockerfile"
+      docker build --tag=$image --file="$context-dockerfile" .
+      docker save $image > $context.tar
+    fi
+    echo "  Uploading Container from $context.tar"
     _drpcli files upload $context.tar as "contexts/docker-context/$image"
   else
     echo "  Found $container_sum, skipping upload"

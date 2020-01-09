@@ -117,16 +117,6 @@ ssh root@$MGR "mkdir -p multi-site-demo"
 scp ~/Downloads/rackn-license.json root@$MGR:./multi-site-demo/
 ```
 
-Build dangerzone plugin - MUST BE RACKN employee / or have git repo access.
-```
-git clone https://github.com/rackn/provision-server.git
-cd provision-server
-export GOOS=linux
-export GOARCH=amd64
-tools/build-one.sh cmds/dangerzone
-scp bin/$GOOS/$GOARCH/dangerzone root@$MGR:./multi-site-demo/
-```
-
 Login / connect to your bootstrap manager VM.
 ```
 ssh root@$MGR

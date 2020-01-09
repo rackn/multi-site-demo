@@ -24,10 +24,6 @@ variable "manager_password" {
   type      = string
 }
 
-variable "cluster_prefix" {
-  type      = string
-}
-
 provider "linode" {
   token     = var.linode_token
 }
@@ -38,10 +34,11 @@ resource "linode_instance" "drp_manager" {
   region    = var.manager_region
   type      = var.manager_type
   root_pass = var.manager_password
+  tags      = [ "${var.manager_label}" ]
 
   stackscript_id = "626699"
   stackscript_data = {
-    "drp_version" = "stable"
+    "drp_version" = "tip"
     "drp_password" = var.manager_password
     "drp_id" = var.manager_label
   }

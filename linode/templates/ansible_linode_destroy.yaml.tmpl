@@ -20,7 +20,7 @@
     - name: output address
       local_action:
         module: copy
-        content: ""
+        content: "REMOVE"
         dest: "{{ .Machine.Name }}-address.txt"
 
     - name: output from playbook

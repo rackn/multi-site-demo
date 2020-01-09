@@ -70,12 +70,15 @@ Templates:
 
       echo "Run Join-Up Playbook using $(ansible-playbook --version)"
       ansible-playbook \
-        -i $ADDRESS, \
+        -i {{ .Machine.Address }}, \
         --private-key=rsa-{{ .Machine.Name }} \
         join-up.yaml
 
-      #echo clear the workflow so join-up can continue
-      drpcli machines workflow $RS_UUID {{ .Param "reboot-workflow" }}
+      echo "Clear the workflow so join-up can continue"
+      drpcli machines workflow $RS_UUID {{ .Param "reboot-workflow" }} | jq .Workflow
+      drpcli machines meta remove $RS_UUID key BaseContext || true | jq .Meta
+      drpcli machines update $RS_UUID '{"Context":""}' | jq .Context 
+      drpcli machines meta set $RS_UUID key icon to "level up alternate"
       
       echo "Done"
     Name: "Run Playbooks"
