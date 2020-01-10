@@ -3,7 +3,7 @@ Multi-Site Manager Demo
 _By RackN, October 2019_
 
 
-This content is used to RackN Showcase Multi-Site Management and Context
+This content is used by RackN to showcase Multi-Site Management and Context
 features.  It is designed to be used with Linode; however, the context
 can be easily adapted for uses.
 
