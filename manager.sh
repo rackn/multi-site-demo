@@ -170,6 +170,9 @@ linode_token     = "$LINODE_TOKEN"
 cluster_prefix   = "$PREFIX"
 EO_MANAGER_VARS
 
+echo "remove cached DRP token"
+rm ~/.cache/drpcli/tokens/.rocketskates.token || true
+
 (( $DBG )) && { echo "manager.tfvars set to:"; cat manager.tfvars; }
 
 # verify our command line flags and validate site-base requested
@@ -190,7 +193,7 @@ else
 fi
 
 if [[ ! -e "v4drp-install.zip" ]]; then
-  curl -sfL -o v4drp-install.zip https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.1.3.zip
+  curl -sfL -o v4drp-install.zip https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.2.0.zip
   curl -sfL -o install.sh get.rebar.digital/tip
 else
   echo "install files exist - skipping"
@@ -203,16 +206,10 @@ mv multi-site-demo.json ..
 cd ..
 
 echo "Script is idempotent - restart if needed!"
-echo "Waiting for endpoint export RS_ENDPOINT=$RS_ENDPOINT"
+echo "Waiting for endpoint to be up.  export RS_ENDPOINT=$RS_ENDPOINT"
 echo ">>> NOTE: 'Failed to connect ...' messages are normal during system bring up."
 sleep 10
 timeout 300 bash -c 'while [[ "$(curl -fsSLk -o /dev/null -w %{http_code} ${RS_ENDPOINT})" != "200" ]]; do sleep 5; done' || false
-
-echo "FIRST, reset the tokens! export RS_ENDPOINT=$RS_ENDPOINT"
-# extract secretes from config
-baseTokenSecret=$(jq -r .sections.version_sets.credential.Prefs.baseTokenSecret multi-site-demo.json)
-systemGrantorSecret=$(jq -r .sections.version_sets.credential.Prefs.systemGrantorSecret multi-site-demo.json)
-_drpcli prefs set baseTokenSecret "${baseTokenSecret}" systemGrantorSecret "${systemGrantorSecret}"
 
 if [[ -f rackn-license.json ]]; then
   echo "Checking Online License for rackn-license updates"
@@ -314,6 +311,7 @@ fi
 
 echo "SETUP DOCKER-CONTEXT export RS_ENDPOINT=$RS_ENDPOINT"
 
+echo "  requires drpcli w/ jq: $(./drpcli version)"
 raw=$(drpcli contexts list Engine=docker-context)
 contexts=$(jq -r ".[].Name" <<< "${raw}")
 i=0

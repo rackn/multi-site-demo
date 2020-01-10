@@ -38,7 +38,7 @@ Templates:
         root_pass = "{{ .Param "linode/root-password" }}"
         tags      = [ "{{ .Info.Id }}" ]
 
-        stackscript_id = "548252"
+        stackscript_id = {{ .Param "linode/stackscript_id" }}
         stackscript_data = {
           "drp_ip" = linode_instance.drp_endpoint.ip_address
           "drp_port" = "8091"

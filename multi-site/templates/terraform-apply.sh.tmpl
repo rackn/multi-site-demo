@@ -25,13 +25,18 @@ echo "=== RUN {{ .Param "terraform/plan-action" }} TERRAFORM ===="
 terraform {{ .Param "terraform/plan-action" }} -no-color -auto-approve
 
 out=$(terraform output --json)
-ip=$(jq -r ".machine_ip.value" <<< ${out})
+echo "capturing terraform output: $out"
+ip=$(jq '.machine_ip.value' <<< ${out})
 if [[ $ip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
 	echo "Detected IP from TF, Updateing Machine IP to $ip"
 	drpcli machines update $RS_UUID "{\"Address\":\"$ip\"}"
+else
+	echo "No IP address (machine_ip.value) detected in terraform output"
 fi
 # capture all the output vars in the parms
+echo "uploading other keys from terraform output"
 for key in $(jq -r 'keys[]' <<< ${out}); do
+	echo "adding $key to machine"
 	drpcli machines set $RS_UUID param "TF_VAR/$key" to "$(jq -r ".$key.value" <<< ${out})"
 done
 
