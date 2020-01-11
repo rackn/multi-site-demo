@@ -4,7 +4,7 @@ Description: "Install Digital Rebar Server"
 Documentation: |
   Installs MINIMAL DRP assuming population by Multi-Site-Manager
 
-  Requires install.sh and v4drp-install.zip to be in DRP files/bootstrap
+  Requires install.sh and dr-provision.zip to be in DRP files/bootstrap
 
   Does nothing if DRP already installed
 Templates:
@@ -14,17 +14,17 @@ Templates:
 
       set -e
       {{template "setup.tmpl" .}}
-      
+
       if [[ "$(systemctl is-active dr-provision)" != "active" ]] ; then
 
         echo "Download Components"
-        drpcli files download "bootstrap/v4drp-install.zip" > v4drp-install.zip
+        drpcli files download "bootstrap/dr-provision.zip" > dr-provision.zip
         drpcli files download "bootstrap/install.sh" > install.sh
         chmod +x install.sh
 
         echo "DRP $action"
         unset RS_ENDPOINT
-        ./install.sh install --systemd --drp-id={{ .Machine.Name }} --no-content --startup --zip-file=v4drp-install.zip
+        ./install.sh install --systemd --drp-id={{ .Machine.Name }} --no-content --startup --zip-file=dr-provision.zip
 
       else
         echo "DRP already installed, skipping"

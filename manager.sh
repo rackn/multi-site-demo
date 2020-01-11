@@ -16,7 +16,7 @@ usage() {
   $0 [ -d ] [ -p ] [ -b site-base-VER ] [ -c cluster_prefix ] [ -S sites ] \\
   $PAD [ -L label ] [ -P password ] [ -R region ] [ -I image ] [ -T type ] \\
   $PAD [ -v version_content ]
-  
+
   WHERE:
           -p                 prep manager (lowercase 'p')
                              set the global manager to apply VersionSets
@@ -24,7 +24,7 @@ usage() {
                              $BASE VersionSet, if there is an
                              additional option to 'prep-manager', that
                              will be used in place of '$BASE'
-          -b site-base-VER   Sets the VER (eg 'v4.2.0') for site-base
+          -b site-base-VER   Sets the VER (eg 'v4.2.1') for site-base
                              implies/sets '-p' if not specified
           -c cluster_prefix  sets cluster members with a prefix name for
                              uniqueness
@@ -45,6 +45,7 @@ usage() {
           -v version         specify what DRP content version to install, by
                              default install "stable" version
           -d                 enable debugging mode
+          -x                 do NOT validate license
 
   NOTES:  * if '-b site-base-VER' specified, '-p' (prep-manager) is implied
           * Regions: $SITES
@@ -57,6 +58,23 @@ usage() {
             ./manager.sh -p -c sg -L global
 
 EO_USAGE
+}
+
+install_tools() {
+  local os=$(uname -s | tr '[:upper:]' '[:lower:]')
+  if ! which drpcli >/dev/null 2>/dev/null ; then
+    curl -s -o drpcli https://rebar-catalog.s3-us-west-2.amazonaws.com/drpcli/v4.2.0/amd64/$os/drpcli
+    chmod +x drpcli
+  fi
+  if ! which jq >/dev/null 2>/dev/null ; then
+    ln -s $(which drpcli) jq
+  fi
+  if ! which terraform >/dev/null 2>/dev/null ; then
+    curl -s -o tf.zip https://releases.hashicorp.com/terraform/0.12.13/terraform_0.12.13_${os}_amd64.zip
+    unzip tf.zip
+    rm -f tf.zip
+    chmod +x terraform
+  fi
 }
 
 check_tools() {
@@ -77,7 +95,7 @@ check_tools() {
 }
 
 _drpcli() {
-  echo ">>> DBG: drpcli $*"
+  (( $DBG )) && >&2 echo ">>> DBG: drpcli $*"
   drpcli $*
 }
 
@@ -92,7 +110,7 @@ set -e
 #            that can be set for the terraform provider (linode)
 ###
 PREP="false"
-BASE="site-base-v4.2.0"           # "stable" is not fully available in the catalog
+BASE="site-base-v4.2.1"           # "stable" is not fully available in the catalog
 OPTS=""
 MGR_LBL="global-manager"
 MGR_PWD="r0cketsk8ts"
@@ -104,10 +122,12 @@ SITES="us-central us-east us-west us-southeast"
 DBG=0
 LOOP_WAIT=15
 VER_CONTENT="stable"
+VALIDATE_LIC="true"
 
-while getopts ":dpb:c:t:L:P:R:I:T:S:v:u" CmdLineOpts
+while getopts ":dxpb:c:t:L:P:R:I:T:S:v:u" CmdLineOpts
 do
   case $CmdLineOpts in
+    x) VALIDATE_LIC="false"   ;;
     p) PREP="true"            ;;
     b) BASE=${OPTARG}
        PREP="true"            ;;
@@ -133,7 +153,9 @@ done
 # if -S sites called, transform patterns to space separated list
 [[ -n "$STS" ]] && SITES=$(echo $STS | tr '[ ,;:-:]' ' ' | sed 's/  //g')
 
-check_tools jq drpcli terraform curl docker
+check_tools unzip curl
+install_tools
+check_tools jq drpcli terraform
 
 if [[ "$LINODE_TOKEN" == "" ]]; then
     echo "you must export LINODE_TOKEN=[your token]"
@@ -192,171 +214,106 @@ else
   echo "catalog files exist - skipping"
 fi
 
-if [[ ! -e "v4drp-install.zip" ]]; then
-  curl -sfL -o v4drp-install.zip https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.2.0.zip
-  curl -sfL -o install.sh get.rebar.digital/tip
-else
-  echo "install files exist - skipping"
-fi
-
-echo "Building Multi-Site Content"
-cd multi-site
-_drpcli contents bundle multi-site-demo.json
-mv multi-site-demo.json ..
-cd ..
-
-echo "Script is idempotent - restart if needed!"
-echo "Waiting for endpoint to be up.  export RS_ENDPOINT=$RS_ENDPOINT"
-echo ">>> NOTE: 'Failed to connect ...' messages are normal during system bring up."
-sleep 10
-timeout 300 bash -c 'while [[ "$(curl -fsSLk -o /dev/null -w %{http_code} ${RS_ENDPOINT})" != "200" ]]; do sleep 5; done' || false
-
 if [[ -f rackn-license.json ]]; then
-  echo "Checking Online License for rackn-license updates"
-  LICENSE=$(cat rackn-license.json)
-  LICENSEBASE=$(jq -r '.sections.profiles["rackn-license"].Params["rackn/license-object"]' <<< ${LICENSE})
-  CONTACTID="$(jq -r .ContactId <<< ${LICENSEBASE})"
-  OWNERID="$(jq -r .OwnerId <<< ${LICENSEBASE})"
-  KEY="$(jq -r '.sections.profiles["rackn-license"].Params["rackn/license"]' <<< ${LICENSE})"
-  VERSION="$(jq -r .Version <<< ${LICENSEBASE})"
-  curl -X GET "https://1p0q9a8qob.execute-api.us-west-2.amazonaws.com/v40/license" \
-    -H "rackn-contactid: ${CONTACTID}" \
-    -H "rackn-ownerid: ${OWNERID}" \
-    -H "rackn-endpointid: ${MGR_LBL}" \
-    -H "rackn-key: ${KEY}" \
-    -H "rackn-version: ${VERSION}" \
-    -o rackn-license.json
-  echo "License Verified"
+  if [[ "$VALIDATE_LIC" == "true" ]] ; then
+    echo "Checking Online License for rackn-license updates"
+    LICENSE=$(cat rackn-license.json)
+    LICENSEBASE=$(jq -r '.sections.profiles["rackn-license"].Params["rackn/license-object"]' <<< ${LICENSE})
+    CONTACTID="$(jq -r .ContactId <<< ${LICENSEBASE})"
+    OWNERID="$(jq -r .OwnerId <<< ${LICENSEBASE})"
+    KEY="$(jq -r '.sections.profiles["rackn-license"].Params["rackn/license"]' <<< ${LICENSE})"
+    VERSION="$(jq -r .Version <<< ${LICENSEBASE})"
+    curl -X GET "https://1p0q9a8qob.execute-api.us-west-2.amazonaws.com/v40/license" \
+      -H "rackn-contactid: ${CONTACTID}" \
+      -H "rackn-ownerid: ${OWNERID}" \
+      -H "rackn-endpointid: ${MGR_LBL}" \
+      -H "rackn-key: ${KEY}" \
+      -H "rackn-version: ${VERSION}" \
+      -o rackn-license.json
+    echo "License Verified"
+  fi
 else
   echo "MISSING REQUIRED RACKN-LICENSE FILE"
   exit 1
 fi
 
-echo "Setup Starting for endpoint export RS_ENDPOINT=$RS_ENDPOINT"
-_drpcli contents upload rackn-license.json
-
-_drpcli catalog item install drp-community-content --version=$VER_CONTENT
-sleep 1
-_drpcli catalog item install task-library --version=$VER_CONTENT
-sleep 1
-_drpcli catalog item install manager --version=$VER_CONTENT
-
+echo "Building Multi-Site Content"
+cd multi-site
+_drpcli contents bundle ../multi-site-demo.json >/dev/null
+cd ..
 echo "Building Linode Content"
 cd linode
-_drpcli contents bundle ../linode.json
+_drpcli contents bundle ../linode.json >/dev/null
 cd ..
-_drpcli contents upload linode.json
-_drpcli prefs set defaultWorkflow discover-linode unknownBootEnv discovery
 
-_drpcli files upload linode.json to "rebar-catalog/linode/v1.0.0.json"
-_drpcli plugins runaction manager buildCatalog
-_drpcli files upload rackn-catalog.json to "rebar-catalog/rackn-catalog.json"
-_drpcli contents upload $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
+echo "Script is idempotent - restart if needed!"
+echo "Waiting for endpoint to be up.  export RS_ENDPOINT=$RS_ENDPOINT"
+timeout 300 bash -c 'while [[ "$(curl -fsSLk -o /dev/null -w %{http_code} ${RS_ENDPOINT} 2>/dev/null)" != "200" ]]; do sleep 5; done' || false
 
-# cache the catalog items on the DRP Server
-_drpcli profiles set global set catalog_url to - <<< $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
-if [[ ! -e "static-catalog.zip" ]]; then
-  echo "downloading static from s3"
-  curl --compressed -o static-catalog.zip https://rackn-private.s3-us-west-2.amazonaws.com/static-catalog.zip
-else
-  echo "using found static-catalog.zip"
+echo "Setup Starting for endpoint export RS_ENDPOINT=$RS_ENDPOINT"
+_drpcli contents upload rackn-license.json >/dev/null
+
+_drpcli catalog item install manager --version=$VER_CONTENT >/dev/null
+
+_drpcli contents upload linode.json >/dev/null
+_drpcli prefs set defaultWorkflow discover-linode unknownBootEnv discovery >/dev/null
+
+echo "Setting Catalog On Manager files"
+_drpcli files upload linode.json to "rebar-catalog/linode/v1.0.0.json" >/dev/null
+_drpcli profiles set global set catalog_url to - >/dev/null <<< $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
+_drpcli files upload rackn-catalog.json as static-catalog.json >/dev/null
+if [[ -f static-catalog.zip ]] ; then
+  echo "Using custom static-catalog.zip ... upload to manager"
+  _drpcli files upload static-catalog.zip >/dev/null
 fi
-catalog_sum=$(drpcli files exists rebar-catalog/static-catalog.zip || true)
-if [[ "$catalog_sum" == "" ]]; then
-  _drpcli files upload static-catalog.zip as "rebar-catalog/static-catalog.zip" --explode
-else
-  echo "catalog already uploaded, skipping...($catalog_sum)"
-fi;
-(
-  RS_ENDPOINT=$(terraform output drp_manager)
-  _drpcli catalog updateLocal -c rackn-catalog.json
-  _drpcli plugins runaction manager buildCatalog
-  echo "Catalog Updated and Ready for endpoint export RS_ENDPOINT=$RS_ENDPOINT"
-) &
+if [[ ! -f v4.2.1.zip ]] ; then
+  curl -s -o v4.2.1.zip https://rebar-catalog.s3-us-west-2.amazonaws.com/drp/v4.2.1.zip
+fi
+_drpcli files upload v4.2.1.zip to "rebar-catalog/drp/v4.2.1.zip"
 
-_drpcli contents upload multi-site-demo.json
+echo "Start the manager workflow"
+_drpcli contents upload multi-site-demo.json >/dev/null
 
-_drpcli profiles set global set "linode/stackscript_id" to 548252
-_drpcli profiles set global set "linode/instance-image" to "linode/centos7"
-_drpcli profiles set global set "linode/type" to "g6-standard-1"
-_drpcli profiles set global set "linode/token" to "$LINODE_TOKEN"
-_drpcli profiles set global set "linode/root-password" to "r0cketsk8ts"
-_drpcli profiles set global set "demo/cluster-count" to 0
+_drpcli profiles set global set "linode/stackscript_id" to 548252 >/dev/null
+_drpcli profiles set global set "linode/instance-image" to "linode/centos7" >/dev/null
+_drpcli profiles set global set "linode/type" to "g6-standard-1" >/dev/null
+_drpcli profiles set global set "linode/token" to "$LINODE_TOKEN" >/dev/null
+_drpcli profiles set global set "linode/root-password" to "r0cketsk8ts" >/dev/null
+_drpcli profiles set global set "demo/cluster-count" to 0 >/dev/null
 echo "drpcli profiles set global param network/firewalld-ports to ... "
 drpcli profiles set global param "network/firewalld-ports" to '[
   "22/tcp", "8091/tcp", "8092/tcp", "6443/tcp", "8379/tcp",  "8380/tcp", "10250/tcp"
-]'
+]' >/dev/null
+
+echo "Upload the docker coxtext image files."
+ls dockerfiles | while read file ; do
+    _drpcli files upload dockerfiles/$file as dockerfiles/$file >/dev/null
+done
 
 echo "BOOTSTRAP export RS_ENDPOINT=$RS_ENDPOINT"
 
-if ! drpcli machines exists Name:"$MGR_LBL" > /dev/null; then  
+if ! drpcli machines exists "Name:$MGR_LBL" 2>/dev/null >/dev/null; then
   echo "Error - Boostrap Machine($MGR_LBL) was not created!"
   exit 1
 else
   echo "Bootstrap machine exists as $MGR_LBL... starting bootstrap workflow"
-  _drpcli machines workflow Name:"$MGR_LBL" "manager-bootstrap"
+  _drpcli machines workflow Name:"$MGR_LBL" "manager-bootstrap" >/dev/null
 fi
 
-# Upload install files
-install_sum=$(drpcli files exists bootstrap/v4drp-install.zip || true)
+install_sum=$(drpcli files exists bootstrap/dr-provision.zip 2>/dev/null || true)
 if [[ "$install_sum" == "" ]]; then
-  echo "upload install files..."
-  _drpcli files upload v4drp-install.zip as "bootstrap/v4drp-install.zip"
-  _drpcli files upload install.sh as "bootstrap/install.sh"
-  sleep 5
+  echo "Missing bootstrap files..."
+  exit 1
 else
   echo "found installed files $install_sum"
 fi
 
-
-echo "SETUP DOCKER-CONTEXT export RS_ENDPOINT=$RS_ENDPOINT"
-
-echo "  requires drpcli w/ jq: $(./drpcli version)"
-raw=$(drpcli contexts list Engine=docker-context)
-contexts=$(jq -r ".[].Name" <<< "${raw}")
-i=0
-for context in $contexts; do
-  image=$(jq -r ".[$i].Image" <<< "${raw}")
-  echo "Uploading Container for $context named [$image] using [$context-dockerfile]"
-  container_sum=$(drpcli files exists "contexts/docker-context/$image" || true)
-  if [[ "$container_sum" == "" ]]; then
-    if [[ -f $context.tar ]]; then
-      echo "  Skipping Build (found Container Tar $context.tar)"
-    else
-      echo "  Building Container --tag=$image --file=$context-dockerfile"
-      docker build --tag=$image --file="$context-dockerfile" .
-      docker save $image > $context.tar
-    fi
-    echo "  Uploading Container from $context.tar"
-    _drpcli files upload $context.tar as "contexts/docker-context/$image"
-  else
-    echo "  Found $container_sum, skipping upload"
-  fi
-  i=$(($i + 1))
-done
-
-echo "ADD CLUSTERS export RS_ENDPOINT=$RS_ENDPOINT"
-_drpcli contents update multi-site-demo multi-site-demo.json
-
-# make sure any background tasks complete
-_drpcli machines wait Name:"$MGR_LBL" Stage "complete-nobootenv" 45
-echo "Waiting for backgrounded 'buildCatalog' to complete..."
-wait
-
-# prepopulate containers
-i=0
-for context in $contexts; do
-  image=$(jq -r ".[$i].Image" <<< "${raw}")
-  echo "Installing Container for $context named from $image"
-  _drpcli plugins runaction docker-context imageUpload \
-    context/image-name ${image} \
-    context/image-path files/contexts/docker-context/${image}
-  i=$(($i + 1))
-done
+echo "Waiting for Manager to finish bootstrap"
+_drpcli machines wait "Name:$MGR_LBL" Stage "complete-nobootenv" 360
 
 for mc in $SITES;
 do
-  if ! drpcli machines exists Name:$mc > /dev/null; then
+  if ! _drpcli machines exists Name:$mc 2>/dev/null >/dev/null; then
     reg=$mc
     [[ -n "$PREFIX" ]] && reg=$(echo $mc | sed 's/'${PREFIX}'-//g')
     echo "Creating $mc"
@@ -364,7 +321,7 @@ do
     drpcli machines create "{\"Name\":\"${mc}\", \
       \"Workflow\":\"site-create\",
       \"Params\":{\"linode/region\": \"${reg}\", \"network\firewalld-ports\":[\"22/tcp\",\"8091/tcp\",\"8092/tcp\"] }, \
-      \"Meta\":{\"BaseContext\":\"runner\", \"icon\":\"cloud\"}}"
+      \"Meta\":{\"BaseContext\":\"runner\", \"icon\":\"cloud\"}}" >/dev/null
     sleep $LOOP_WAIT
   else
     echo "machine $mc already exists"
@@ -378,7 +335,7 @@ then
   BAIL=120
   WAIT=5
 
-  _drpcli extended -l endpoints update $MGR_LBL '{"VersionSets":["cluster-3","credential","license","manager-ignore","'$BASE'"]}'
+  _drpcli extended -l endpoints update $MGR_LBL '{"VersionSets":["cluster-3","license","manager-ignore","'$BASE'"]}'
   _drpcli extended -l endpoints update $MGR_LBL '{"Apply":true}'
 
   # need to "wait" - monitor that we've finish applying this ...
@@ -416,8 +373,7 @@ fi # end if PREP
 for mc in $SITES;
 do
   echo "Adding $mc to install DRP"
-  _drpcli machines wait Name:$mc Stage "complete-nobootenv" 180
-  sleep 5
+  _drpcli machines wait Name:$mc Stage "complete-nobootenv" 360
   machine=$(drpcli machines show Name:$mc)
   ip=$(jq -r .Address <<< "${machine}")
   echo "Adding $mc to Endpoints List"

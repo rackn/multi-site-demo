@@ -29,3 +29,8 @@ Prefs:
   defaultStage: none
   defaultWorkflow: discover-linode
   unknownBootEnv: discovery
+  completeJobsPurgedAfter: never
+  failedJobsPurgedAfter: never
+  jobsToKeep: "50"
+  knownTokenTimeout: "3600"
+  unknownTokenTimeout: "600"

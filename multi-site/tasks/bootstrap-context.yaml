@@ -1,0 +1,77 @@
+---
+Description: "Setup Containers for Docker-Context"
+Name: "bootstrap-context"
+ExtraClaims:
+  - scope: "*"
+    action: "*"
+    specific: "*"
+Templates:
+  - Contents: |-
+      #!/bin/bash
+      # RackN Copyright 2019
+
+      set -e
+      {{template "setup.tmpl" .}}
+
+      #yum -y install podman
+
+      if ! which docker ; then
+        # Get latest docker...
+        curl -fsSL https://get.docker.com/ | VERSION="18.09" sh
+      fi
+
+      echo "Starting Docker Service"
+      service docker enable
+      service docker start
+
+      echo "Docker installed successfully"
+
+      echo "Install the Docker Context"
+      drpcli catalog item install docker-context
+
+      echo "Building the docker images if not already built."
+      cp $(which drpcli) drpcli
+      raw=$(drpcli contexts list Engine=docker-context)
+      contexts=$(jq -r ".[].Name" <<< "${raw}")
+      i=0
+      for context in $contexts; do
+        image=$(jq -r ".[$i].Image" <<< "${raw}")
+        echo "Uploading Container for $context named [$image] using [$context-dockerfile]"
+        container_sum=$(drpcli files exists "contexts/docker-context/$image" || true)
+        if [[ "$container_sum" == "" ]]; then
+          if [[ -f /root/$context.tar ]]; then
+            echo "  Skipping Build (found Container Tar /root/$context.tar)"
+          else
+            echo "  Building Container --tag=$image --file=$context-dockerfile"
+            drpcli files download dockerfiles/$context-dockerfile > $context-dockerfile
+            docker build --tag=$image --file="$context-dockerfile" .
+            docker save $image > /root/$context.tar
+          fi
+          echo "  Uploading Container from /root/$context.tar"
+          drpcli files upload /root/$context.tar as "contexts/docker-context/$image"
+        else
+          echo "  Found $container_sum, skipping upload"
+        fi
+        i=$(($i + 1))
+      done
+
+      echo "Populate the contexts"
+      i=0
+      for context in $contexts; do
+        image=$(jq -r ".[$i].Image" <<< "${raw}")
+        echo "Installing Container for $context named from $image"
+        drpcli plugins runaction docker-context imageUpload \
+          context/image-name ${image} \
+          context/image-path files/contexts/docker-context/${image}
+        i=$(($i + 1))
+      done
+
+      echo "done"
+      exit 0
+
+    Name: "docker-context"
+Meta:
+  icon: "spy"
+  color: "purple"
+  title: "Digital Rebar Community Content"
+  feature-flags: "sane-exit-codes"

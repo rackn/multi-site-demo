@@ -1,6 +1,6 @@
 ---
 Description: "Setup Sledgehammer ISO"
-Name: "iso-bootstrap"
+Name: "bootstrap-iso"
 ExtraClaims:
   - scope: "*"
     action: "*"
@@ -12,7 +12,7 @@ Templates:
 
       set -e
       {{template "setup.tmpl" .}}
-      
+
       if [[ "$(drpcli isos list | jq length)" == "0" ]]; then
         echo "No ISOS, upload sledgehammer"
         drpcli bootenvs uploadiso sledgehammer
