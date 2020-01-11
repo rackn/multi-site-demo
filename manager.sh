@@ -266,10 +266,12 @@ if [[ -f static-catalog.zip ]] ; then
   echo "Using custom static-catalog.zip ... upload to manager"
   _drpcli files upload static-catalog.zip >/dev/null
 fi
+# XXX: When moved into static-catalog.zip, then remove
 if [[ ! -f v4.2.1.zip ]] ; then
   curl -s -o v4.2.1.zip https://rebar-catalog.s3-us-west-2.amazonaws.com/drp/v4.2.1.zip
 fi
 _drpcli files upload v4.2.1.zip to "rebar-catalog/drp/v4.2.1.zip"
+# XXX: When moved into static-catalog.zip, then remove
 
 echo "Start the manager workflow"
 _drpcli contents upload multi-site-demo.json >/dev/null
