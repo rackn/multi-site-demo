@@ -38,7 +38,7 @@ resource "linode_instance" "drp_manager" {
 
   stackscript_id = "626699"
   stackscript_data = {
-    "drp_version" = "tip"
+    "drp_version" = "v4.2.1"
     "drp_password" = var.manager_password
     "drp_id" = var.manager_label
   }

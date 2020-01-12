@@ -3,7 +3,7 @@
 # zip up files for packing up
 
 
-FILES="dangerzone drpcli runner.tar terraform terraform.tar .terraform/plugins/linux_amd64/terraform-provider-linode_v1.9.0_x4"
+FILES="drpcli runner.tar terraform terraform.tar .terraform/plugins/linux_amd64/terraform-provider-linode_v1.9.0_x4"
 
 set -e
 
