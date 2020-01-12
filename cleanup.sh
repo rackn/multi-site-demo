@@ -60,6 +60,8 @@ if [[ "$(drpcli machines list | jq length)" == "1" ]]; then
     rm multi-site-demo.json
   fi
 
+  rm -f terraform.tfstate terraform.tfstate.backup
+
 else
   echo "WARNING machines still exist - did not destroy manager"
 fi
