@@ -1,0 +1,17 @@
+---
+Name: "demo/cluster-prefix"
+Description: "<<PLACEHOLDER>> The cluster prefix used to identify the deployed cluster."
+Documentation: |
+  <<PLACEHOLDER>>
+  This is a placeholder demo/cluster-prefix definition.  This file will be
+  overwritten by manager.sh before the content is bundled.  This exists
+  for an operators sanity if they are reviewing the content pack and looking
+  for this artifact.
+  
+Schema:
+  type: "string"
+  default: "cluster"
+Meta:
+  color: "blue"
+  icon: "tags"
+  title: "RackN Content"
