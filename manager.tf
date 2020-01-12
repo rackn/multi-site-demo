@@ -28,13 +28,17 @@ provider "linode" {
   token     = var.linode_token
 }
 
+variable "cluster_prefix" {
+  type      = string
+}
+
 resource "linode_instance" "drp_manager" {
   image     = var.manager_image
   label     = var.manager_label
   region    = var.manager_region
   type      = var.manager_type
   root_pass = var.manager_password
-  tags      = [ "${var.manager_label}" ]
+  tags      = [ "cluster-${var.cluster_prefix}"]
 
   stackscript_id = "626699"
   stackscript_data = {

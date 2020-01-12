@@ -12,13 +12,15 @@ Templates:
 
       {{template "terraform-linode.tf.tmpl" .}}
 
+      {{ $prefix := .Param "demo/cluster-prefix" -}}
+      {{ $region := .Param "linode/region" -}}
       resource "linode_instance" "drp_endpoint" {
         image     = "{{ .Param "linode/instance-image" }}"
         label     = "{{ .Machine.Name }}"
-        region    = "{{ .Param "linode/region" }}"
+        region    = "{{ $region }}"
         type      = "{{ .Param "linode/instance-type" }}"
         root_pass = "{{ .Param "linode/root-password" }}"
-        tags      = [ "{{ .Info.Id }}" ]
+        tags      = [ "cluster-{{ $prefix }}" ]
 
         stackscript_id = {{ .Param "linode/stackscript_id" }}
         stackscript_data = {
@@ -33,10 +35,10 @@ Templates:
         count     = "{{ .Param "demo/cluster-count" }}"
         image     = "{{ .Param "linode/instance-image" }}"
         label     = "{{ .Machine.Name }}-node-${count.index + 10}"
-        region    = "{{ .Param "linode/region" }}"
+        region    = "{{ $region }}"
         type      = "{{ .Param "linode/instance-type" }}"
         root_pass = "{{ .Param "linode/root-password" }}"
-        tags      = [ "{{ .Info.Id }}" ]
+        tags      = [ "cluster-{{ $prefix }}" ]
 
         stackscript_id = {{ .Param "linode/stackscript_id" }}
         stackscript_data = {

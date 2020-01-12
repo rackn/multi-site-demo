@@ -1,16 +1,19 @@
 ---
 Name: "demo/cluster-prefix"
-Description: "<<PLACEHOLDER>> The cluster prefix used to identify the deployed cluster."
+Description: "The cluster prefix used to identify the deployed cluster."
 Documentation: |
-  <<PLACEHOLDER>>
-  This is a placeholder demo/cluster-prefix definition.  This file will be
-  overwritten by manager.sh before the content is bundled.  This exists
-  for an operators sanity if they are reviewing the content pack and looking
-  for this artifact.
+  The cluster prefix is used to group the Multi Site Demo systems together.
   
+  It is used by cloud providers to identify the cluster.  For example, the
+  terraform pieces use this in Linode to set the tags = [ "tag1", "tag2" ]
+  tags.  Other cloud providers should use this value too.
+
+  The value is customized in the ``global`` profile of the global maanger,
+  when the ``manager.sh`` script is run.
+
 Schema:
   type: "string"
-  default: "cluster"
+  default: "demo"
 Meta:
   color: "blue"
   icon: "tags"

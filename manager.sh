@@ -164,18 +164,21 @@ else
     echo "Ready, LINODE_TOKEN set!"
 fi
 
-# add prefix to manager_label and SITES if requested
-# TODO: turn this in to a variable list of SITES to support
-if [[ -n "$PREFIX" ]]
-then
-  MGR_LBL="$PREFIX-$MGR_LBL"
+# create a random cluster prefix if one was not specified
+[[ -z "$PREFIX" ]] && PREFIX=$(mktemp -u XXXXXX)
 
-  for site in $SITES
-  do
-    s+="$PREFIX-$site "
-  done
-  SITES="$s"
-fi
+echo ">>>"
+echo ">>> Cluster Prefix has been set to:  $PREFIX"
+echo ">>>"
+
+# add prefix to manager_label and SITES
+MGR_LBL="$PREFIX-$MGR_LBL"
+
+for site in $SITES
+do
+  s+="$PREFIX-$site "
+done
+SITES="$s"
 (( $DBG )) && echo "Manager name set to:  $MGR_LBL"
 (( $DBG )) && echo "Sites set to:  $SITES"
 
@@ -238,6 +241,7 @@ else
 fi
 
 echo "Building Multi-Site Content"
+
 cd multi-site
 _drpcli contents bundle ../multi-site-demo.json >/dev/null
 cd ..
@@ -275,6 +279,9 @@ _drpcli files upload v4.2.1.zip to "rebar-catalog/drp/v4.2.1.zip"
 
 echo "Start the manager workflow"
 _drpcli contents upload multi-site-demo.json >/dev/null
+
+echo "Setting the 'demo/cluster-prefix' param"
+_drpcli profiles set global set demo/cluster-prefix to $PREFIX
 
 _drpcli profiles set global set "linode/stackscript_id" to 548252 >/dev/null
 _drpcli profiles set global set "linode/instance-image" to "linode/centos7" >/dev/null
@@ -332,12 +339,25 @@ done
 
 if [[ "$PREP" == "true" ]]
 then
+  echo "VersionSet prep was requested."
+  echo "Waiting for regional endpoints to reach 'complete-nobootenv'"
+  # wait for the regional controllers to finish up before trying to do VersionSets
+  for mc in $SITES
+  do
+    if drpcli machines exists Name:$mc > /dev/null; then
+      _drpcli machines wait Name:$mc Stage "complete-nobootenv" 240 &
+    fi
+  done
+
+  wait
+  echo "Regional endpoints done, starting VersionSet prep on global manager."
+
   # start at 1, do BAIL iterations of WAIT length (10 mins by default)
   LOOP=1
   BAIL=120
   WAIT=5
 
-  _drpcli extended -l endpoints update $MGR_LBL '{"VersionSets":["cluster-3","license","manager-ignore","'$BASE'"]}'
+  _drpcli extended -l endpoints update $MGR_LBL '{"VersionSets":["license","manager-ignore","'$BASE'"]}'
   _drpcli extended -l endpoints update $MGR_LBL '{"Apply":true}'
 
   # need to "wait" - monitor that we've finish applying this ...
@@ -383,6 +403,10 @@ do
 done
 
 echo ""
-echo "DONE !!! Example export for Endpoint:"
+echo ">>>"
+echo ">>> Cluster Prefix is set to:  $PREFIX"
+echo ">>>"
+echo ">>> DONE !!! Example export for Endpoint:"
+echo ">>>"
 echo "export RS_ENDPOINT=$RS_ENDPOINT"
 echo ""
