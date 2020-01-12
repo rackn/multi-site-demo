@@ -1,8 +1,0 @@
----
-Name: "bootstrapper"
-Description: "Use Dangerzone to Bootstrap Podman Context"
-Engine: "dangerzone"
-Meta:
-  icon: "fire"
-  color: "blue"
-  title: "RackN Content"

@@ -42,28 +42,28 @@ do
   if drpcli machines exists Name:$mc > /dev/null
   then
     drpcli machines wait Name:$mc Stage "complete-nobootenv" 120
+    drpcli machines destroy Name:$mc
   fi
 done
 
-terraform init -no-color
-terraform destroy -no-color -auto-approve --var="linode_token=$LINODE_TOKEN"
+if [[ "$(drpcli machines list | jq length)" == "1" ]]; then
 
+  echo "removing manager"
+  terraform init -no-color
+  terraform destroy -no-color -auto-approve -var-file=manager.tfvars
 
-if [[ -e "linode.json" ]]; then
-  rm linode.json
+  if [[ -e "linode.json" ]]; then
+    rm linode.json
+  fi
+
+  if [[ -e "multi-site-demo.json" ]]; then
+    rm multi-site-demo.json
+  fi
+
+  rm -f terraform.tfstate terraform.tfstate.backup
+
+else
+  echo "WARNING machines still exist - did not destroy manager"
 fi
 
-if [[ -e "multi-site-demo.json" ]]; then
-  rm multi-site-demo.json
-fi
 
-if [[ -e "runner.tar" ]]; then
-  rm runner.tar
-fi
-
-if [[ -e "terraform.tar" ]]; then
-  rm terraform.tar
-fi
-
-docker rmi digitalrebar-runner
-docker rmi digitalrebar-terraform

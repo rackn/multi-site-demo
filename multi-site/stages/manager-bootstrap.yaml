@@ -1,0 +1,12 @@
+---
+Name: "manager-bootstrap"
+Description: "Use Bootstrap Process to Setup Manager (Contexts)"
+Tasks:
+  - "bootstrap-context"
+  - "bootstrap-catalog"
+  - "bootstrap-iso"
+  - "bootstrap-backrev-bootstrap"
+Meta:
+  icon: "boxes"
+  color: "black"
+  title: "RackN Content"

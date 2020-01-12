@@ -1,9 +1,0 @@
----
-Name: "context-bootstrap"
-Description: "Use Dangerzone to Setup Containers"
-Tasks:
-  - "context-bootstrap"
-Meta:
-  icon: "boxes"
-  color: "black"
-  title: "RackN Content"

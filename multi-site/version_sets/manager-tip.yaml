@@ -11,9 +11,6 @@ Components:
 - Name: rackn-catalog
   Type: ContentPackage
   Version: ignore
-- Name: dangerzone
-  Type: PluginProvider
-  Version: ignore
 - Name: docker-context
   Type: PluginProvider
   Version: ignore
@@ -21,8 +18,6 @@ Components:
   Type: PluginProvider
   Version: tip
 Plugins:
-- Name: dangerzone
-  Provider: dangerzone
 - Name: docker-context
   Provider: docker-context
 - Name: manager

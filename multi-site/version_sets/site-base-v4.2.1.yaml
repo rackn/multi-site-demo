@@ -1,29 +1,26 @@
 ---
-Id: site-base-stable
+Id: site-base-v4.2.1
 Description: "Core Components needed by all Sites"
 Apply: true
 Meta:
   icon: paw
-DRPVersion: stable
+DRPVersion: v4.2.1
 Components:
 - Name: drp-community-content
   Type: ContentPackage
   Version: stable
 - Name: task-library
   Type: ContentPackage
-  Version: stable
+  Version: v4.2.0
 - Name: krib
   Type: ContentPackage
-  Version: stable
+  Version: v4.2.0
 - Name: linode
   Type: ContentPackage
   Version: v1.0.0
 - Name: certs
   Type: PluginProvider
-  Version: stable
-- Name: ux-views
-  Type: PluginProvider
-  Version: stable
+  Version: v4.2.0
 Plugins:
 - Name: certs
   Provider: certs

@@ -1,9 +1,10 @@
-Name: "context-bootstrap"
-Description: "Setup Contexts for Use"
+Name: "manager-bootstrap"
+Description: "Setup DRP for Multi-Site Manager"
 Documentation: |
   Ensures that sytem can run the contexts that are defined
+  And pulls in other data
 Stages:
-  - "context-bootstrap"
+  - "manager-bootstrap"
   - "complete-nobootenv"
 Meta:
   color: "purple"

@@ -18,8 +18,7 @@
         authorized_keys:
           - '{{ .Param "rsa/key-public" }}'
         tags:
-          - {{ .Machine.Uuid }}        
-          - "digitalrebar"
+          - {{ .Info.Id }}
         state: present
       register: new_linode
 

@@ -1,0 +1,32 @@
+---
+Description: "Setup Sledgehammer ISO"
+Name: "bootstrap-iso"
+ExtraClaims:
+  - scope: "*"
+    action: "*"
+    specific: "*"
+Templates:
+  - Contents: |-
+      #!/bin/bash
+      # RackN Copyright 2020
+
+      set -e
+      {{template "setup.tmpl" .}}
+
+      if [[ "$(drpcli isos list | jq length)" == "0" ]]; then
+        echo "No ISOS, upload sledgehammer"
+        drpcli bootenvs uploadiso sledgehammer
+      else
+        echo "ISOs already uploaded:"
+        drpcli isos list
+      fi
+
+      echo "Sledgehammer Uploaded"
+      exit 0
+
+    Name: "iso-bootstrap"
+Meta:
+  icon: "dot circle outline"
+  color: "yellow"
+  title: "Digital Rebar Community Content"
+  feature-flags: "sane-exit-codes"
