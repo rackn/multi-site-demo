@@ -41,14 +41,21 @@ Templates:
         if [[ "$container_sum" == "" ]]; then
           if [[ -f /root/$context.tar ]]; then
             echo "  Skipping Build (found Container Tar /root/$context.tar)"
+            echo "  Uploading Container from /root/$context.tar"
+            drpcli files upload /root/$context.tar as "contexts/docker-context/$image"
+          elif [[ -f /root/$context.tar.gz ]]; then
+            echo "  Skipping Build (found Container Tar /root/$context.tar.gz)"
+            echo "  Uploading Container from /root/$context.tar.gz"
+            drpcli files upload /root/$context.tar.gz as "contexts/docker-context/$image"
           else
             echo "  Building Container --tag=$image --file=$context-dockerfile"
             drpcli files download dockerfiles/$context-dockerfile > $context-dockerfile
             docker build --tag=$image --file="$context-dockerfile" .
             docker save $image > /root/$context.tar
+            gzip /root/$context.tar
+            echo "  Uploading Container from /root/$context.tar.gz"
+            drpcli files upload /root/$context.tar.gz as "contexts/docker-context/$image"
           fi
-          echo "  Uploading Container from /root/$context.tar"
-          drpcli files upload /root/$context.tar as "contexts/docker-context/$image"
         else
           echo "  Found $container_sum, skipping upload"
         fi

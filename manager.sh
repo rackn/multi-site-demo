@@ -153,7 +153,7 @@ done
 # if -S sites called, transform patterns to space separated list
 [[ -n "$STS" ]] && SITES=$(echo $STS | tr '[ ,;:-:]' ' ' | sed 's/  //g')
 
-check_tools unzip curl
+check_tools unzip curl gzip
 install_tools
 check_tools jq drpcli terraform
 
@@ -296,7 +296,16 @@ drpcli profiles set global param "network/firewalld-ports" to '[
 
 echo "Upload the docker coxtext image files."
 ls dockerfiles | while read file ; do
-    _drpcli files upload dockerfiles/$file as dockerfiles/$file >/dev/null
+  _drpcli files upload dockerfiles/$file as dockerfiles/$file >/dev/null
+  dname=$(echo $file | sed 's/-dockerfile//g')
+  if [[ -f $dname.tar ]] ; then
+     gzip $dname.tar
+  fi
+  if [[ -f $dname.tar.gz ]] ; then
+    image="digitalrebar-$dname"
+    echo "Staging pre-built docker context. $image"
+    _drpcli files upload $dname.tar.gz as "contexts/docker-context/$image" >/dev/null
+  fi
 done
 
 echo "BOOTSTRAP export RS_ENDPOINT=$RS_ENDPOINT"
