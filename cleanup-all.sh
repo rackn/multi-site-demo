@@ -7,6 +7,9 @@ rm -f manager.tfvars
 rm -f tf.zip
 rm -f install.sh
 rm -f static-catalog.zip
+rm -f ansible.tar*
+rm -f terraform.tar*
+rm -f runner.tar*
 rm -f terraform*
 rm -f v4drp-install.zip
 rm -f rackn-catalog.json
