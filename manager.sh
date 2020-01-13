@@ -285,7 +285,7 @@ _drpcli profiles set global set demo/cluster-prefix to $PREFIX
 
 _drpcli profiles set global set "linode/stackscript_id" to 548252 >/dev/null
 _drpcli profiles set global set "linode/instance-image" to "linode/centos7" >/dev/null
-_drpcli profiles set global set "linode/type" to "g6-standard-1" >/dev/null
+_drpcli profiles set global set "linode/instance-type" to "g6-standard-1" >/dev/null
 _drpcli profiles set global set "linode/token" to "$LINODE_TOKEN" >/dev/null
 _drpcli profiles set global set "linode/root-password" to "r0cketsk8ts" >/dev/null
 _drpcli profiles set global set "demo/cluster-count" to 0 >/dev/null
