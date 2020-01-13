@@ -6,11 +6,12 @@ install.sh
 rackn-license.json
 dangerzone
 *.tar
+*.tar.gz
 *.tfstate
 *.tfstate.backup
 .terraform
 setup.ref
-
+v4*.zip
 linode.json
 linode.yaml
 linode/linode.json
