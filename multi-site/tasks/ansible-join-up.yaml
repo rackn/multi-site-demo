@@ -18,7 +18,6 @@ RequiredParams:
   - rsa/key-public
   - rsa/key-user
   - rsa/key-private
-  - reboot-workflow
 Templates:
   - Contents: |-
       #!/bin/bash
@@ -50,23 +49,30 @@ Templates:
         remote_user: "{{ .Param "rsa/key-user" }}"
         connection: "ssh"
         gather_facts: false
+        become: true
 
         tasks:
 
           - name: create uuid file
+            become: true
             copy:
               content: "{{.Machine.Uuid}}"
               dest: /etc/rs-uuid
 
           - name: download join-up script
+            become: true
             get_url:
               url: "{{.ProvisionerURL}}/machines/join-up.sh"
               dest: "./join-up.sh"
               mode: 0755
 
           - name: run join-up script
+            become: true
             shell: "nohup ./join-up.sh >/dev/null 2>&1 &"
       EOF
+
+      drpcli machines meta set $RS_UUID key icon to "level up alternate"
+      drpcli machines meta set $RS_UUID key color to "red"
 
       echo "Run Join-Up Playbook using $(ansible-playbook --version)"
       ansible-playbook \
@@ -74,11 +80,7 @@ Templates:
         --private-key=rsa-{{ .Machine.Name }} \
         join-up.yaml
 
-      echo "Clear the workflow so join-up can continue"
-      drpcli machines workflow $RS_UUID {{ .Param "reboot-workflow" }} | jq .Workflow
-      drpcli machines meta remove $RS_UUID key BaseContext || true | jq .Meta
-      drpcli machines update $RS_UUID '{"Context":""}' | jq .Context 
-      drpcli machines meta set $RS_UUID key icon to "level up alternate"
+      drpcli machines meta set $RS_UUID key color to "green"
       
       echo "Done"
     Name: "Run Playbooks"
