@@ -24,3 +24,4 @@ multi-site/multi-site-demo.yaml
 endpoint-exec
 static-catalog.zip
 manager.tfvars
+contexts/*

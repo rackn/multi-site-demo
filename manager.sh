@@ -294,18 +294,10 @@ drpcli profiles set global param "network/firewalld-ports" to '[
   "22/tcp", "8091/tcp", "8092/tcp", "6443/tcp", "8379/tcp",  "8380/tcp", "10250/tcp"
 ]' >/dev/null
 
-echo "Upload the docker coxtext image files."
-ls dockerfiles | while read file ; do
-  _drpcli files upload dockerfiles/$file as dockerfiles/$file >/dev/null
-  dname=$(echo $file | sed 's/-dockerfile//g')
-  if [[ -f $dname.tar ]] ; then
-     gzip $dname.tar
-  fi
-  if [[ -f $dname.tar.gz ]] ; then
-    image="digitalrebar-$dname"
-    echo "Staging pre-built docker context. $image"
-    _drpcli files upload $dname.tar.gz as "contexts/docker-context/$image" >/dev/null
-  fi
+echo "Upload the docker image files from contexts/$file."
+ls contexts/* | while read file ; do
+  echo "Staging pre-built docker context from contexts/$file"
+  _drpcli files upload "contexts/$file" "contexts/docker-context/$file" >/dev/null
 done
 
 echo "BOOTSTRAP export RS_ENDPOINT=$RS_ENDPOINT"

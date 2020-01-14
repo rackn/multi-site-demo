@@ -15,7 +15,6 @@ Documentation: |
   the address into a `[Machine.Uuid]-address.txt` file.
 Params:
   "ansible/playbook-templates": ["ansible_linode_provision.yaml.tmpl"]
-  "reboot-workflow": "discover-linode"
 Tasks:
   - "context:ansible"
   - "rsa-key-create"
