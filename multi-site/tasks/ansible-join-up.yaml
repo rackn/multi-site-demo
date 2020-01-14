@@ -73,6 +73,7 @@ Templates:
 
       drpcli machines meta set $RS_UUID key icon to "level up alternate"
       drpcli machines meta set $RS_UUID key color to "red"
+      drpcli machines set $RS_UUID param start-over to false
 
       echo "Run Join-Up Playbook using $(ansible-playbook --version)"
       ansible-playbook \

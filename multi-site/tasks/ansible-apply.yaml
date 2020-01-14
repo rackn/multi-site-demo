@@ -91,7 +91,7 @@ Templates:
 
       # capture results from run
       if [[ -f {{$machine}}.json ]]; then
-        echo "Saving Ouput from {{$machine}}.json to Machine.Paarams anisble/output."
+        echo "Saving Ouput from {{$machine}}.json to Machine.Params anisble/output."
         drpcli machines set $RS_UUID param ansible/output to - < {{$machine}}.json
       else
         echo "No output file from Playbook.  If desired, create {{$machine}}.json"
