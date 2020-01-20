@@ -1,0 +1,21 @@
+---
+Id: flexiflow-ignore
+Apply: false
+Components:
+- Name: flexiflow
+  Type: ContentPackage
+  Version: ignore
+Description: Ignore Flexiflow content.
+Documentation: |
+  Ignores the ``flexiflow`` content pack.  Used primarily to
+  demo adding flexiflow which is removed, then add this 
+  VersionSet to the DRP Endpoint, and then the flexiflow
+  content will be ignored on that endpoint.
+
+Meta:
+  color: orange
+  icon: lab
+Params: {}
+Plugins: []
+Type: version_sets
+
