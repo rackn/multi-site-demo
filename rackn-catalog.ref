@@ -1000,14 +1000,14 @@
         "Id": "task-library-stable",
         "Type": "catalog_items",
         "Name": "task-library",
-        "ActualVersion": "v4.2.0",
+        "ActualVersion": "v4.2.2",
         "Version": "stable",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.2.0.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.2.2.json",
         "Shasum256": {
-          "any/any": "bfa255d127f83265d82e2a24f85585b52e670d6726fa104044080f64e2b07e4d"
+          "any/any": "68c046a9a51c763f920e538eb176e90a8acdae09f7abaa9bc5733756a0d0d48e"
         },
-        "NOJQSource": "task-library-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.2.0.json",
+        "NOJQSource": "task-library-v4.2.2:::https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.2.2.json",
         "Tip": false,
         "HotFix": true
       },
@@ -1115,6 +1115,41 @@
         "NOJQSource": "task-library-v4.2.0:::https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.2.0.json",
         "Tip": false,
         "HotFix": false
+      },
+      "task-library-v4.2.2": {
+        "Validated": false,
+        "Available": false,
+        "Errors": [],
+        "ReadOnly": false,
+        "Meta": {
+          "Author": "RackN",
+          "CodeSource": "https://github.com/rackn/provision-content",
+          "Color": "green",
+          "Copyright": "RackN",
+          "Description": "Essential task and stage library",
+          "DisplayName": "Core Task Library",
+          "DocUrl": "https://provision.readthedocs.io/en/latest/doc/content-packages/task-library.html",
+          "Icon": "shopping basket",
+          "License": "RackN",
+          "Name": "task-library",
+          "Order": "100",
+          "Prerequisites": "",
+          "Tags": "base,rackn,tasks,linux,library"
+        },
+        "Endpoint": "",
+        "Id": "task-library-v4.2.2",
+        "Type": "catalog_items",
+        "Name": "task-library",
+        "ActualVersion": "v4.2.2",
+        "Version": "v4.2.2",
+        "ContentType": "ContentPackage",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.2.2.json",
+        "Shasum256": {
+          "any/any": "68c046a9a51c763f920e538eb176e90a8acdae09f7abaa9bc5733756a0d0d48e"
+        },
+        "NOJQSource": "task-library-v4.2.2:::https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.2.2.json",
+        "Tip": false,
+        "HotFix": true
       },
       "ux-views-stable": {
         "Validated": false,
