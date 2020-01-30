@@ -7,4 +7,4 @@ Meta:
   icon: "cube"
   color: "blue"
   title: "RackN Content"
-  Dockerfile: "https://raw.githubusercontent.com/rackn/multi-site-demo/master/dockerfiles/runner-dockerfile"
+  Dockerfile: "https://raw.githubusercontent.com/digitalrebar/provision-content/v4/integrations/docker-context/runner-dockerfile"
