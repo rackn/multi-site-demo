@@ -196,7 +196,7 @@ cluster_prefix   = "$PREFIX"
 EO_MANAGER_VARS
 
 echo "remove cached DRP token"
-rm ~/.cache/drpcli/tokens/.rocketskates.token || true
+rm -f ~/.cache/drpcli/tokens/.rocketskates.token || true
 
 (( $DBG )) && { echo "manager.tfvars set to:"; cat manager.tfvars; }
 
