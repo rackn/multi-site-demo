@@ -7,4 +7,4 @@ Meta:
   icon: "map"
   color: "green"
   title: "RackN Content"
-  Dockerfile: "https://raw.githubusercontent.com/rackn/multi-site-demo/master/dockerfiles/terraform-dockerfile"
+  Dockerfile: "https://raw.githubusercontent.com/digitalrebar/provision-content/v4/integrations/docker-context/terraform-dockerfile"
