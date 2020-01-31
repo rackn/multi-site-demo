@@ -17,9 +17,6 @@ RUN echo "===> Installing Libraries..."  && \
         py-boto \
         py-netaddr \
         bind-tools \
-        html2text \
-        php7 \
-        php7-json \
         git \
         curl \
         openssh-client \
