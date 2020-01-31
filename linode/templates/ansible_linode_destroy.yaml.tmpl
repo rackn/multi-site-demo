@@ -12,8 +12,7 @@
         label: "{{ .Machine.Name }}"
         access_token: "{{ .Param "linode/token" }}"
         tags:
-          - {{ .Machine.Uuid }}        
-          - "digitalrebar"
+          - "cluster-{{ .Param "demo/cluster-prefix" -}}"
         state: absent
       register: new_linode
 

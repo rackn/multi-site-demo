@@ -18,7 +18,7 @@
         authorized_keys:
           - '{{ .Param "rsa/key-public" }}'
         tags:
-          - {{ .Info.Id }}
+          - "cluster-{{ .Param "demo/cluster-prefix" }}"
         state: present
       register: new_linode
 
