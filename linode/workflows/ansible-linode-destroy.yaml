@@ -1,4 +1,4 @@
-Name: "ansible-linode-destroy"
+Name: "machine-destroy"
 Description: "Destroy Remote Machine Using Ansible"
 Documentation: |
   Requires that operator has created a Contexts for "runner" and "ansible"

@@ -3,7 +3,7 @@ Description: "Destroy Terraform Plan for Machine"
 Documentation: |
   Requires that operator has created a Context "DZ" that can run Terraform
 Stages:
-  - "terraform-destroy"
+  - "ansible-linode-destroy"
   - "context-runner"
   - "complete-nobootenv"
 Meta:

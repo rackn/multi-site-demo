@@ -6,7 +6,7 @@ Documentation: |
 
   Leaves the machines in a Runner Context not on the machine
 Stages:
-  - "terraform-apply"
+  - "ansible-linode-create"
   - "context-clear"
   - "discover"
   - "network-firewalld"

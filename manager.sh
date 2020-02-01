@@ -294,6 +294,20 @@ drpcli profiles set global param "network/firewalld-ports" to '[
   "22/tcp", "8091/tcp", "8092/tcp", "6443/tcp", "8379/tcp",  "8380/tcp", "10250/tcp"
 ]' >/dev/null
 
+echo "Upload Contexts if found"
+raw=$(drpcli contexts list Engine=docker-context)
+contexts=$(jq -r ".[].Name" <<< "${raw}")
+i=0
+for context in $contexts; do
+  image=$(jq -r ".[$i].Image" <<< "${raw}")
+  if [[ -f $context.tar ]] ; then
+    echo "uploading $image for $context context"
+    drpcli files upload $context.tar as "contexts/docker-context/$image"
+  else
+    echo "no local $context.tar file, will have to build in bootstrap"
+  fi
+done
+
 echo "BOOTSTRAP export RS_ENDPOINT=$RS_ENDPOINT"
 
 if ! drpcli machines exists "Name:$MGR_LBL" 2>/dev/null >/dev/null; then
@@ -323,7 +337,7 @@ do
     echo "Creating $mc"
     echo "drpcli machines create \"{\"Name\":\"${mc}\", ... "
     drpcli machines create "{\"Name\":\"${mc}\", \
-      \"Workflow\":\"site-create\",
+      \"Workflow\":\"machine-create\",
       \"Params\":{\"linode/region\": \"${reg}\", \"network\firewalld-ports\":[\"22/tcp\",\"8091/tcp\",\"8092/tcp\"] }, \
       \"Meta\":{\"BaseContext\":\"runner\", \"icon\":\"cloud\"}}" >/dev/null
     sleep $LOOP_WAIT
