@@ -252,7 +252,7 @@ cd ..
 
 echo "Script is idempotent - restart if needed!"
 echo "Waiting for endpoint to be up.  export RS_ENDPOINT=$RS_ENDPOINT"
-timeout 300 bash -c 'while [[ "$(curl -fsSLk -o /dev/null -w %{http_code} ${RS_ENDPOINT} 2>/dev/null)" != "200" ]]; do sleep 5; done' || false
+timeout 300 bash -c 'while [[ "$(curl -fsSLk -o /dev/null -w %{http_code} ${RS_ENDPOINT} 2>/dev/null)" != "200" ]]; do sleep 3; done' || false
 
 echo "Setup Starting for endpoint export RS_ENDPOINT=$RS_ENDPOINT"
 _drpcli contents upload rackn-license.json >/dev/null
@@ -260,7 +260,7 @@ _drpcli contents upload rackn-license.json >/dev/null
 _drpcli catalog item install manager --version=$VER_CONTENT >/dev/null
 
 _drpcli contents upload linode.json >/dev/null
-_drpcli prefs set defaultWorkflow discover-linode unknownBootEnv discovery >/dev/null
+_drpcli prefs set defaultWorkflow discover-linode defaultBootEnv sledgehammer unknownBootEnv discovery >/dev/null
 
 echo "Setting Catalog On Manager files"
 _drpcli files upload linode.json to "rebar-catalog/linode/v1.0.0.json" >/dev/null
@@ -276,6 +276,7 @@ if [[ ! -f v4.2.2.zip ]] ; then
 fi
 _drpcli files upload v4.2.2.zip to "rebar-catalog/drp/v4.2.2.zip"
 # XXX: When moved into static-catalog.zip, then remove
+
 
 echo "Start the manager workflow"
 _drpcli contents upload multi-site-demo.json >/dev/null
@@ -294,6 +295,11 @@ drpcli profiles set global param "network/firewalld-ports" to '[
   "22/tcp", "8091/tcp", "8092/tcp", "6443/tcp", "8379/tcp",  "8380/tcp", "10250/tcp"
 ]' >/dev/null
 
+if [[ -f ~/.ssh/id_rsa.pub ]]; then
+  echo "adding SSH key to global profile"
+  drpcli profiles set global param "access-keys" to "{\"bootstrap\": \"$(cat ~/.ssh/id_rsa.pub)\"}"  >/dev/null
+fi
+
 echo "Upload Contexts if found"
 raw=$(drpcli contexts list Engine=docker-context)
 contexts=$(jq -r ".[].Name" <<< "${raw}")
@@ -306,6 +312,7 @@ for context in $contexts; do
   else
     echo "no local $context.tar file, will have to build in bootstrap"
   fi
+  i=$(($i + 1))
 done
 
 echo "BOOTSTRAP export RS_ENDPOINT=$RS_ENDPOINT"
@@ -326,6 +333,9 @@ else
   echo "found installed files $install_sum"
 fi
 
+echo "upload edge-lab"
+_drpcli catalog item install edge-lab --version=tip >/dev/null
+
 echo "Waiting for Manager to finish bootstrap"
 _drpcli machines wait "Name:$MGR_LBL" Stage "complete-nobootenv" 360
 
@@ -337,7 +347,7 @@ do
     echo "Creating $mc"
     echo "drpcli machines create \"{\"Name\":\"${mc}\", ... "
     drpcli machines create "{\"Name\":\"${mc}\", \
-      \"Workflow\":\"machine-create\",
+      \"Workflow\":\"site-create\",
       \"Params\":{\"linode/region\": \"${reg}\", \"network\firewalld-ports\":[\"22/tcp\",\"8091/tcp\",\"8092/tcp\"] }, \
       \"Meta\":{\"BaseContext\":\"runner\", \"icon\":\"cloud\"}}" >/dev/null
     sleep $LOOP_WAIT
@@ -403,7 +413,7 @@ fi # end if PREP
 
 for mc in $SITES;
 do
-  echo "Adding $mc to install DRP"
+  echo "Adding $mc to install endpoint list"
   _drpcli machines wait Name:$mc Stage "complete-nobootenv" 360
   machine=$(drpcli machines show Name:$mc)
   ip=$(jq -r .Address <<< "${machine}")

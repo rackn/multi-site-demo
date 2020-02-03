@@ -8,11 +8,10 @@ Documentation: |
 Stages:
   - "ansible-linode-create"
   - "context-clear"
-  - "discover"
+  - "discover-nobootenv"
   - "network-firewalld"
   - "runner-service"
   - "dr-server-install"
-  - "context-runner"
   - "complete-nobootenv"
 Meta:
   color: "purple"

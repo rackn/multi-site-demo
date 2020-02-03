@@ -41,6 +41,9 @@ Templates:
       echo "Install the Docker Context"
       drpcli catalog item install docker-context
 
+      echo "Check which files are uploaded"
+      drpcli files list contexts/docker-context && true
+
       echo "Building the docker images if not already built."
       cp $(which drpcli) drpcli
       raw=$(drpcli contexts list Engine=docker-context)

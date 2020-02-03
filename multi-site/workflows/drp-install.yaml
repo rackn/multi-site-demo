@@ -1,0 +1,12 @@
+Name: "drp-install"
+Description: "Install DRP on Remote Site using Runner"
+Documentation: |
+  Requires that runner is up on remote system
+Stages:
+  - "network-firewalld"
+  - "dr-server-install"
+  - "complete-nobootenv"
+Meta:
+  color: "purple"
+  icon: "cubes"
+  title: "RackN Content"

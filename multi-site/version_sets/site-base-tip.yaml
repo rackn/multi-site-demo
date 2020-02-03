@@ -6,24 +6,29 @@ Meta:
   icon: paw
 DRPVersion: tip
 Components:
+- Name: docker-context
+  Type: PluginProvider
+  Version: tip
 - Name: drp-community-content
   Type: ContentPackage
   Version: tip
-- Name: task-library
-  Type: ContentPackage
-  Version: tip
-- Name: krib
+- Name: edge-lab
   Type: ContentPackage
   Version: tip
 - Name: linode
   Type: ContentPackage
   Version: v1.0.0
-- Name: certs
-  Type: PluginProvider
+- Name: task-library
+  Type: ContentPackage
   Version: tip
 Plugins:
-- Name: certs
-  Provider: certs
+- Name: docker-context
+  Provider: docker-context
+Files:
+- Path: files/contexts/docker-context/digitalrebar-ansible
+  Source: self://files/contexts/docker-context/digitalrebar-ansible
+- Path: files/contexts/docker-context/digitalrebar-ansible
+  Source: self://files/contexts/docker-context/digitalrebar-runner
 Prefs:
   defaultBootEnv: local
   defaultStage: none

@@ -27,7 +27,7 @@ do
   if drpcli machines exists Name:$mc > /dev/null
   then
     drpcli machines meta set Name:$mc key BaseContext to "runner"
-    drpcli machines workflow Name:$mc machine-destroy > /dev/null
+    drpcli machines workflow Name:$mc site-destroy > /dev/null
     # backslash escape seems to be needed, otherwise it's being intepreted as YAML input
     drpcli machines set Name:$mc param Runnable to true
   else
@@ -57,6 +57,7 @@ for context in $contexts; do
     echo "downloading $image for $context context"
     drpcli files download "contexts/docker-context/$image" > $context.tar
   fi
+  i=$(($i + 1))
 done
 
 
