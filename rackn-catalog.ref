@@ -587,6 +587,40 @@
         "Tip": false,
         "HotFix": false
       },
+      "drp-v4.2.2": {
+        "Validated": false,
+        "Available": false,
+        "Errors": [],
+        "ReadOnly": false,
+        "Meta": {
+          "Author": "RackN",
+          "CodeSource": "https://github.com/digitalrebar/provision",
+          "Color": "black",
+          "Copyright": "RackN",
+          "DisplayName": "Digital Rebar Provision",
+          "DocUrl": "https://provision.readthedocs.io/en/latest/",
+          "Icon": "cube",
+          "License": "APLv2",
+          "Name": "drp",
+          "Order": "1",
+          "Prerequisites": "",
+          "Tags": "drp,endpoint,rackn,service"
+        },
+        "Endpoint": "",
+        "Id": "drp-v4.2.2",
+        "Type": "catalog_items",
+        "Name": "drp",
+        "ActualVersion": "v4.2.2",
+        "Version": "v4.2.2",
+        "ContentType": "DRP",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.2.2.zip",
+        "Shasum256": {
+          "any/any": "54ff3b0f0bfdb02d37de50af3a871002a2a42c3ce63ab38c878b24b016623a74"
+        },
+        "NOJQSource": "drp-v4.2.2:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.2.2.zip",
+        "Tip": false,
+        "HotFix": true
+      },
       "drpcli-stable": {
         "Validated": false,
         "Available": false,
@@ -610,16 +644,15 @@
         "Id": "drpcli-stable",
         "Type": "catalog_items",
         "Name": "drpcli",
-        "ActualVersion": "v4.2.0",
+        "ActualVersion": "v4.2.2",
         "Version": "stable",
-        "ContentType": "DRPCLI",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.2.0",
+        "ActualVersion": "v4.2.2",
+        "ContentType": "DRP",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.2.2.zip",
         "Shasum256": {
-          "amd64/darwin": "0972fe5599a1d1f6b8b82faff28a0cfc849ff55d96db167d6d2e27147129140e",
-          "amd64/linux": "88321ace69b8748874e1187906450e59e9fdd2586f74215b179dadfaf4b28f3e",
-          "amd64/windows": "44586fc941991cd495af8c9c40255852caee9b4e5e57c9c273d38de86a486a99"
+          "any/any": "54ff3b0f0bfdb02d37de50af3a871002a2a42c3ce63ab38c878b24b016623a74"
         },
-        "NOJQSource": "drpcli-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.2.0",
+        "NOJQSource": "drp-v4.2.2:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.2.2.zip",
         "Tip": false,
         "HotFix": true
       },
@@ -967,14 +1000,14 @@
         "Id": "task-library-stable",
         "Type": "catalog_items",
         "Name": "task-library",
-        "ActualVersion": "v4.2.0",
+        "ActualVersion": "v4.2.2",
         "Version": "stable",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.2.0.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.2.2.json",
         "Shasum256": {
-          "any/any": "bfa255d127f83265d82e2a24f85585b52e670d6726fa104044080f64e2b07e4d"
+          "any/any": "68c046a9a51c763f920e538eb176e90a8acdae09f7abaa9bc5733756a0d0d48e"
         },
-        "NOJQSource": "task-library-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.2.0.json",
+        "NOJQSource": "task-library-v4.2.2:::https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.2.2.json",
         "Tip": false,
         "HotFix": true
       },
@@ -1082,6 +1115,41 @@
         "NOJQSource": "task-library-v4.2.0:::https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.2.0.json",
         "Tip": false,
         "HotFix": false
+      },
+      "task-library-v4.2.2": {
+        "Validated": false,
+        "Available": false,
+        "Errors": [],
+        "ReadOnly": false,
+        "Meta": {
+          "Author": "RackN",
+          "CodeSource": "https://github.com/rackn/provision-content",
+          "Color": "green",
+          "Copyright": "RackN",
+          "Description": "Essential task and stage library",
+          "DisplayName": "Core Task Library",
+          "DocUrl": "https://provision.readthedocs.io/en/latest/doc/content-packages/task-library.html",
+          "Icon": "shopping basket",
+          "License": "RackN",
+          "Name": "task-library",
+          "Order": "100",
+          "Prerequisites": "",
+          "Tags": "base,rackn,tasks,linux,library"
+        },
+        "Endpoint": "",
+        "Id": "task-library-v4.2.2",
+        "Type": "catalog_items",
+        "Name": "task-library",
+        "ActualVersion": "v4.2.2",
+        "Version": "v4.2.2",
+        "ContentType": "ContentPackage",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.2.2.json",
+        "Shasum256": {
+          "any/any": "68c046a9a51c763f920e538eb176e90a8acdae09f7abaa9bc5733756a0d0d48e"
+        },
+        "NOJQSource": "task-library-v4.2.2:::https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.2.2.json",
+        "Tip": false,
+        "HotFix": true
       },
       "ux-views-stable": {
         "Validated": false,

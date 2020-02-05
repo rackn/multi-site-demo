@@ -24,7 +24,7 @@ usage() {
                              $BASE VersionSet, if there is an
                              additional option to 'prep-manager', that
                              will be used in place of '$BASE'
-          -b site-base-VER   Sets the VER (eg 'v4.2.1') for site-base
+          -b site-base-VER   Sets the VER (eg 'v4.2.2') for site-base
                              implies/sets '-p' if not specified
           -c cluster_prefix  sets cluster members with a prefix name for
                              uniqueness
@@ -110,7 +110,7 @@ set -e
 #            that can be set for the terraform provider (linode)
 ###
 PREP="false"
-BASE="site-base-v4.2.1"           # "stable" is not fully available in the catalog
+BASE="site-base-v4.2.2"           # "stable" is not fully available in the catalog
 OPTS=""
 MGR_LBL="global-manager"
 MGR_PWD="r0cketsk8ts"
@@ -202,7 +202,7 @@ rm -f ~/.cache/drpcli/tokens/.rocketskates.token || true
 
 # verify our command line flags and validate site-base requested
 AVAIL=$(ls multi-site/version_sets/site-base*.yaml | sed 's|^.*sets/\(.*\)\.yaml$|\1|g')
-( echo "$AVAIL" | grep -q "$BASE" ) || xiterr 1 "Unsupported 'site-base', availalbe values are: \n$AVAIL"
+( echo "$AVAIL" | grep -q "$BASE" ) || xiterr 1 "Unsupported 'site-base', available values are: \n$AVAIL"
 
 terraform init -no-color
 terraform apply -no-color -auto-approve -var-file=manager.tfvars
@@ -271,10 +271,10 @@ if [[ -f static-catalog.zip ]] ; then
   _drpcli files upload static-catalog.zip >/dev/null
 fi
 # XXX: When moved into static-catalog.zip, then remove
-if [[ ! -f v4.2.1.zip ]] ; then
-  curl -s -o v4.2.1.zip https://rebar-catalog.s3-us-west-2.amazonaws.com/drp/v4.2.1.zip
+if [[ ! -f v4.2.2.zip ]] ; then
+  curl -s -o v4.2.2.zip https://rebar-catalog.s3-us-west-2.amazonaws.com/drp/v4.2.2.zip
 fi
-_drpcli files upload v4.2.1.zip to "rebar-catalog/drp/v4.2.1.zip"
+_drpcli files upload v4.2.2.zip to "rebar-catalog/drp/v4.2.2.zip"
 # XXX: When moved into static-catalog.zip, then remove
 
 echo "Start the manager workflow"
@@ -293,20 +293,6 @@ echo "drpcli profiles set global param network/firewalld-ports to ... "
 drpcli profiles set global param "network/firewalld-ports" to '[
   "22/tcp", "8091/tcp", "8092/tcp", "6443/tcp", "8379/tcp",  "8380/tcp", "10250/tcp"
 ]' >/dev/null
-
-echo "Upload the docker coxtext image files."
-ls dockerfiles | while read file ; do
-  _drpcli files upload dockerfiles/$file as dockerfiles/$file >/dev/null
-  dname=$(echo $file | sed 's/-dockerfile//g')
-  if [[ -f $dname.tar ]] ; then
-     gzip $dname.tar
-  fi
-  if [[ -f $dname.tar.gz ]] ; then
-    image="digitalrebar-$dname"
-    echo "Staging pre-built docker context. $image"
-    _drpcli files upload $dname.tar.gz as "contexts/docker-context/$image" >/dev/null
-  fi
-done
 
 echo "BOOTSTRAP export RS_ENDPOINT=$RS_ENDPOINT"
 

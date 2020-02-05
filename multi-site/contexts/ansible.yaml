@@ -7,3 +7,4 @@ Meta:
   icon: "cog"
   color: "green"
   title: "RackN Content"
+  Dockerfile: "https://raw.githubusercontent.com/digitalrebar/provision-content/v4/integrations/docker-context/ansible-dockerfile"
