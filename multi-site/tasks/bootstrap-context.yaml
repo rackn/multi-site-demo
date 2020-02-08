@@ -14,8 +14,11 @@ Documentation: |
   1. using Docker Image from Context Meta.Dockerpull
   Once downloaded and built, they are uploaded to the correct files location
 ExtraClaims:
-  - scope: "*"
+  - scope: "files"
     action: "*"
+    specific: "*"
+  - scope: "contexts"
+    action: "get"
     specific: "*"
 Templates:
   - Contents: |-

@@ -24,11 +24,6 @@ Components:
 Plugins:
 - Name: docker-context
   Provider: docker-context
-Files:
-- Path: files/contexts/docker-context/digitalrebar-ansible
-  Source: self://files/contexts/docker-context/digitalrebar-ansible
-- Path: files/contexts/docker-context/digitalrebar-ansible
-  Source: self://files/contexts/docker-context/digitalrebar-runner
 Prefs:
   defaultBootEnv: local
   defaultStage: none

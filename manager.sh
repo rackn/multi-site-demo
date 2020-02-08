@@ -411,16 +411,6 @@ then
   fi
 fi # end if PREP
 
-for mc in $SITES;
-do
-  echo "Adding $mc to install endpoint list"
-  _drpcli machines wait Name:$mc Stage "complete-nobootenv" 360
-  machine=$(drpcli machines show Name:$mc)
-  ip=$(jq -r .Address <<< "${machine}")
-  echo "Adding $mc to Endpoints List"
-  _drpcli plugins runaction manager addEndpoint manager/url https://$ip:8092 manager/username rocketskates manager/password r0cketsk8ts
-done
-
 echo ""
 echo ">>>"
 echo ">>> Cluster Prefix is set to:  $PREFIX"

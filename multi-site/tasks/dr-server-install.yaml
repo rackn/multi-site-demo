@@ -4,9 +4,17 @@ Description: "Install Digital Rebar Server"
 Documentation: |
   Installs MINIMAL DRP assuming population by Multi-Site-Manager
 
+  TODO: make user/password settable
+
   Requires install.sh and dr-provision.zip to be in DRP files/bootstrap
 
   Does nothing if DRP already installed
+
+  If Manager installed, will register this DRP as an endpoint
+ExtraClaims:
+  - scope: "*"
+    action: "*"
+    specific: "*"
 Templates:
   - Contents: |-
       #!/bin/bash
@@ -28,6 +36,17 @@ Templates:
 
       else
         echo "DRP already installed, skipping"
+      fi
+
+      if drpcli extended -l endpoints show {{ .Info.Id }} ; then
+        if drpcli extended -l endpoints show {{ .Machine.Name }} ; then
+          echo "Endpoint {{ .Machine.Name }} already registered"
+        else
+          echo "Registering {{ .Machine.Name }} for management"
+          drpcli plugins runaction manager addEndpoint manager/url https://{{ .Machine.Address}}:8092 manager/username rocketskates manager/password r0cketsk8ts
+        fi
+      else
+        echo "No Manager Plugin"
       fi
 
       exit 0
