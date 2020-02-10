@@ -1,0 +1,33 @@
+---
+Name: "dr-server-files"
+Description: "Setup Files for Digital Rebar Server"
+Documentation: |
+  Copy Files from Multi-Site-Manager to Local DR Server
+Templates:
+  - Contents: |-
+      #!/bin/bash
+      # RackN Copyright 2020
+
+      set -e
+      {{template "setup.tmpl" .}}
+
+      {{ $url := .ProvisionerURL -}}
+      {{ $addr := .Machine.Address -}}
+      {{range $index, $file := .Param "multi-site/files"}}
+
+      echo "Synchronizing {{$file}} from {{$url}}/files"
+      unset RS_TOKEN
+      drpcli files -U rocketskates -P r0cketsk8ts -x -E https://{{$addr}}:8092 upload {{$url}}/files/{{$file}} as {{$file}}
+
+      {{ else }}
+      echo "No files provided"
+      {{ end}}
+
+      exit 0
+
+    Name: "drp-install"
+Meta:
+  icon: "heart"
+  color: "green"
+  title: "RackN Content"
+  feature-flags: "sane-exit-codes"

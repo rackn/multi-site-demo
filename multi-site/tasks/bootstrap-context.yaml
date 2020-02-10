@@ -20,6 +20,9 @@ ExtraClaims:
   - scope: "contexts"
     action: "get"
     specific: "*"
+  - scope: "plugin_providers"
+    action: "*"
+    specific: "*"
 Templates:
   - Contents: |-
       #!/bin/bash

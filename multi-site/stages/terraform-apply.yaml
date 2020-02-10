@@ -4,8 +4,10 @@ Description: "Apply Terraform with Terraform Context"
 Params:
   terraform/plan-action: "apply"
 Tasks:
-  - "context:terraform"
-  - "terraform-apply"
+  - "context:runner"
+  - "create-machines"
+  - "context:ansible"
+  - "attach-machines"
 Meta:
   icon: "sliders horizontal"
   color: "black"

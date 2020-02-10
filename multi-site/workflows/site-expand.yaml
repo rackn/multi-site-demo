@@ -1,15 +1,14 @@
 Name: "site-expand"
 Description: "Expand Remote Site using Terraform Plan"
 Documentation: |
-  Requires that operator has created a Contexts for "runner" and "terraform"
-  that can run DRP Angent and Terraform
+  Requires that operator has created a Contexts for "runner" and "ansible"
+  that can run DRP Angent and Ansible
 
   Leaves the machines in a Runner Context not on the machine
 Params:
   - demo/cluster-count: 3
 Stages:
-  - "add-demo-profile"
-  - "terraform-apply"
+  - "site-expand"
   - "complete-nobootenv"
 Meta:
   color: "purple"
