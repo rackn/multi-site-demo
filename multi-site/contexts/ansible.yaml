@@ -7,4 +7,5 @@ Meta:
   icon: "cog"
   color: "green"
   title: "RackN Content"
+  Imagepull: "https://s3-us-west-2.amazonaws.com/get.rebar.digital/containers/20200210/ansible.tar"
   Dockerfile: "https://raw.githubusercontent.com/digitalrebar/provision-content/v4/integrations/docker-context/ansible-dockerfile"

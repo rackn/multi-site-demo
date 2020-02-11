@@ -11,14 +11,9 @@ Documentation: |
   Future:
     * allow download from DRP
     * expand use of params
-Params:
-  "multi-site/files":
-    - "contexts/docker-context/digitalrebar-ansible"
-    - "contexts/docker-context/digitalrebar-runner"
 Tasks:
   - "context:"
   - "dr-server-install"
-  - "dr-server-files"
 Meta:
   icon: "heart"
   color: "green"

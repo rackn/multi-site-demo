@@ -10,6 +10,7 @@ Documentation: |
 
   Docker build files are discovered in the following precidence order:
   1. using Docker Buildfile from files/contexts/docker-build/[contextname]
+  1. using URL from Meta.Imagepull
   1. using Docker Buildfile downloaded Context Meta.Dockerfile
   1. using Docker Image from Context Meta.Dockerpull
   Once downloaded and built, they are uploaded to the correct files location
@@ -59,6 +60,7 @@ Templates:
         image=$(jq -r ".[$i].Image" <<< "${raw}")
         echo "=== Uploading Container for $context named [$image] using [$context-dockerfile] ==="
         container_sum=$(drpcli files exists "contexts/docker-context/$image" || true)
+        imagepull=$(jq -r ".[$i].Meta.Imagepull" <<< "${raw}")
         if [[ "$container_sum" == "" ]]; then
           if [[ -f /root/$context.tar ]]; then
             echo "  Skipping Build (found Container Tar /root/$context.tar)"
@@ -68,6 +70,9 @@ Templates:
             echo "  Skipping Build (found Container Tar /root/$context.tar.gz)"
             echo "  Uploading Container from /root/$context.tar.gz"
             drpcli files upload /root/$context.tar.gz as "contexts/docker-context/$image"
+          elif [[ "$imagepull" != "null" ]]; then
+            echo "  Uploading Container from $imagepull"
+            drpcli files upload $imagepull as "contexts/docker-context/$image"
           else
             echo "  Building Container --tag=$image --file=$context-dockerfile"
             dockerbuild=$(drpcli files exists "contexts/docker-build/$context" || true)
