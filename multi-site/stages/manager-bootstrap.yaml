@@ -6,6 +6,7 @@ Tasks:
   - "bootstrap-catalog"
   - "bootstrap-iso"
   - "bootstrap-backrev-bootstrap"
+  - "bootstrap-lock"
 Meta:
   icon: "boxes"
   color: "black"

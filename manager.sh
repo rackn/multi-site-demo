@@ -271,10 +271,10 @@ if [[ -f static-catalog.zip ]] ; then
   _drpcli files upload static-catalog.zip >/dev/null
 fi
 # XXX: When moved into static-catalog.zip, then remove
-if [[ ! -f v4.2.2.zip ]] ; then
-  curl -s -o v4.2.2.zip https://rebar-catalog.s3-us-west-2.amazonaws.com/drp/v4.2.2.zip
+if [[ ! -f v4.2.4.zip ]] ; then
+  curl -s -o v4.2.4.zip https://rebar-catalog.s3-us-west-2.amazonaws.com/drp/v4.2.4.zip
 fi
-_drpcli files upload v4.2.2.zip to "rebar-catalog/drp/v4.2.2.zip"
+_drpcli files upload v4.2.4.zip to "rebar-catalog/drp/v4.2.4.zip"
 # XXX: When moved into static-catalog.zip, then remove
 
 
@@ -323,14 +323,6 @@ if ! drpcli machines exists "Name:$MGR_LBL" 2>/dev/null >/dev/null; then
 else
   echo "Bootstrap machine exists as $MGR_LBL... starting bootstrap workflow"
   _drpcli machines workflow Name:"$MGR_LBL" "manager-bootstrap" >/dev/null
-fi
-
-install_sum=$(drpcli files exists bootstrap/dr-provision.zip 2>/dev/null || true)
-if [[ "$install_sum" == "" ]]; then
-  echo "Missing bootstrap files..."
-  exit 1
-else
-  echo "found installed files $install_sum"
 fi
 
 echo "upload edge-lab"

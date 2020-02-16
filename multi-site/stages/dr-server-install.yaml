@@ -14,6 +14,7 @@ Documentation: |
 Tasks:
   - "context:"
   - "dr-server-install"
+  - "dr-server-seed"
 Meta:
   icon: "heart"
   color: "green"
