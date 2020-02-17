@@ -9,19 +9,26 @@ Templates:
       # RackN Copyright 2020
 
       set -e
-      {{template "setup.tmpl" .}}
+      # DO NOT INCLUDE template "setup.tmpl" !!
 
-      {{ $url := .ProvisionerURL -}}
       {{ $addr := .Machine.Address -}}
 
-      echo "copy over Linode Token"
-      drpcli profiles -U rocketskates -P r0cketsk8ts -x -E https://{{$addr}}:8092 set global set "linode/token" to {{ .Param "linode/token" }} >/dev/null
+      export RS_KEY="rocketskates:r0cketsk8ts"
+      export RS_ENDPOINT="https://{{$addr}}:8092"
+      unset RS_TOKEN
 
-      echo "copy over Linode Region"
-      drpcli profiles -U rocketskates -P r0cketsk8ts -x -E https://{{$addr}}:8092 set global set "linode/region" to {{ .Param "linode/region" }} >/dev/null
+      echo "Pointing DRPCLI to $RS_ENDPOINT using $RS_KEY"
 
-      echo "copy over Prefix"
-      drpcli profiles -U rocketskates -P r0cketsk8ts -x -E https://{{$addr}}:8092 set global set "demo/cluster-prefix" to {{ .Param "demo/cluster-prefix" }} >/dev/null
+      drpcli -x profiles list
+
+      echo "copy over Linode Token (value NOT shown)"
+      drpcli -x profiles set global set "linode/token" to "{{ .Param "linode/token" }}" >/dev/null
+
+      echo "copy over Linode Region to {{ .Param "linode/region" }}"
+      drpcli -x profiles set global set "linode/region" to "{{ .Param "linode/region" }}" >/dev/null
+
+      echo "copy over Prefix to {{ .Param "demo/cluster-prefix" }}"
+      drpcli -x profiles set global set "demo/cluster-prefix" to "{{ .Param "demo/cluster-prefix" }}" >/dev/null
 
       exit 0
 
