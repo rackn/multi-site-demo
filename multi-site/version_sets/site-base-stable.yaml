@@ -18,6 +18,9 @@ Components:
 - Name: linode
   Type: ContentPackage
   Version: v1.0.0
+- Name: multi-site-demo
+  Type: ContentPackage
+  Version: v1.2.0
 - Name: task-library
   Type: ContentPackage
   Version: stable

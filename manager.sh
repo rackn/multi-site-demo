@@ -264,6 +264,7 @@ _drpcli prefs set defaultWorkflow discover-linode defaultBootEnv sledgehammer un
 
 echo "Setting Catalog On Manager files"
 _drpcli files upload linode.json to "rebar-catalog/linode/v1.0.0.json" >/dev/null
+_drpcli files upload multi-site-demo.json to "rebar-catalog/multi-site-demo/v1.2.0.json" >/dev/null
 _drpcli profiles set global set catalog_url to - >/dev/null <<< $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
 _drpcli files upload rackn-catalog.json as static-catalog.json >/dev/null
 if [[ -f static-catalog.zip ]] ; then
@@ -292,7 +293,7 @@ _drpcli profiles set global set "linode/root-password" to "r0cketsk8ts" >/dev/nu
 _drpcli profiles set global set "demo/cluster-count" to 0 >/dev/null
 echo "drpcli profiles set global param network/firewalld-ports to ... "
 drpcli profiles set global param "network/firewalld-ports" to '[
-  "22/tcp", "8091/tcp", "8092/tcp", "6443/tcp", "8379/tcp",  "8380/tcp", "10250/tcp"
+  "22/tcp", "8091/tcp", "8092/tcp", "6443/tcp", "8379/tcp", "8080/tcp", "8380/tcp", "10250/tcp"
 ]' >/dev/null
 
 if [[ -f ~/.ssh/id_rsa.pub ]]; then
@@ -339,7 +340,8 @@ do
     echo "Creating $mc"
     echo "drpcli machines create \"{\"Name\":\"${mc}\", ... "
     drpcli machines create "{\"Name\":\"${mc}\", \
-      \"Workflow\":\"site-create\",
+      \"Workflow\":\"site-create\", \
+      \"Description\":\"Edge DR Server\", \
       \"Params\":{\"linode/region\": \"${reg}\", \"network\firewalld-ports\":[\"22/tcp\",\"8091/tcp\",\"8092/tcp\"] }, \
       \"Meta\":{\"BaseContext\":\"runner\", \"icon\":\"cloud\"}}" >/dev/null
     sleep $LOOP_WAIT

@@ -16,10 +16,11 @@ Templates:
       export RS_KEY="rocketskates:r0cketsk8ts"
       export RS_ENDPOINT="https://{{$addr}}:8092"
       unset RS_TOKEN
+      unset RS_LOCAL_PROXY
 
       echo "Pointing DRPCLI to $RS_ENDPOINT using $RS_KEY"
 
-      drpcli -x profiles list
+      drpcli -x profiles show global
 
       echo "copy over Linode Token (value NOT shown)"
       drpcli -x profiles set global set "linode/token" to "{{ .Param "linode/token" }}" >/dev/null

@@ -26,6 +26,7 @@ for mc in $sites;
 do
   if drpcli machines exists Name:$mc > /dev/null
   then
+    drpcli machines update Name:$mc '{"Locked":false}' > /dev/null
     drpcli machines meta set Name:$mc key BaseContext to "runner"
     drpcli machines workflow Name:$mc site-destroy > /dev/null
     # backslash escape seems to be needed, otherwise it's being intepreted as YAML input
