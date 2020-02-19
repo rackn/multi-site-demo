@@ -263,7 +263,7 @@ _drpcli contents upload linode.json >/dev/null
 _drpcli prefs set defaultWorkflow discover-linode defaultBootEnv sledgehammer unknownBootEnv discovery >/dev/null
 
 echo "Setting Catalog On Manager files"
-_drpcli files upload linode.json to "rebar-catalog/linode/v1.0.0.json" >/dev/null
+_drpcli files upload linode.json to "rebar-catalog/linode/v1.1.json" >/dev/null
 _drpcli files upload multi-site-demo.json to "rebar-catalog/multi-site-demo/v1.2.0.json" >/dev/null
 _drpcli profiles set global set catalog_url to - >/dev/null <<< $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
 _drpcli files upload rackn-catalog.json as static-catalog.json >/dev/null

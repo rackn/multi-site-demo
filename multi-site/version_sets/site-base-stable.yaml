@@ -6,6 +6,9 @@ Meta:
   icon: paw
 DRPVersion: stable
 Components:
+- Name: rackn-license
+  Type: ContentPackage
+  Version: tip
 - Name: docker-context
   Type: PluginProvider
   Version: stable
@@ -15,15 +18,15 @@ Components:
 - Name: edge-lab
   Type: ContentPackage
   Version: stable
-- Name: linode
-  Type: ContentPackage
-  Version: v1.0.0
-- Name: multi-site-demo
-  Type: ContentPackage
-  Version: v1.2.0
 - Name: task-library
   Type: ContentPackage
   Version: stable
+- Name: linode
+  Type: ContentPackage
+  Version: v1.1.0
+- Name: multi-site-demo
+  Type: ContentPackage
+  Version: v1.2.0
 Plugins:
 - Name: docker-context
   Provider: docker-context
