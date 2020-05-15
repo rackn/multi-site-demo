@@ -4,11 +4,9 @@ Description: "Apply Terraform with Terraform Context"
 Params:
   terraform/plan-action: "apply"
 Tasks:
-  - "context:runner"
-  - "create-machines"
-  - "context:ansible"
-  - "attach-machines"
+  - "context:terraform"
+  - "terraform-apply"
 Meta:
   icon: "sliders horizontal"
-  color: "black"
+  color: "blue"
   title: "RackN Content"
