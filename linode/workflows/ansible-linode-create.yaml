@@ -9,7 +9,7 @@ Stages:
   - "ansible-linode-create"
   - "context-clear"
   - "discover-nobootenv"
-  - "network-firewalld"
+  - "network-firewall"
   - "runner-service"
   - "complete-nobootenv"
 Meta:

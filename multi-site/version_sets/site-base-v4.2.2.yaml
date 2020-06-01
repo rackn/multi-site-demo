@@ -1,17 +1,17 @@
 ---
-Id: site-base-v4.2.2
+Id: site-base-v4.2.6
 Description: "Core Components needed by all Sites"
 Apply: true
 Meta:
   icon: paw
-DRPVersion: v4.2.2
+DRPVersion: v4.2.6
 Components:
 - Name: rackn-license
   Type: ContentPackage
   Version: tip
 - Name: docker-context
   Type: PluginProvider
-  Version: v4.2.2
+  Version: v4.2.6
 - Name: drp-community-content
   Type: ContentPackage
   Version: tip

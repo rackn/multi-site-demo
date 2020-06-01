@@ -2,11 +2,11 @@
 Name: "manager-bootstrap"
 Description: "Use Bootstrap Process to Setup Manager (Contexts)"
 Tasks:
-  - "bootstrap-context"
+  - "bootstrap-discovery-iso"
+  - "bootstrap-contexts"
   - "bootstrap-catalog"
-  - "bootstrap-iso"
   - "bootstrap-backrev-bootstrap"
-  - "bootstrap-lock"
+  - "bootstrap-lock-mc"
 Meta:
   icon: "boxes"
   color: "black"

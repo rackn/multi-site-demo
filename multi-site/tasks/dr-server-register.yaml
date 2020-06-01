@@ -1,15 +1,7 @@
 ---
-Name: "dr-server-install"
-Description: "Install Digital Rebar Server"
+Name: "dr-server-register"
+Description: "Register Digital Rebar Server Endpoints"
 Documentation: |
-  Installs MINIMAL DRP assuming population by Multi-Site-Manager
-
-  TODO: make user/password settable
-
-  Requires install.sh and dr-provision.zip to be in DRP files/bootstrap
-
-  Does nothing if DRP already installed
-
   If Manager installed, will register this DRP as an endpoint
 ExtraClaims:
   - scope: "*"
@@ -18,32 +10,21 @@ ExtraClaims:
 Templates:
   - Contents: |-
       #!/bin/bash
-      # RackN Copyright 2019
+      # RackN Copyright 2020
 
       set -e
       {{template "setup.tmpl" .}}
 
-      if [[ "$(systemctl is-active dr-provision)" != "active" ]] ; then
+      {{ $drpid := (regexFind "[a-zA-Z0-9-]+" .Machine.Name) }}
+      RS_USER="rocketskates"
+      RS_PASS="r0cketsk8ts"
 
-        echo "Download Components"
-        drpcli files download "bootstrap/dr-provision.zip" > dr-provision.zip
-        drpcli files download "bootstrap/install.sh" > install.sh
-        chmod +x install.sh
-
-        echo "DRP $action"
-        unset RS_ENDPOINT
-        ./install.sh install --systemd --drp-id={{ .Machine.Name }} --no-content --startup --zip-file=dr-provision.zip
-
-      else
-        echo "DRP already installed, skipping"
-      fi
-
-      if drpcli extended -l endpoints show {{ .Info.Id }} ; then
-        if drpcli extended -l endpoints show {{ .Machine.Name }} ; then
-          echo "Endpoint {{ .Machine.Name }} already registered"
+      if drpcli extended -l endpoints exists {{ .Info.Id }} ; then
+        if drpcli extended -l endpoints show {{ $drpid }} ; then
+          echo "Endpoint {{ $drpid }} already registered"
         else
-          echo "Registering {{ .Machine.Name }} for management"
-          drpcli plugins runaction manager addEndpoint manager/url https://{{ .Machine.Address}}:8092 manager/username rocketskates manager/password r0cketsk8ts
+          echo "Registering {{ $drpid }} for management"
+          drpcli plugins runaction manager addEndpoint manager/url https://{{ .Machine.Address}}:8092 manager/username $RS_USER manager/password $RS_PASS
         fi
       else
         echo "No Manager Plugin"
@@ -51,9 +32,9 @@ Templates:
 
       exit 0
 
-    Name: "drp-install"
+    Name: "drp-register"
 Meta:
-  icon: "heart"
+  icon: "chess"
   color: "green"
   title: "RackN Content"
   feature-flags: "sane-exit-codes"

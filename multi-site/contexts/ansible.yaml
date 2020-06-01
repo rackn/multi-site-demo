@@ -2,10 +2,9 @@
 Name: "ansible"
 Description: "Run Ansible Playbook in Docker Context"
 Engine: "docker-context"
-Image: "digitalrebar-ansible"
+Image: "digitalrebar-context-ansible"
 Meta:
   icon: "cog"
   color: "green"
   title: "RackN Content"
-  Imagepull: "https://s3-us-west-2.amazonaws.com/get.rebar.digital/containers/20200210/ansible.tar"
-  Dockerfile: "https://raw.githubusercontent.com/digitalrebar/provision-content/v4/integrations/docker-context/ansible-dockerfile"
+  Dockerpull: "digitalrebar/context-ansible"

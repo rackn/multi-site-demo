@@ -3,7 +3,7 @@ Description: "Install DRP on Remote Site using Runner"
 Documentation: |
   Requires that runner is up on remote system
 Stages:
-  - "network-firewalld"
+  - "network-firewall"
   - "dr-server-install"
   - "complete-nobootenv"
 Meta:

@@ -31,8 +31,19 @@ Templates:
       echo "copy over Prefix to {{ .Param "demo/cluster-prefix" }}"
       drpcli -x profiles set global set "demo/cluster-prefix" to "{{ .Param "demo/cluster-prefix" }}" >/dev/null
 
-      exit 0
+      echo "Populate the contexts"
+      contexts=$(jq -r ".[].Name" <<< "${raw}")
+      i=0
+      for context in $contexts; do
+        image=$(jq -r ".[$i].Image" <<< "${raw}")
+        echo "Installing Container for $context named from $image"
+        drpcli -x plugins runaction docker-context imageUpload \
+          context/image-name ${image} \
+          context/image-path files/contexts/docker-context/${image}
+        i=$(($i + 1))
+      done
 
+      exit 0
     Name: "drp-install"
 Meta:
   icon: "heart"

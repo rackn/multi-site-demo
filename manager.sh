@@ -117,6 +117,7 @@ MGR_PWD="r0cketsk8ts"
 MGR_RGN="us-west"
 MGR_IMG="linode/centos7"
 MGR_TYP="g6-standard-2"
+SSH_KEY="$(cat ~/.ssh/id_rsa.pub)"
 LINODE_TOKEN=${LINODE_TOKEN:-""}
 SITES="us-central us-east us-west us-southeast"
 DBG=0
@@ -191,6 +192,7 @@ manager_password = "$MGR_PWD"
 manager_region   = "$MGR_RGN"
 manager_image    = "$MGR_IMG"
 manager_type     = "$MGR_TYP"
+ssh_key          = "$SSH_KEY"
 linode_token     = "$LINODE_TOKEN"
 cluster_prefix   = "$PREFIX"
 EO_MANAGER_VARS
@@ -226,6 +228,7 @@ if [[ -f rackn-license.json ]]; then
     OWNERID="$(jq -r .OwnerId <<< ${LICENSEBASE})"
     KEY="$(jq -r '.sections.profiles["rackn-license"].Params["rackn/license"]' <<< ${LICENSE})"
     VERSION="$(jq -r .Version <<< ${LICENSEBASE})"
+    cp rackn-license.json rackn-license.old
     curl -X GET "https://1p0q9a8qob.execute-api.us-west-2.amazonaws.com/v40/license" \
       -H "rackn-contactid: ${CONTACTID}" \
       -H "rackn-ownerid: ${OWNERID}" \
@@ -257,25 +260,29 @@ timeout 300 bash -c 'while [[ "$(curl -fsSLk -o /dev/null -w %{http_code} ${RS_E
 echo "Setup Starting for endpoint export RS_ENDPOINT=$RS_ENDPOINT"
 _drpcli contents upload rackn-license.json >/dev/null
 
-_drpcli catalog item install manager --version=$VER_CONTENT >/dev/null
-
 _drpcli contents upload linode.json >/dev/null
-_drpcli prefs set defaultWorkflow discover-linode defaultBootEnv sledgehammer unknownBootEnv discovery >/dev/null
+_drpcli prefs set defaultWorkflow discover-joinup defaultBootEnv sledgehammer unknownBootEnv discovery >/dev/null
+if [[ -f task-library.yaml ]] ; then
+  _drpcli contents upload task-library.yaml
+fi
+if [[ -f content.yaml ]] ; then
+  _drpcli contents upload content.yaml
+fi
 
 echo "Setting Catalog On Manager files"
 _drpcli files upload linode.json to "rebar-catalog/linode/v1.1.0.json" >/dev/null
 _drpcli files upload multi-site-demo.json to "rebar-catalog/multi-site-demo/v1.2.0.json" >/dev/null
-_drpcli profiles set global set catalog_url to - >/dev/null <<< $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
-_drpcli files upload rackn-catalog.json as static-catalog.json >/dev/null
-if [[ -f static-catalog.zip ]] ; then
-  echo "Using custom static-catalog.zip ... upload to manager"
-  _drpcli files upload static-catalog.zip >/dev/null
-fi
+#_drpcli profiles set global set catalog_url to - >/dev/null <<< $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
+#_drpcli files upload rackn-catalog.json as static-catalog.json >/dev/null
+#if [[ -f static-catalog.zip ]] ; then
+#  echo "Using custom static-catalog.zip ... upload to manager"
+#  _drpcli files upload static-catalog.zip >/dev/null
+#fi
 # XXX: When moved into static-catalog.zip, then remove
-if [[ ! -f v4.2.4.zip ]] ; then
-  curl -s -o v4.2.4.zip https://rebar-catalog.s3-us-west-2.amazonaws.com/drp/v4.2.4.zip
+if [[ ! -f v4.2.15.zip ]] ; then
+  curl -s -o v4.2.15.zip https://rebar-catalog.s3-us-west-2.amazonaws.com/drp/v4.2.15.zip
 fi
-_drpcli files upload v4.2.4.zip to "rebar-catalog/drp/v4.2.4.zip"
+_drpcli files upload v4.2.15.zip to "rebar-catalog/drp/v4.2.15.zip"
 # XXX: When moved into static-catalog.zip, then remove
 
 
@@ -283,8 +290,7 @@ echo "Start the manager workflow"
 _drpcli contents upload multi-site-demo.json >/dev/null
 
 echo "Setting the 'demo/cluster-prefix' param"
-_drpcli profiles set global set demo/cluster-prefix to $PREFIX
-
+_drpcli profiles set global set "demo/cluster-prefix" to $PREFIX
 _drpcli profiles set global set "linode/stackscript_id" to 548252 >/dev/null
 _drpcli profiles set global set "linode/instance-image" to "linode/centos7" >/dev/null
 _drpcli profiles set global set "linode/instance-type" to "g6-standard-1" >/dev/null
@@ -296,26 +302,6 @@ drpcli profiles set global param "network/firewalld-ports" to '[
   "22/tcp", "8091/tcp", "8092/tcp", "6443/tcp", "8379/tcp", "8080/tcp", "8380/tcp", "10250/tcp"
 ]' >/dev/null
 
-if [[ -f ~/.ssh/id_rsa.pub ]]; then
-  echo "adding SSH key to global profile"
-  drpcli profiles set global param "access-keys" to "{\"bootstrap\": \"$(cat ~/.ssh/id_rsa.pub)\"}"  >/dev/null
-fi
-
-echo "Upload Contexts if found"
-raw=$(drpcli contexts list Engine=docker-context)
-contexts=$(jq -r ".[].Name" <<< "${raw}")
-i=0
-for context in $contexts; do
-  image=$(jq -r ".[$i].Image" <<< "${raw}")
-  if [[ -f $context.tar ]] ; then
-    echo "uploading $image for $context context"
-    drpcli files upload $context.tar as "contexts/docker-context/$image"
-  else
-    echo "no local $context.tar file, will have to build in bootstrap"
-  fi
-  i=$(($i + 1))
-done
-
 echo "BOOTSTRAP export RS_ENDPOINT=$RS_ENDPOINT"
 
 if ! drpcli machines exists "Name:$MGR_LBL" 2>/dev/null >/dev/null; then
@@ -323,14 +309,17 @@ if ! drpcli machines exists "Name:$MGR_LBL" 2>/dev/null >/dev/null; then
   exit 1
 else
   echo "Bootstrap machine exists as $MGR_LBL... starting bootstrap workflow"
-  _drpcli machines workflow Name:"$MGR_LBL" "manager-bootstrap" >/dev/null
+  _drpcli machines workflow Name:"$MGR_LBL" "bootstrap-advanced" >/dev/null
 fi
 
 echo "upload edge-lab"
 _drpcli catalog item install edge-lab --version=tip >/dev/null
 
 echo "Waiting for Manager to finish bootstrap"
-_drpcli machines wait "Name:$MGR_LBL" Stage "complete-nobootenv" 360
+_drpcli machines wait "Name:$MGR_LBL" Stage "bootstrap-lock-mc" 360
+
+_drpcli contents upload multi-site-demo.json >/dev/null
+_drpcli contents upload linode.json >/dev/null
 
 for mc in $SITES;
 do

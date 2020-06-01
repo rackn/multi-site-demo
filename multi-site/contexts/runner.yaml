@@ -2,10 +2,9 @@
 Name: "runner"
 Description: "Run DRPCLI in Docker Context"
 Engine: "docker-context"
-Image: "digitalrebar-runner"
+Image: "digitalrebar-context-runner"
 Meta:
   icon: "cube"
   color: "blue"
   title: "RackN Content"
-  Imagepull: "https://s3-us-west-2.amazonaws.com/get.rebar.digital/containers/20200210/runner.tar"
-  Dockerfile: "https://raw.githubusercontent.com/digitalrebar/provision-content/v4/integrations/docker-context/runner-dockerfile"
+  Dockerpull: "digitalrebar/context-runner"

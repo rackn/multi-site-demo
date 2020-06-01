@@ -1,7 +1,7 @@
 {
   "meta": {
     "Name": "rackn-catalog",
-    "Version": "v20.02.18-0",
+    "Version": "v20.03.13-4",
     "Description": "RackN Catalog",
     "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/rackn-catalog.json",
     "Documentation": "",
@@ -47,14 +47,14 @@
         "Id": "dev-library-stable",
         "Type": "catalog_items",
         "Name": "dev-library",
-        "ActualVersion": "v4.2.8",
+        "ActualVersion": "v4.2.10",
         "Version": "stable",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.2.8.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.2.10.json",
         "Shasum256": {
-          "any/any": "82b9013ef3463c3eec413523baaaf0bbb6c7841a832557c8a32bd35e8059e4bd"
+          "any/any": "d728963716e2a61de88e069fc55eee5b6056e7d71506c2fff1cc6bb730da5567"
         },
-        "NOJQSource": "dev-library-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.2.8.json",
+        "NOJQSource": "dev-library-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.2.10.json",
         "Tip": false,
         "HotFix": true
       },
@@ -82,18 +82,18 @@
         "Id": "dev-library-tip",
         "Type": "catalog_items",
         "Name": "dev-library",
-        "ActualVersion": "v4.3.0-alpha2.78+gb85357fd32bd316be6f538c45b788903916467e0",
+        "ActualVersion": "v4.3.0-beta2.5+g89e44d246000d1ba8e171c5d3396dbc29624a285",
         "Version": "tip",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.3.0-alpha2.78%2Bgb85357fd32bd316be6f538c45b788903916467e0.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.3.0-beta2.5%2Bg89e44d246000d1ba8e171c5d3396dbc29624a285.json",
         "Shasum256": {
-          "any/any": "43e5a8516b821d2c8d09ebda11385bfe83e0881558b0e342488cb584f97d3a01"
+          "any/any": "09a61aa2733e84d19d42cac41cd84801a412761499e7999091bccee8744d7483"
         },
-        "NOJQSource": "dev-library-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.3.0-alpha2.78%2Bgb85357fd32bd316be6f538c45b788903916467e0.json",
+        "NOJQSource": "dev-library-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.3.0-beta2.5%2Bg89e44d246000d1ba8e171c5d3396dbc29624a285.json",
         "Tip": true,
         "HotFix": false
       },
-      "dev-library-v4.2.8": {
+      "dev-library-v4.2.10": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -114,21 +114,21 @@
           "Tags": "advanced,rackn,tasks,linux,library,development"
         },
         "Endpoint": "",
-        "Id": "dev-library-v4.2.8",
+        "Id": "dev-library-v4.2.10",
         "Type": "catalog_items",
         "Name": "dev-library",
-        "ActualVersion": "v4.2.8",
-        "Version": "v4.2.8",
+        "ActualVersion": "v4.2.10",
+        "Version": "v4.2.10",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.2.8.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.2.10.json",
         "Shasum256": {
-          "any/any": "82b9013ef3463c3eec413523baaaf0bbb6c7841a832557c8a32bd35e8059e4bd"
+          "any/any": "d728963716e2a61de88e069fc55eee5b6056e7d71506c2fff1cc6bb730da5567"
         },
-        "NOJQSource": "dev-library-v4.2.8:::https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.2.8.json",
+        "NOJQSource": "dev-library-v4.2.10:::https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.2.10.json",
         "Tip": false,
         "HotFix": true
       },
-      "dev-library-v4.3.0-alpha2.71": {
+      "dev-library-v4.3.0-alpha2.86": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -149,21 +149,21 @@
           "Tags": "advanced,rackn,tasks,linux,library,development"
         },
         "Endpoint": "",
-        "Id": "dev-library-v4.3.0-alpha2.71",
+        "Id": "dev-library-v4.3.0-alpha2.86",
         "Type": "catalog_items",
         "Name": "dev-library",
-        "ActualVersion": "v4.3.0-alpha2.71+g47bb9dc3f63a6bdd2af246bceac9f720d8985abb",
-        "Version": "v4.3.0-alpha2.71",
+        "ActualVersion": "v4.3.0-alpha2.86+gf73cd7dea21a52b44d190d8d7c4786eddd8c1f68",
+        "Version": "v4.3.0-alpha2.86",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.3.0-alpha2.71%2Bg47bb9dc3f63a6bdd2af246bceac9f720d8985abb.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.3.0-alpha2.86%2Bgf73cd7dea21a52b44d190d8d7c4786eddd8c1f68.json",
         "Shasum256": {
-          "any/any": "98d52721b2f65cca2a883caac153c8f1c11dd569ca9dbf401c517e92fdd81993"
+          "any/any": "7b42728b578bbe49ba3f7111b0769b5de2ba8e2f0e942b73afbe08a8d6bab208"
         },
-        "NOJQSource": "dev-library-v4.3.0-alpha2.71:::https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.3.0-alpha2.71%2Bg47bb9dc3f63a6bdd2af246bceac9f720d8985abb.json",
+        "NOJQSource": "dev-library-v4.3.0-alpha2.86:::https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.3.0-alpha2.86%2Bgf73cd7dea21a52b44d190d8d7c4786eddd8c1f68.json",
         "Tip": false,
         "HotFix": true
       },
-      "dev-library-v4.3.0-alpha2.73": {
+      "dev-library-v4.3.0-beta2.0": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -184,21 +184,56 @@
           "Tags": "advanced,rackn,tasks,linux,library,development"
         },
         "Endpoint": "",
-        "Id": "dev-library-v4.3.0-alpha2.73",
+        "Id": "dev-library-v4.3.0-beta2.0",
         "Type": "catalog_items",
         "Name": "dev-library",
-        "ActualVersion": "v4.3.0-alpha2.73+ge8c8fa914f668f5cfc3945ae4e9e3b5e2a636322",
-        "Version": "v4.3.0-alpha2.73",
+        "ActualVersion": "v4.3.0-beta2.0+g1e2643c55ef26f60a1206130fc0f0076868b89e9",
+        "Version": "v4.3.0-beta2.0",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.3.0-alpha2.73%2Bge8c8fa914f668f5cfc3945ae4e9e3b5e2a636322.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.3.0-beta2.0%2Bg1e2643c55ef26f60a1206130fc0f0076868b89e9.json",
         "Shasum256": {
-          "any/any": "286dd9eac399f196494dad6bba2fb42cfc2aa82e0bff22a503e82aa4ad84bdb0"
+          "any/any": "4a9445f813aaa7e6bbeea8fa9f8197d7907bd66aac7fbb763f1e19ecea05b371"
         },
-        "NOJQSource": "dev-library-v4.3.0-alpha2.73:::https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.3.0-alpha2.73%2Bge8c8fa914f668f5cfc3945ae4e9e3b5e2a636322.json",
+        "NOJQSource": "dev-library-v4.3.0-beta2.0:::https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.3.0-beta2.0%2Bg1e2643c55ef26f60a1206130fc0f0076868b89e9.json",
+        "Tip": false,
+        "HotFix": false
+      },
+      "dev-library-v4.3.0-beta2.3": {
+        "Validated": false,
+        "Available": false,
+        "Errors": [],
+        "ReadOnly": false,
+        "Meta": {
+          "Author": "RackN",
+          "CodeSource": "https://github.com/rackn/provision-content",
+          "Color": "black",
+          "Copyright": "RackN 2019",
+          "Description": "A task and stage library for content developers",
+          "DisplayName": "Dev Library",
+          "DocUrl": "https://provision.readthedocs.io/en/latest/doc/content-packages/dev-library.html",
+          "Icon": "shopping basket",
+          "License": "APLv2",
+          "Name": "dev-library",
+          "Order": "1000",
+          "Prerequisites": "",
+          "Tags": "advanced,rackn,tasks,linux,library,development"
+        },
+        "Endpoint": "",
+        "Id": "dev-library-v4.3.0-beta2.3",
+        "Type": "catalog_items",
+        "Name": "dev-library",
+        "ActualVersion": "v4.3.0-beta2.3+g73a17d73d238c46130a821ba61f3d865c9474760",
+        "Version": "v4.3.0-beta2.3",
+        "ContentType": "ContentPackage",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.3.0-beta2.3%2Bg73a17d73d238c46130a821ba61f3d865c9474760.json",
+        "Shasum256": {
+          "any/any": "af652831b60445d6d0fd68d44ab45cfb9aafa6f9fd31f1fa9cbd49ba5f7a4a7e"
+        },
+        "NOJQSource": "dev-library-v4.3.0-beta2.3:::https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.3.0-beta2.3%2Bg73a17d73d238c46130a821ba61f3d865c9474760.json",
         "Tip": false,
         "HotFix": true
       },
-      "dev-library-v4.3.0-alpha2.76": {
+      "dev-library-v4.3.0-beta2.5": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -219,52 +254,17 @@
           "Tags": "advanced,rackn,tasks,linux,library,development"
         },
         "Endpoint": "",
-        "Id": "dev-library-v4.3.0-alpha2.76",
+        "Id": "dev-library-v4.3.0-beta2.5",
         "Type": "catalog_items",
         "Name": "dev-library",
-        "ActualVersion": "v4.3.0-alpha2.76+gba0d497b18f1f7474baaecc98fd2e726c0fc6d90",
-        "Version": "v4.3.0-alpha2.76",
+        "ActualVersion": "v4.3.0-beta2.5+g89e44d246000d1ba8e171c5d3396dbc29624a285",
+        "Version": "v4.3.0-beta2.5",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.3.0-alpha2.76%2Bgba0d497b18f1f7474baaecc98fd2e726c0fc6d90.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.3.0-beta2.5%2Bg89e44d246000d1ba8e171c5d3396dbc29624a285.json",
         "Shasum256": {
-          "any/any": "7cf5a47741dd106ccc05ec4d76711347b1ef19da2d089227c920608630ee4d57"
+          "any/any": "09a61aa2733e84d19d42cac41cd84801a412761499e7999091bccee8744d7483"
         },
-        "NOJQSource": "dev-library-v4.3.0-alpha2.76:::https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.3.0-alpha2.76%2Bgba0d497b18f1f7474baaecc98fd2e726c0fc6d90.json",
-        "Tip": false,
-        "HotFix": true
-      },
-      "dev-library-v4.3.0-alpha2.78": {
-        "Validated": false,
-        "Available": false,
-        "Errors": [],
-        "ReadOnly": false,
-        "Meta": {
-          "Author": "RackN",
-          "CodeSource": "https://github.com/rackn/provision-content",
-          "Color": "black",
-          "Copyright": "RackN 2019",
-          "Description": "A task and stage library for content developers",
-          "DisplayName": "Dev Library",
-          "DocUrl": "https://provision.readthedocs.io/en/latest/doc/content-packages/dev-library.html",
-          "Icon": "shopping basket",
-          "License": "APLv2",
-          "Name": "dev-library",
-          "Order": "1000",
-          "Prerequisites": "",
-          "Tags": "advanced,rackn,tasks,linux,library,development"
-        },
-        "Endpoint": "",
-        "Id": "dev-library-v4.3.0-alpha2.78",
-        "Type": "catalog_items",
-        "Name": "dev-library",
-        "ActualVersion": "v4.3.0-alpha2.78+gb85357fd32bd316be6f538c45b788903916467e0",
-        "Version": "v4.3.0-alpha2.78",
-        "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.3.0-alpha2.78%2Bgb85357fd32bd316be6f538c45b788903916467e0.json",
-        "Shasum256": {
-          "any/any": "43e5a8516b821d2c8d09ebda11385bfe83e0881558b0e342488cb584f97d3a01"
-        },
-        "NOJQSource": "dev-library-v4.3.0-alpha2.78:::https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.3.0-alpha2.78%2Bgb85357fd32bd316be6f538c45b788903916467e0.json",
+        "NOJQSource": "dev-library-v4.3.0-beta2.5:::https://s3-us-west-2.amazonaws.com/rebar-catalog/dev-library/v4.3.0-beta2.5%2Bg89e44d246000d1ba8e171c5d3396dbc29624a285.json",
         "Tip": false,
         "HotFix": true
       },
@@ -328,53 +328,17 @@
         "Id": "docker-context-tip",
         "Type": "catalog_items",
         "Name": "docker-context",
-        "ActualVersion": "v4.2.6-dev.2+g4ec637aa91b68a58261baedbe192eaf9fcaa2e81",
+        "ActualVersion": "v4.3.0-beta2.0+g633d7a46f34debacc32185261139782d917a9244",
         "Version": "tip",
         "ContentType": "PluginProvider",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/docker-context/v4.2.6-dev.2%2Bg4ec637aa91b68a58261baedbe192eaf9fcaa2e81",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/docker-context/v4.3.0-beta2.0%2Bg633d7a46f34debacc32185261139782d917a9244",
         "Shasum256": {
-          "amd64/darwin": "16920911444e540ec3a40b143a00cceed6f5457a335eb661ffe15bd9bde68644",
-          "amd64/linux": "ad10fee522cdb3a666eee38e6c9afac91277dbdae4d7d96f3dbd32f73d5dfbda"
+          "amd64/darwin": "2133d639bcae71c48321e352dd04adda1440ddd020eed2a4c6f3f64c85d7bb24",
+          "amd64/linux": "8f4d8d97deb246c1d1546c265daacc58e78322a9804be67a1e99e5a57aae7914"
         },
-        "NOJQSource": "docker-context-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/docker-context/v4.2.6-dev.2%2Bg4ec637aa91b68a58261baedbe192eaf9fcaa2e81",
+        "NOJQSource": "docker-context-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/docker-context/v4.3.0-beta2.0%2Bg633d7a46f34debacc32185261139782d917a9244",
         "Tip": true,
         "HotFix": false
-      },
-      "docker-context-v4.2.2": {
-        "Validated": false,
-        "Available": false,
-        "Errors": [],
-        "ReadOnly": false,
-        "Meta": {
-          "Author": "RackN",
-          "CodeSource": "https://github.com/rackn/provision-plugins",
-          "Color": "black",
-          "Copyright": "RackN",
-          "Description": "Manage OCI container-based execution contexts",
-          "DisplayName": "Docker (OCI) Execution Context",
-          "DocUrl": "",
-          "Icon": "boxes",
-          "License": "",
-          "Name": "docker-context",
-          "Order": "1000",
-          "Prerequisites": "",
-          "Tags": "enterprise,context,integration"
-        },
-        "Endpoint": "",
-        "Id": "docker-context-v4.2.2",
-        "Type": "catalog_items",
-        "Name": "docker-context",
-        "ActualVersion": "v4.2.2",
-        "Version": "v4.2.2",
-        "ContentType": "PluginProvider",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/docker-context/v4.2.2",
-        "Shasum256": {
-          "amd64/darwin": "7b53d8531d8a9da38eaf25c0a108d14d33c48b850b7fbf53a1b0e9c72e95c528",
-          "amd64/linux": "0941643efd0ca77072c0883b480984599a0d9e8d8c1cbc950cb78ef84f7d1cd8"
-        },
-        "NOJQSource": "docker-context-v4.2.2:::https://s3-us-west-2.amazonaws.com/rebar-catalog/docker-context/v4.2.2",
-        "Tip": false,
-        "HotFix": true
       },
       "docker-context-v4.2.5": {
         "Validated": false,
@@ -448,6 +412,42 @@
         "Tip": false,
         "HotFix": true
       },
+      "docker-context-v4.3.0-beta2.0": {
+        "Validated": false,
+        "Available": false,
+        "Errors": [],
+        "ReadOnly": false,
+        "Meta": {
+          "Author": "RackN",
+          "CodeSource": "https://github.com/rackn/provision-plugins",
+          "Color": "black",
+          "Copyright": "RackN",
+          "Description": "Manage OCI container-based execution contexts",
+          "DisplayName": "Docker (OCI) Execution Context",
+          "DocUrl": "",
+          "Icon": "boxes",
+          "License": "",
+          "Name": "docker-context",
+          "Order": "1000",
+          "Prerequisites": "",
+          "Tags": "enterprise,context,integration"
+        },
+        "Endpoint": "",
+        "Id": "docker-context-v4.3.0-beta2.0",
+        "Type": "catalog_items",
+        "Name": "docker-context",
+        "ActualVersion": "v4.3.0-beta2.0+g633d7a46f34debacc32185261139782d917a9244",
+        "Version": "v4.3.0-beta2.0",
+        "ContentType": "PluginProvider",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/docker-context/v4.3.0-beta2.0%2Bg633d7a46f34debacc32185261139782d917a9244",
+        "Shasum256": {
+          "amd64/darwin": "2133d639bcae71c48321e352dd04adda1440ddd020eed2a4c6f3f64c85d7bb24",
+          "amd64/linux": "8f4d8d97deb246c1d1546c265daacc58e78322a9804be67a1e99e5a57aae7914"
+        },
+        "NOJQSource": "docker-context-v4.3.0-beta2.0:::https://s3-us-west-2.amazonaws.com/rebar-catalog/docker-context/v4.3.0-beta2.0%2Bg633d7a46f34debacc32185261139782d917a9244",
+        "Tip": false,
+        "HotFix": false
+      },
       "drp-community-content-stable": {
         "Validated": false,
         "Available": false,
@@ -472,14 +472,14 @@
         "Id": "drp-community-content-stable",
         "Type": "catalog_items",
         "Name": "drp-community-content",
-        "ActualVersion": "v4.2.8",
+        "ActualVersion": "v4.2.10",
         "Version": "stable",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.2.8.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.2.10.json",
         "Shasum256": {
-          "any/any": "d1ce505e44f3878dd5879c1e9d876e0a1de71f78b8cff9df894c4b80dd123fa0"
+          "any/any": "efd81541c11d4214eb5f5886b8f8e5e2d87fb9669454a6c75f7929156f627d5b"
         },
-        "NOJQSource": "drp-community-content-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.2.8.json",
+        "NOJQSource": "drp-community-content-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.2.10.json",
         "Tip": false,
         "HotFix": true
       },
@@ -507,18 +507,18 @@
         "Id": "drp-community-content-tip",
         "Type": "catalog_items",
         "Name": "drp-community-content",
-        "ActualVersion": "v4.3.0-alpha2.78+gb85357fd32bd316be6f538c45b788903916467e0",
+        "ActualVersion": "v4.3.0-beta2.5+g89e44d246000d1ba8e171c5d3396dbc29624a285",
         "Version": "tip",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.3.0-alpha2.78%2Bgb85357fd32bd316be6f538c45b788903916467e0.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.3.0-beta2.5%2Bg89e44d246000d1ba8e171c5d3396dbc29624a285.json",
         "Shasum256": {
-          "any/any": "781f795042face73a6a8ffa80cd7be9ae946bac8f69e2159a9c10b97fca9a935"
+          "any/any": "9bf0e56d8e0cd96c20b299487d57e9234ce486847d8246562d95ec8a03e13632"
         },
-        "NOJQSource": "drp-community-content-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.3.0-alpha2.78%2Bgb85357fd32bd316be6f538c45b788903916467e0.json",
+        "NOJQSource": "drp-community-content-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.3.0-beta2.5%2Bg89e44d246000d1ba8e171c5d3396dbc29624a285.json",
         "Tip": true,
         "HotFix": false
       },
-      "drp-community-content-v4.2.8": {
+      "drp-community-content-v4.2.10": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -539,21 +539,21 @@
           "Tags": "base,community,linux,APL,quick-start,ssh"
         },
         "Endpoint": "",
-        "Id": "drp-community-content-v4.2.8",
+        "Id": "drp-community-content-v4.2.10",
         "Type": "catalog_items",
         "Name": "drp-community-content",
-        "ActualVersion": "v4.2.8",
-        "Version": "v4.2.8",
+        "ActualVersion": "v4.2.10",
+        "Version": "v4.2.10",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.2.8.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.2.10.json",
         "Shasum256": {
-          "any/any": "d1ce505e44f3878dd5879c1e9d876e0a1de71f78b8cff9df894c4b80dd123fa0"
+          "any/any": "efd81541c11d4214eb5f5886b8f8e5e2d87fb9669454a6c75f7929156f627d5b"
         },
-        "NOJQSource": "drp-community-content-v4.2.8:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.2.8.json",
+        "NOJQSource": "drp-community-content-v4.2.10:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.2.10.json",
         "Tip": false,
         "HotFix": true
       },
-      "drp-community-content-v4.3.0-alpha2.71": {
+      "drp-community-content-v4.3.0-alpha2.86": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -574,21 +574,21 @@
           "Tags": "base,community,linux,APL,quick-start,ssh"
         },
         "Endpoint": "",
-        "Id": "drp-community-content-v4.3.0-alpha2.71",
+        "Id": "drp-community-content-v4.3.0-alpha2.86",
         "Type": "catalog_items",
         "Name": "drp-community-content",
-        "ActualVersion": "v4.3.0-alpha2.71+g47bb9dc3f63a6bdd2af246bceac9f720d8985abb",
-        "Version": "v4.3.0-alpha2.71",
+        "ActualVersion": "v4.3.0-alpha2.86+gf73cd7dea21a52b44d190d8d7c4786eddd8c1f68",
+        "Version": "v4.3.0-alpha2.86",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.3.0-alpha2.71%2Bg47bb9dc3f63a6bdd2af246bceac9f720d8985abb.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.3.0-alpha2.86%2Bgf73cd7dea21a52b44d190d8d7c4786eddd8c1f68.json",
         "Shasum256": {
-          "any/any": "ba0746d1237ee2f4222ce8fa79cbcedd35b463554067036e697de2d5ee646e20"
+          "any/any": "59da2bb210f368f187e69eab5ee81e2cc992bfcaec794891a5192fa5c3298f9a"
         },
-        "NOJQSource": "drp-community-content-v4.3.0-alpha2.71:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.3.0-alpha2.71%2Bg47bb9dc3f63a6bdd2af246bceac9f720d8985abb.json",
+        "NOJQSource": "drp-community-content-v4.3.0-alpha2.86:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.3.0-alpha2.86%2Bgf73cd7dea21a52b44d190d8d7c4786eddd8c1f68.json",
         "Tip": false,
         "HotFix": true
       },
-      "drp-community-content-v4.3.0-alpha2.73": {
+      "drp-community-content-v4.3.0-beta2.0": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -609,21 +609,56 @@
           "Tags": "base,community,linux,APL,quick-start,ssh"
         },
         "Endpoint": "",
-        "Id": "drp-community-content-v4.3.0-alpha2.73",
+        "Id": "drp-community-content-v4.3.0-beta2.0",
         "Type": "catalog_items",
         "Name": "drp-community-content",
-        "ActualVersion": "v4.3.0-alpha2.73+ge8c8fa914f668f5cfc3945ae4e9e3b5e2a636322",
-        "Version": "v4.3.0-alpha2.73",
+        "ActualVersion": "v4.3.0-beta2.0+g1e2643c55ef26f60a1206130fc0f0076868b89e9",
+        "Version": "v4.3.0-beta2.0",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.3.0-alpha2.73%2Bge8c8fa914f668f5cfc3945ae4e9e3b5e2a636322.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.3.0-beta2.0%2Bg1e2643c55ef26f60a1206130fc0f0076868b89e9.json",
         "Shasum256": {
-          "any/any": "37fae430a96ddb8693fa85fc9bdcc6423e65d71bcd10a156c36a65e2346f2c82"
+          "any/any": "46eea02df5047b5b694549ed8af58e2472533f62eac93495773bd82376229b1f"
         },
-        "NOJQSource": "drp-community-content-v4.3.0-alpha2.73:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.3.0-alpha2.73%2Bge8c8fa914f668f5cfc3945ae4e9e3b5e2a636322.json",
+        "NOJQSource": "drp-community-content-v4.3.0-beta2.0:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.3.0-beta2.0%2Bg1e2643c55ef26f60a1206130fc0f0076868b89e9.json",
+        "Tip": false,
+        "HotFix": false
+      },
+      "drp-community-content-v4.3.0-beta2.3": {
+        "Validated": false,
+        "Available": false,
+        "Errors": [],
+        "ReadOnly": false,
+        "Meta": {
+          "Author": "RackN and Digital Rebar Community",
+          "CodeSource": "https://github.com/digitalrebar/provision-content",
+          "Color": "green",
+          "Copyright": "RackN 2019",
+          "Description": "Core Provisioning Functionality (Required Libraries)",
+          "DisplayName": "Community Core",
+          "DocUrl": "https://provision.readthedocs.io/en/latest/doc/content-packages/drp-community-content.html",
+          "Icon": "creative commons",
+          "License": "APLv2",
+          "Name": "drp-community-content",
+          "Order": "100",
+          "Prerequisites": "BasicStore",
+          "Tags": "base,community,linux,APL,quick-start,ssh"
+        },
+        "Endpoint": "",
+        "Id": "drp-community-content-v4.3.0-beta2.3",
+        "Type": "catalog_items",
+        "Name": "drp-community-content",
+        "ActualVersion": "v4.3.0-beta2.3+g73a17d73d238c46130a821ba61f3d865c9474760",
+        "Version": "v4.3.0-beta2.3",
+        "ContentType": "ContentPackage",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.3.0-beta2.3%2Bg73a17d73d238c46130a821ba61f3d865c9474760.json",
+        "Shasum256": {
+          "any/any": "d622c648be6c87c403e90d80477e537d1fa26c09a51159848c38df68379be1d2"
+        },
+        "NOJQSource": "drp-community-content-v4.3.0-beta2.3:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.3.0-beta2.3%2Bg73a17d73d238c46130a821ba61f3d865c9474760.json",
         "Tip": false,
         "HotFix": true
       },
-      "drp-community-content-v4.3.0-alpha2.76": {
+      "drp-community-content-v4.3.0-beta2.5": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -644,52 +679,17 @@
           "Tags": "base,community,linux,APL,quick-start,ssh"
         },
         "Endpoint": "",
-        "Id": "drp-community-content-v4.3.0-alpha2.76",
+        "Id": "drp-community-content-v4.3.0-beta2.5",
         "Type": "catalog_items",
         "Name": "drp-community-content",
-        "ActualVersion": "v4.3.0-alpha2.76+gba0d497b18f1f7474baaecc98fd2e726c0fc6d90",
-        "Version": "v4.3.0-alpha2.76",
+        "ActualVersion": "v4.3.0-beta2.5+g89e44d246000d1ba8e171c5d3396dbc29624a285",
+        "Version": "v4.3.0-beta2.5",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.3.0-alpha2.76%2Bgba0d497b18f1f7474baaecc98fd2e726c0fc6d90.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.3.0-beta2.5%2Bg89e44d246000d1ba8e171c5d3396dbc29624a285.json",
         "Shasum256": {
-          "any/any": "f00cd76c2ce6873d95e22f058fc3a94bf6da6aba433e949d1cd73f006f97b54d"
+          "any/any": "9bf0e56d8e0cd96c20b299487d57e9234ce486847d8246562d95ec8a03e13632"
         },
-        "NOJQSource": "drp-community-content-v4.3.0-alpha2.76:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.3.0-alpha2.76%2Bgba0d497b18f1f7474baaecc98fd2e726c0fc6d90.json",
-        "Tip": false,
-        "HotFix": true
-      },
-      "drp-community-content-v4.3.0-alpha2.78": {
-        "Validated": false,
-        "Available": false,
-        "Errors": [],
-        "ReadOnly": false,
-        "Meta": {
-          "Author": "RackN and Digital Rebar Community",
-          "CodeSource": "https://github.com/digitalrebar/provision-content",
-          "Color": "green",
-          "Copyright": "RackN 2019",
-          "Description": "Core Provisioning Functionality (Required Libraries)",
-          "DisplayName": "Community Core",
-          "DocUrl": "https://provision.readthedocs.io/en/latest/doc/content-packages/drp-community-content.html",
-          "Icon": "creative commons",
-          "License": "APLv2",
-          "Name": "drp-community-content",
-          "Order": "100",
-          "Prerequisites": "BasicStore",
-          "Tags": "base,community,linux,APL,quick-start,ssh"
-        },
-        "Endpoint": "",
-        "Id": "drp-community-content-v4.3.0-alpha2.78",
-        "Type": "catalog_items",
-        "Name": "drp-community-content",
-        "ActualVersion": "v4.3.0-alpha2.78+gb85357fd32bd316be6f538c45b788903916467e0",
-        "Version": "v4.3.0-alpha2.78",
-        "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.3.0-alpha2.78%2Bgb85357fd32bd316be6f538c45b788903916467e0.json",
-        "Shasum256": {
-          "any/any": "781f795042face73a6a8ffa80cd7be9ae946bac8f69e2159a9c10b97fca9a935"
-        },
-        "NOJQSource": "drp-community-content-v4.3.0-alpha2.78:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.3.0-alpha2.78%2Bgb85357fd32bd316be6f538c45b788903916467e0.json",
+        "NOJQSource": "drp-community-content-v4.3.0-beta2.5:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-content/v4.3.0-beta2.5%2Bg89e44d246000d1ba8e171c5d3396dbc29624a285.json",
         "Tip": false,
         "HotFix": true
       },
@@ -717,14 +717,14 @@
         "Id": "drp-community-contrib-stable",
         "Type": "catalog_items",
         "Name": "drp-community-contrib",
-        "ActualVersion": "v4.2.8",
+        "ActualVersion": "v4.2.10",
         "Version": "stable",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-contrib/v4.2.8.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-contrib/v4.2.10.json",
         "Shasum256": {
-          "any/any": "d6d9a3b29c6439aa742ae944c28b7092ee6337ee31f5e661f4bf12429ce3b17d"
+          "any/any": "5f2a58932a4e9d4641bc82c809b82650041c901a0a73c04995959e643c007f45"
         },
-        "NOJQSource": "drp-community-contrib-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-contrib/v4.2.8.json",
+        "NOJQSource": "drp-community-contrib-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-contrib/v4.2.10.json",
         "Tip": false,
         "HotFix": true
       },
@@ -752,18 +752,18 @@
         "Id": "drp-community-contrib-tip",
         "Type": "catalog_items",
         "Name": "drp-community-contrib",
-        "ActualVersion": "v4.3.0-alpha2.78+gb85357fd32bd316be6f538c45b788903916467e0",
+        "ActualVersion": "v4.3.0-beta2.5+g89e44d246000d1ba8e171c5d3396dbc29624a285",
         "Version": "tip",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-contrib/v4.3.0-alpha2.78%2Bgb85357fd32bd316be6f538c45b788903916467e0.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-contrib/v4.3.0-beta2.5%2Bg89e44d246000d1ba8e171c5d3396dbc29624a285.json",
         "Shasum256": {
-          "any/any": "f3fb625f0a2290cdcf6fdd13a0f6b313a8e751062d064e57c1b4e24449ee69a8"
+          "any/any": "2116c9e86446841026b8aed5fb6fd14eba5ecce1e64ed07ac50bd816628e7c26"
         },
-        "NOJQSource": "drp-community-contrib-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-contrib/v4.3.0-alpha2.78%2Bgb85357fd32bd316be6f538c45b788903916467e0.json",
+        "NOJQSource": "drp-community-contrib-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-contrib/v4.3.0-beta2.5%2Bg89e44d246000d1ba8e171c5d3396dbc29624a285.json",
         "Tip": true,
         "HotFix": false
       },
-      "drp-community-contrib-v4.2.8": {
+      "drp-community-contrib-v4.2.10": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -784,21 +784,21 @@
           "Tags": "advanced,community,linux,APL,quick-start,ssh,contrib,edge"
         },
         "Endpoint": "",
-        "Id": "drp-community-contrib-v4.2.8",
+        "Id": "drp-community-contrib-v4.2.10",
         "Type": "catalog_items",
         "Name": "drp-community-contrib",
-        "ActualVersion": "v4.2.8",
-        "Version": "v4.2.8",
+        "ActualVersion": "v4.2.10",
+        "Version": "v4.2.10",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-contrib/v4.2.8.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-contrib/v4.2.10.json",
         "Shasum256": {
-          "any/any": "d6d9a3b29c6439aa742ae944c28b7092ee6337ee31f5e661f4bf12429ce3b17d"
+          "any/any": "5f2a58932a4e9d4641bc82c809b82650041c901a0a73c04995959e643c007f45"
         },
-        "NOJQSource": "drp-community-contrib-v4.2.8:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-contrib/v4.2.8.json",
+        "NOJQSource": "drp-community-contrib-v4.2.10:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-contrib/v4.2.10.json",
         "Tip": false,
         "HotFix": true
       },
-      "drp-community-contrib-v4.3.0-alpha2.71": {
+      "drp-community-contrib-v4.3.0-alpha2.86": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -819,21 +819,21 @@
           "Tags": "advanced,community,linux,APL,quick-start,ssh,contrib,edge"
         },
         "Endpoint": "",
-        "Id": "drp-community-contrib-v4.3.0-alpha2.71",
+        "Id": "drp-community-contrib-v4.3.0-alpha2.86",
         "Type": "catalog_items",
         "Name": "drp-community-contrib",
-        "ActualVersion": "v4.3.0-alpha2.71+g47bb9dc3f63a6bdd2af246bceac9f720d8985abb",
-        "Version": "v4.3.0-alpha2.71",
+        "ActualVersion": "v4.3.0-alpha2.86+gf73cd7dea21a52b44d190d8d7c4786eddd8c1f68",
+        "Version": "v4.3.0-alpha2.86",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-contrib/v4.3.0-alpha2.71%2Bg47bb9dc3f63a6bdd2af246bceac9f720d8985abb.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-contrib/v4.3.0-alpha2.86%2Bgf73cd7dea21a52b44d190d8d7c4786eddd8c1f68.json",
         "Shasum256": {
-          "any/any": "057eb97b62e8a11bb90cbeeabbb8b09a3cf115eea03e2bcbe10a880e5edc2237"
+          "any/any": "7b0fe8031d733267259e8e4cc6c433ed76363198762c00dea4f990123afc4b0a"
         },
-        "NOJQSource": "drp-community-contrib-v4.3.0-alpha2.71:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-contrib/v4.3.0-alpha2.71%2Bg47bb9dc3f63a6bdd2af246bceac9f720d8985abb.json",
+        "NOJQSource": "drp-community-contrib-v4.3.0-alpha2.86:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-contrib/v4.3.0-alpha2.86%2Bgf73cd7dea21a52b44d190d8d7c4786eddd8c1f68.json",
         "Tip": false,
         "HotFix": true
       },
-      "drp-community-contrib-v4.3.0-alpha2.73": {
+      "drp-community-contrib-v4.3.0-beta2.0": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -854,21 +854,56 @@
           "Tags": "advanced,community,linux,APL,quick-start,ssh,contrib,edge"
         },
         "Endpoint": "",
-        "Id": "drp-community-contrib-v4.3.0-alpha2.73",
+        "Id": "drp-community-contrib-v4.3.0-beta2.0",
         "Type": "catalog_items",
         "Name": "drp-community-contrib",
-        "ActualVersion": "v4.3.0-alpha2.73+ge8c8fa914f668f5cfc3945ae4e9e3b5e2a636322",
-        "Version": "v4.3.0-alpha2.73",
+        "ActualVersion": "v4.3.0-beta2.0+g1e2643c55ef26f60a1206130fc0f0076868b89e9",
+        "Version": "v4.3.0-beta2.0",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-contrib/v4.3.0-alpha2.73%2Bge8c8fa914f668f5cfc3945ae4e9e3b5e2a636322.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-contrib/v4.3.0-beta2.0%2Bg1e2643c55ef26f60a1206130fc0f0076868b89e9.json",
         "Shasum256": {
-          "any/any": "b31a27e68dd0960521913e6dad65e53fb8c7adbf92486ab6afb833eca7ef1841"
+          "any/any": "cb81853910c2e505c1746a55ae73fb64c03c2f82f055c812463ac1d6a58d110b"
         },
-        "NOJQSource": "drp-community-contrib-v4.3.0-alpha2.73:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-contrib/v4.3.0-alpha2.73%2Bge8c8fa914f668f5cfc3945ae4e9e3b5e2a636322.json",
+        "NOJQSource": "drp-community-contrib-v4.3.0-beta2.0:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-contrib/v4.3.0-beta2.0%2Bg1e2643c55ef26f60a1206130fc0f0076868b89e9.json",
+        "Tip": false,
+        "HotFix": false
+      },
+      "drp-community-contrib-v4.3.0-beta2.3": {
+        "Validated": false,
+        "Available": false,
+        "Errors": [],
+        "ReadOnly": false,
+        "Meta": {
+          "Author": "RackN and Digital Rebar Community",
+          "CodeSource": "https://github.com/digitalrebar/provision-content",
+          "Color": "blue",
+          "Copyright": "RackN 2019",
+          "Description": "Experimental and Edge Features",
+          "DisplayName": "Community Edge",
+          "DocUrl": "https://provision.readthedocs.io/en/latest/doc/content-packages/drp-community-contrib.html",
+          "Icon": "lab",
+          "License": "APLv2",
+          "Name": "drp-community-contrib",
+          "Order": "110",
+          "Prerequisites": "drp-community-content: \u003e=1.13.0",
+          "Tags": "advanced,community,linux,APL,quick-start,ssh,contrib,edge"
+        },
+        "Endpoint": "",
+        "Id": "drp-community-contrib-v4.3.0-beta2.3",
+        "Type": "catalog_items",
+        "Name": "drp-community-contrib",
+        "ActualVersion": "v4.3.0-beta2.3+g73a17d73d238c46130a821ba61f3d865c9474760",
+        "Version": "v4.3.0-beta2.3",
+        "ContentType": "ContentPackage",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-contrib/v4.3.0-beta2.3%2Bg73a17d73d238c46130a821ba61f3d865c9474760.json",
+        "Shasum256": {
+          "any/any": "374a4b0bdd3b155f49972f910e720d23453ac51b8b82f6a3795d60368539a491"
+        },
+        "NOJQSource": "drp-community-contrib-v4.3.0-beta2.3:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-contrib/v4.3.0-beta2.3%2Bg73a17d73d238c46130a821ba61f3d865c9474760.json",
         "Tip": false,
         "HotFix": true
       },
-      "drp-community-contrib-v4.3.0-alpha2.76": {
+      "drp-community-contrib-v4.3.0-beta2.5": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -889,52 +924,17 @@
           "Tags": "advanced,community,linux,APL,quick-start,ssh,contrib,edge"
         },
         "Endpoint": "",
-        "Id": "drp-community-contrib-v4.3.0-alpha2.76",
+        "Id": "drp-community-contrib-v4.3.0-beta2.5",
         "Type": "catalog_items",
         "Name": "drp-community-contrib",
-        "ActualVersion": "v4.3.0-alpha2.76+gba0d497b18f1f7474baaecc98fd2e726c0fc6d90",
-        "Version": "v4.3.0-alpha2.76",
+        "ActualVersion": "v4.3.0-beta2.5+g89e44d246000d1ba8e171c5d3396dbc29624a285",
+        "Version": "v4.3.0-beta2.5",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-contrib/v4.3.0-alpha2.76%2Bgba0d497b18f1f7474baaecc98fd2e726c0fc6d90.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-contrib/v4.3.0-beta2.5%2Bg89e44d246000d1ba8e171c5d3396dbc29624a285.json",
         "Shasum256": {
-          "any/any": "b860403cf0275be8ccf8818e5740de39b28e5a269004a99c73597d1f64711b7e"
+          "any/any": "2116c9e86446841026b8aed5fb6fd14eba5ecce1e64ed07ac50bd816628e7c26"
         },
-        "NOJQSource": "drp-community-contrib-v4.3.0-alpha2.76:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-contrib/v4.3.0-alpha2.76%2Bgba0d497b18f1f7474baaecc98fd2e726c0fc6d90.json",
-        "Tip": false,
-        "HotFix": true
-      },
-      "drp-community-contrib-v4.3.0-alpha2.78": {
-        "Validated": false,
-        "Available": false,
-        "Errors": [],
-        "ReadOnly": false,
-        "Meta": {
-          "Author": "RackN and Digital Rebar Community",
-          "CodeSource": "https://github.com/digitalrebar/provision-content",
-          "Color": "blue",
-          "Copyright": "RackN 2019",
-          "Description": "Experimental and Edge Features",
-          "DisplayName": "Community Edge",
-          "DocUrl": "https://provision.readthedocs.io/en/latest/doc/content-packages/drp-community-contrib.html",
-          "Icon": "lab",
-          "License": "APLv2",
-          "Name": "drp-community-contrib",
-          "Order": "110",
-          "Prerequisites": "drp-community-content: \u003e=1.13.0",
-          "Tags": "advanced,community,linux,APL,quick-start,ssh,contrib,edge"
-        },
-        "Endpoint": "",
-        "Id": "drp-community-contrib-v4.3.0-alpha2.78",
-        "Type": "catalog_items",
-        "Name": "drp-community-contrib",
-        "ActualVersion": "v4.3.0-alpha2.78+gb85357fd32bd316be6f538c45b788903916467e0",
-        "Version": "v4.3.0-alpha2.78",
-        "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-contrib/v4.3.0-alpha2.78%2Bgb85357fd32bd316be6f538c45b788903916467e0.json",
-        "Shasum256": {
-          "any/any": "f3fb625f0a2290cdcf6fdd13a0f6b313a8e751062d064e57c1b4e24449ee69a8"
-        },
-        "NOJQSource": "drp-community-contrib-v4.3.0-alpha2.78:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-contrib/v4.3.0-alpha2.78%2Bgb85357fd32bd316be6f538c45b788903916467e0.json",
+        "NOJQSource": "drp-community-contrib-v4.3.0-beta2.5:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp-community-contrib/v4.3.0-beta2.5%2Bg89e44d246000d1ba8e171c5d3396dbc29624a285.json",
         "Tip": false,
         "HotFix": true
       },
@@ -961,14 +961,14 @@
         "Id": "drp-stable",
         "Type": "catalog_items",
         "Name": "drp",
-        "ActualVersion": "v4.2.4",
+        "ActualVersion": "v4.2.6",
         "Version": "stable",
         "ContentType": "DRP",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.2.4.zip",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.2.6.zip",
         "Shasum256": {
-          "any/any": "a829a2c0cdd95f50fc23a751ce6a01f6dfd6674ec0c584d006b1fd8e30650dd9"
+          "any/any": "7c6fabfb281c5caed364fe04f8f354453a29ff9bfdbd18f15779186f72f50b70"
         },
-        "NOJQSource": "drp-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.2.4.zip",
+        "NOJQSource": "drp-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.2.6.zip",
         "Tip": false,
         "HotFix": true
       },
@@ -995,18 +995,18 @@
         "Id": "drp-tip",
         "Type": "catalog_items",
         "Name": "drp",
-        "ActualVersion": "v4.3.0-alpha2.18+g01d7f186b7c4a1a81db21d63f7a175004c7d77dc",
+        "ActualVersion": "v4.3.0-beta2.4+g8634de88ba8308a017bdc9414cfbae35dacb4fac",
         "Version": "tip",
         "ContentType": "DRP",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.3.0-alpha2.18%2Bg01d7f186b7c4a1a81db21d63f7a175004c7d77dc.zip",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.3.0-beta2.4%2Bg8634de88ba8308a017bdc9414cfbae35dacb4fac.zip",
         "Shasum256": {
-          "any/any": "e46c47eeed05f740c61fd4018b8f77351352de3c1eef4126daa92fce73aa7294"
+          "any/any": "3398505d88d2ec578b072f7fd49f0f4490ebdca68b770b05038f404d08ea42ba"
         },
-        "NOJQSource": "drp-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.3.0-alpha2.18%2Bg01d7f186b7c4a1a81db21d63f7a175004c7d77dc.zip",
+        "NOJQSource": "drp-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.3.0-beta2.4%2Bg8634de88ba8308a017bdc9414cfbae35dacb4fac.zip",
         "Tip": true,
         "HotFix": false
       },
-      "drp-v4.2.4": {
+      "drp-v4.2.6": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -1026,85 +1026,17 @@
           "Tags": "drp,endpoint,rackn,service"
         },
         "Endpoint": "",
-        "Id": "drp-v4.2.4",
+        "Id": "drp-v4.2.6",
         "Type": "catalog_items",
         "Name": "drp",
-        "ActualVersion": "v4.2.4",
-        "Version": "v4.2.4",
+        "ActualVersion": "v4.2.6",
+        "Version": "v4.2.6",
         "ContentType": "DRP",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.2.4.zip",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.2.6.zip",
         "Shasum256": {
-          "any/any": "a829a2c0cdd95f50fc23a751ce6a01f6dfd6674ec0c584d006b1fd8e30650dd9"
+          "any/any": "7c6fabfb281c5caed364fe04f8f354453a29ff9bfdbd18f15779186f72f50b70"
         },
-        "NOJQSource": "drp-v4.2.4:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.2.4.zip",
-        "Tip": false,
-        "HotFix": true
-      },
-      "drp-v4.3.0-alpha2.12": {
-        "Validated": false,
-        "Available": false,
-        "Errors": [],
-        "ReadOnly": false,
-        "Meta": {
-          "Author": "RackN",
-          "CodeSource": "https://github.com/digitalrebar/provision",
-          "Color": "black",
-          "Copyright": "RackN",
-          "DisplayName": "Digital Rebar Provision",
-          "DocUrl": "https://provision.readthedocs.io/en/latest/",
-          "Icon": "cube",
-          "License": "APLv2",
-          "Name": "drp",
-          "Order": "1",
-          "Prerequisites": "",
-          "Tags": "drp,endpoint,rackn,service"
-        },
-        "Endpoint": "",
-        "Id": "drp-v4.3.0-alpha2.12",
-        "Type": "catalog_items",
-        "Name": "drp",
-        "ActualVersion": "v4.3.0-alpha2.12+g1a54ceacfd670a27488ba9700c1afab211c1a08b",
-        "Version": "v4.3.0-alpha2.12",
-        "ContentType": "DRP",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.3.0-alpha2.12%2Bg1a54ceacfd670a27488ba9700c1afab211c1a08b.zip",
-        "Shasum256": {
-          "any/any": "470f56de9487037751b5e5aed2e9f4866ba638708292489e0a5dbfe9d96ddd3b"
-        },
-        "NOJQSource": "drp-v4.3.0-alpha2.12:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.3.0-alpha2.12%2Bg1a54ceacfd670a27488ba9700c1afab211c1a08b.zip",
-        "Tip": false,
-        "HotFix": true
-      },
-      "drp-v4.3.0-alpha2.14": {
-        "Validated": false,
-        "Available": false,
-        "Errors": [],
-        "ReadOnly": false,
-        "Meta": {
-          "Author": "RackN",
-          "CodeSource": "https://github.com/digitalrebar/provision",
-          "Color": "black",
-          "Copyright": "RackN",
-          "DisplayName": "Digital Rebar Provision",
-          "DocUrl": "https://provision.readthedocs.io/en/latest/",
-          "Icon": "cube",
-          "License": "APLv2",
-          "Name": "drp",
-          "Order": "1",
-          "Prerequisites": "",
-          "Tags": "drp,endpoint,rackn,service"
-        },
-        "Endpoint": "",
-        "Id": "drp-v4.3.0-alpha2.14",
-        "Type": "catalog_items",
-        "Name": "drp",
-        "ActualVersion": "v4.3.0-alpha2.14+gd2f9a917215aeab6d98c077e28cb5ae9bf04ea35",
-        "Version": "v4.3.0-alpha2.14",
-        "ContentType": "DRP",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.3.0-alpha2.14%2Bgd2f9a917215aeab6d98c077e28cb5ae9bf04ea35.zip",
-        "Shasum256": {
-          "any/any": "bdadef2049c22d52515ddbf93869db55c3bd7f600678fbf3ec00aa3bbeeac5ac"
-        },
-        "NOJQSource": "drp-v4.3.0-alpha2.14:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.3.0-alpha2.14%2Bgd2f9a917215aeab6d98c077e28cb5ae9bf04ea35.zip",
+        "NOJQSource": "drp-v4.2.6:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.2.6.zip",
         "Tip": false,
         "HotFix": true
       },
@@ -1176,6 +1108,74 @@
         "Tip": false,
         "HotFix": true
       },
+      "drp-v4.3.0-beta2.0": {
+        "Validated": false,
+        "Available": false,
+        "Errors": [],
+        "ReadOnly": false,
+        "Meta": {
+          "Author": "RackN",
+          "CodeSource": "https://github.com/digitalrebar/provision",
+          "Color": "black",
+          "Copyright": "RackN",
+          "DisplayName": "Digital Rebar Provision",
+          "DocUrl": "https://provision.readthedocs.io/en/latest/",
+          "Icon": "cube",
+          "License": "APLv2",
+          "Name": "drp",
+          "Order": "1",
+          "Prerequisites": "",
+          "Tags": "drp,endpoint,rackn,service"
+        },
+        "Endpoint": "",
+        "Id": "drp-v4.3.0-beta2.0",
+        "Type": "catalog_items",
+        "Name": "drp",
+        "ActualVersion": "v4.3.0-beta2.0+gedb05834c64afc2965409913a00614251a5dbdf9",
+        "Version": "v4.3.0-beta2.0",
+        "ContentType": "DRP",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.3.0-beta2.0%2Bgedb05834c64afc2965409913a00614251a5dbdf9.zip",
+        "Shasum256": {
+          "any/any": "5bbde83f499a90b44cb92217b68a00e52e696ff5ae810684344a462018dc9a23"
+        },
+        "NOJQSource": "drp-v4.3.0-beta2.0:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.3.0-beta2.0%2Bgedb05834c64afc2965409913a00614251a5dbdf9.zip",
+        "Tip": false,
+        "HotFix": false
+      },
+      "drp-v4.3.0-beta2.4": {
+        "Validated": false,
+        "Available": false,
+        "Errors": [],
+        "ReadOnly": false,
+        "Meta": {
+          "Author": "RackN",
+          "CodeSource": "https://github.com/digitalrebar/provision",
+          "Color": "black",
+          "Copyright": "RackN",
+          "DisplayName": "Digital Rebar Provision",
+          "DocUrl": "https://provision.readthedocs.io/en/latest/",
+          "Icon": "cube",
+          "License": "APLv2",
+          "Name": "drp",
+          "Order": "1",
+          "Prerequisites": "",
+          "Tags": "drp,endpoint,rackn,service"
+        },
+        "Endpoint": "",
+        "Id": "drp-v4.3.0-beta2.4",
+        "Type": "catalog_items",
+        "Name": "drp",
+        "ActualVersion": "v4.3.0-beta2.4+g8634de88ba8308a017bdc9414cfbae35dacb4fac",
+        "Version": "v4.3.0-beta2.4",
+        "ContentType": "DRP",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.3.0-beta2.4%2Bg8634de88ba8308a017bdc9414cfbae35dacb4fac.zip",
+        "Shasum256": {
+          "any/any": "3398505d88d2ec578b072f7fd49f0f4490ebdca68b770b05038f404d08ea42ba"
+        },
+        "NOJQSource": "drp-v4.3.0-beta2.4:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drp/v4.3.0-beta2.4%2Bg8634de88ba8308a017bdc9414cfbae35dacb4fac.zip",
+        "Tip": false,
+        "HotFix": true
+      },
       "drpcli-stable": {
         "Validated": false,
         "Available": false,
@@ -1235,16 +1235,16 @@
         "Id": "drpcli-tip",
         "Type": "catalog_items",
         "Name": "drpcli",
-        "ActualVersion": "v4.3.0-beta1.9+g9593c5d8938b472520e05902c9ec283e1892b94f",
+        "ActualVersion": "v4.3.0-beta2.2+g22be11ffad94c94dc70a1be5aab21e8bbbf3f310",
         "Version": "tip",
         "ContentType": "DRPCLI",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.3.0-beta1.9%2Bg9593c5d8938b472520e05902c9ec283e1892b94f",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.3.0-beta2.2%2Bg22be11ffad94c94dc70a1be5aab21e8bbbf3f310",
         "Shasum256": {
-          "amd64/darwin": "f0068603c9519d25883d20899e97c5c03140cefa9c8865f800118d666c606c68",
-          "amd64/linux": "3c0f2d421bd1ad15a1e7531597a804495102f26efffd316989c111fb8613690c",
-          "amd64/windows": "191c64c8a63e872c950a876426a8a41acd112ebb8220d060ee762b98b96665b5"
+          "amd64/darwin": "3657258e3441418c2b9391e84598db035dafd3332c13133227f387a7fb5c8ef3",
+          "amd64/linux": "17e277a2189994d0fc5f80dc192d154598ce5649366389b54dc1ded85081c28a",
+          "amd64/windows": "03b23c2228d2fcff3b5f00d128fd38430b4af12bf4644b080e27f0c1d52b2a6d"
         },
-        "NOJQSource": "drpcli-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.3.0-beta1.9%2Bg9593c5d8938b472520e05902c9ec283e1892b94f",
+        "NOJQSource": "drpcli-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.3.0-beta2.2%2Bg22be11ffad94c94dc70a1be5aab21e8bbbf3f310",
         "Tip": true,
         "HotFix": false
       },
@@ -1284,7 +1284,7 @@
         "Tip": false,
         "HotFix": false
       },
-      "drpcli-v4.3.0-beta1.2": {
+      "drpcli-v4.3.0-beta1.16": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -1304,23 +1304,23 @@
           "Tags": "drp,ux,rackn"
         },
         "Endpoint": "",
-        "Id": "drpcli-v4.3.0-beta1.2",
+        "Id": "drpcli-v4.3.0-beta1.16",
         "Type": "catalog_items",
         "Name": "drpcli",
-        "ActualVersion": "v4.3.0-beta1.2+g01f8d2b965ce520329f1a38382e54c872c408f45",
-        "Version": "v4.3.0-beta1.2",
+        "ActualVersion": "v4.3.0-beta1.16+g0016911d2487da7e4ae0ff2f96ee9c9cfca9f019",
+        "Version": "v4.3.0-beta1.16",
         "ContentType": "DRPCLI",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.3.0-beta1.2%2Bg01f8d2b965ce520329f1a38382e54c872c408f45",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.3.0-beta1.16%2Bg0016911d2487da7e4ae0ff2f96ee9c9cfca9f019",
         "Shasum256": {
-          "amd64/darwin": "029eb18dd403e7103398bc2b938bc089564292c6c73c8a86444deb8a11cf1ced",
-          "amd64/linux": "38fef85e1dddd68dc6c7f510fb0663ed79e5fa3191141c8fe7afafd173b83928",
-          "amd64/windows": "687eb5f7c09b8697dd5ab304ca8ca607396520315dccdb3c18ae80196c864b1b"
+          "amd64/darwin": "f4a923343ae98f3925b4bff975adc18091ea45d03cf49217d45c72a4dd0783a4",
+          "amd64/linux": "b9e16e29075bf0c3200936229b59506d3be038e00d25eeac51784a7e0cb90906",
+          "amd64/windows": "05eed68d14ffcccc840fe948572fbf5e715fa845bf63633605f4e452fa4635df"
         },
-        "NOJQSource": "drpcli-v4.3.0-beta1.2:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.3.0-beta1.2%2Bg01f8d2b965ce520329f1a38382e54c872c408f45",
+        "NOJQSource": "drpcli-v4.3.0-beta1.16:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.3.0-beta1.16%2Bg0016911d2487da7e4ae0ff2f96ee9c9cfca9f019",
         "Tip": false,
         "HotFix": true
       },
-      "drpcli-v4.3.0-beta1.5": {
+      "drpcli-v4.3.0-beta1.18": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -1340,23 +1340,23 @@
           "Tags": "drp,ux,rackn"
         },
         "Endpoint": "",
-        "Id": "drpcli-v4.3.0-beta1.5",
+        "Id": "drpcli-v4.3.0-beta1.18",
         "Type": "catalog_items",
         "Name": "drpcli",
-        "ActualVersion": "v4.3.0-beta1.5+g3557f4782d5ab750e2a43c2243ba114b418fe90a",
-        "Version": "v4.3.0-beta1.5",
+        "ActualVersion": "v4.3.0-beta1.18+g5d8bb4acb8f2ac3be118fdd02739063ccfe1d575",
+        "Version": "v4.3.0-beta1.18",
         "ContentType": "DRPCLI",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.3.0-beta1.5%2Bg3557f4782d5ab750e2a43c2243ba114b418fe90a",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.3.0-beta1.18%2Bg5d8bb4acb8f2ac3be118fdd02739063ccfe1d575",
         "Shasum256": {
-          "amd64/darwin": "90d203fe53703424ee4a8417d0883d6efa29f72f9cfa85c48a2c35e4b5ec2705",
-          "amd64/linux": "8aae9b186c821ba246e7f9a17a55b782fb516abd0fede6d0c9c9d9e6bff33ea8",
-          "amd64/windows": "71c28a745a7153082a32c783ce64ca05b9b851685405eafd2809f8efd0f2ecb1"
+          "amd64/darwin": "00085141bc1520e0a3cd4944efd1be279e6a8d814ad757da3d4b8eba47fd1f0c",
+          "amd64/linux": "34f04ff784f5ca1cc28e6d503b092cb398b44eafa942583eacac9a6a75dea947",
+          "amd64/windows": "99f1038e4c588c6dcdf8b40bbeebdb8c5432504388bc0f239e67bf76fa20a1e2"
         },
-        "NOJQSource": "drpcli-v4.3.0-beta1.5:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.3.0-beta1.5%2Bg3557f4782d5ab750e2a43c2243ba114b418fe90a",
+        "NOJQSource": "drpcli-v4.3.0-beta1.18:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.3.0-beta1.18%2Bg5d8bb4acb8f2ac3be118fdd02739063ccfe1d575",
         "Tip": false,
         "HotFix": true
       },
-      "drpcli-v4.3.0-beta1.7": {
+      "drpcli-v4.3.0-beta1.20": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -1376,23 +1376,23 @@
           "Tags": "drp,ux,rackn"
         },
         "Endpoint": "",
-        "Id": "drpcli-v4.3.0-beta1.7",
+        "Id": "drpcli-v4.3.0-beta1.20",
         "Type": "catalog_items",
         "Name": "drpcli",
-        "ActualVersion": "v4.3.0-beta1.7+g180275d844e251ce17f9d789f5b269eda778cee9",
-        "Version": "v4.3.0-beta1.7",
+        "ActualVersion": "v4.3.0-beta1.20+g782e41fc5efa3af15c15ac80d788802bf6584678",
+        "Version": "v4.3.0-beta1.20",
         "ContentType": "DRPCLI",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.3.0-beta1.7%2Bg180275d844e251ce17f9d789f5b269eda778cee9",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.3.0-beta1.20%2Bg782e41fc5efa3af15c15ac80d788802bf6584678",
         "Shasum256": {
-          "amd64/darwin": "4182ca62e8af8e64da45cb84682ca9b4f2aba1783cde9702e8f4a1dbbafc3c08",
-          "amd64/linux": "c904eb6f34da1f526cc0f02ea90595e0b19b41d884ef87e0be63bd354d0f0593",
-          "amd64/windows": "448971adb33f07d9631e1f6c248308acd14b89420847a8a9e30c65c0233be671"
+          "amd64/darwin": "25a03f046878a6b9c72d1457a9ecea5211bb2154056c17a54ab60e428a3a3965",
+          "amd64/linux": "554a2c016e842e3c2e2ce953d121b2ce17219c90e405e9f0c3793c8bd8f9c6dc",
+          "amd64/windows": "cfd56b48ad0dc39a7d45c65c63353ca7c20c079ca4a9c72988772813911bdd64"
         },
-        "NOJQSource": "drpcli-v4.3.0-beta1.7:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.3.0-beta1.7%2Bg180275d844e251ce17f9d789f5b269eda778cee9",
+        "NOJQSource": "drpcli-v4.3.0-beta1.20:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.3.0-beta1.20%2Bg782e41fc5efa3af15c15ac80d788802bf6584678",
         "Tip": false,
         "HotFix": true
       },
-      "drpcli-v4.3.0-beta1.9": {
+      "drpcli-v4.3.0-beta2.2": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -1412,19 +1412,19 @@
           "Tags": "drp,ux,rackn"
         },
         "Endpoint": "",
-        "Id": "drpcli-v4.3.0-beta1.9",
+        "Id": "drpcli-v4.3.0-beta2.2",
         "Type": "catalog_items",
         "Name": "drpcli",
-        "ActualVersion": "v4.3.0-beta1.9+g9593c5d8938b472520e05902c9ec283e1892b94f",
-        "Version": "v4.3.0-beta1.9",
+        "ActualVersion": "v4.3.0-beta2.2+g22be11ffad94c94dc70a1be5aab21e8bbbf3f310",
+        "Version": "v4.3.0-beta2.2",
         "ContentType": "DRPCLI",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.3.0-beta1.9%2Bg9593c5d8938b472520e05902c9ec283e1892b94f",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.3.0-beta2.2%2Bg22be11ffad94c94dc70a1be5aab21e8bbbf3f310",
         "Shasum256": {
-          "amd64/darwin": "f0068603c9519d25883d20899e97c5c03140cefa9c8865f800118d666c606c68",
-          "amd64/linux": "3c0f2d421bd1ad15a1e7531597a804495102f26efffd316989c111fb8613690c",
-          "amd64/windows": "191c64c8a63e872c950a876426a8a41acd112ebb8220d060ee762b98b96665b5"
+          "amd64/darwin": "3657258e3441418c2b9391e84598db035dafd3332c13133227f387a7fb5c8ef3",
+          "amd64/linux": "17e277a2189994d0fc5f80dc192d154598ce5649366389b54dc1ded85081c28a",
+          "amd64/windows": "03b23c2228d2fcff3b5f00d128fd38430b4af12bf4644b080e27f0c1d52b2a6d"
         },
-        "NOJQSource": "drpcli-v4.3.0-beta1.9:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.3.0-beta1.9%2Bg9593c5d8938b472520e05902c9ec283e1892b94f",
+        "NOJQSource": "drpcli-v4.3.0-beta2.2:::https://s3-us-west-2.amazonaws.com/rebar-catalog/drpcli/v4.3.0-beta2.2%2Bg22be11ffad94c94dc70a1be5aab21e8bbbf3f310",
         "Tip": false,
         "HotFix": true
       },
@@ -1452,18 +1452,18 @@
         "Id": "edge-lab-tip",
         "Type": "catalog_items",
         "Name": "edge-lab",
-        "ActualVersion": "v4.3.0-alpha2.78+gb85357fd32bd316be6f538c45b788903916467e0",
+        "ActualVersion": "v4.3.0-beta2.5+g89e44d246000d1ba8e171c5d3396dbc29624a285",
         "Version": "tip",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/edge-lab/v4.3.0-alpha2.78%2Bgb85357fd32bd316be6f538c45b788903916467e0.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/edge-lab/v4.3.0-beta2.5%2Bg89e44d246000d1ba8e171c5d3396dbc29624a285.json",
         "Shasum256": {
-          "any/any": "94745e8e201d3791089821f5ec821fa4d5d051f3e76ea91c99f6c75dbd7e698f"
+          "any/any": "a51aad619c12970aba61270324c22a96e77c8e8ecb9730d53bed0fabf952d8cc"
         },
-        "NOJQSource": "edge-lab-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/edge-lab/v4.3.0-alpha2.78%2Bgb85357fd32bd316be6f538c45b788903916467e0.json",
+        "NOJQSource": "edge-lab-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/edge-lab/v4.3.0-beta2.5%2Bg89e44d246000d1ba8e171c5d3396dbc29624a285.json",
         "Tip": true,
         "HotFix": false
       },
-      "edge-lab-v4.3.0-alpha2.71": {
+      "edge-lab-v4.3.0-alpha2.86": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -1484,21 +1484,21 @@
           "Tags": "kubernetes,edge,integration,rpi,lab"
         },
         "Endpoint": "",
-        "Id": "edge-lab-v4.3.0-alpha2.71",
+        "Id": "edge-lab-v4.3.0-alpha2.86",
         "Type": "catalog_items",
         "Name": "edge-lab",
-        "ActualVersion": "v4.3.0-alpha2.71+g47bb9dc3f63a6bdd2af246bceac9f720d8985abb",
-        "Version": "v4.3.0-alpha2.71",
+        "ActualVersion": "v4.3.0-alpha2.86+gf73cd7dea21a52b44d190d8d7c4786eddd8c1f68",
+        "Version": "v4.3.0-alpha2.86",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/edge-lab/v4.3.0-alpha2.71%2Bg47bb9dc3f63a6bdd2af246bceac9f720d8985abb.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/edge-lab/v4.3.0-alpha2.86%2Bgf73cd7dea21a52b44d190d8d7c4786eddd8c1f68.json",
         "Shasum256": {
-          "any/any": "291146bc38cc3a975e628cc90eb48d78886215657f2060733307579369e7c7b1"
+          "any/any": "0f31511fd2e1f7884b09d71f16b4c596bb7882d002ea223aff72d29e3eef8186"
         },
-        "NOJQSource": "edge-lab-v4.3.0-alpha2.71:::https://s3-us-west-2.amazonaws.com/rebar-catalog/edge-lab/v4.3.0-alpha2.71%2Bg47bb9dc3f63a6bdd2af246bceac9f720d8985abb.json",
+        "NOJQSource": "edge-lab-v4.3.0-alpha2.86:::https://s3-us-west-2.amazonaws.com/rebar-catalog/edge-lab/v4.3.0-alpha2.86%2Bgf73cd7dea21a52b44d190d8d7c4786eddd8c1f68.json",
         "Tip": false,
         "HotFix": true
       },
-      "edge-lab-v4.3.0-alpha2.73": {
+      "edge-lab-v4.3.0-beta2.0": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -1519,21 +1519,56 @@
           "Tags": "kubernetes,edge,integration,rpi,lab"
         },
         "Endpoint": "",
-        "Id": "edge-lab-v4.3.0-alpha2.73",
+        "Id": "edge-lab-v4.3.0-beta2.0",
         "Type": "catalog_items",
         "Name": "edge-lab",
-        "ActualVersion": "v4.3.0-alpha2.73+ge8c8fa914f668f5cfc3945ae4e9e3b5e2a636322",
-        "Version": "v4.3.0-alpha2.73",
+        "ActualVersion": "v4.3.0-beta2.0+g1e2643c55ef26f60a1206130fc0f0076868b89e9",
+        "Version": "v4.3.0-beta2.0",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/edge-lab/v4.3.0-alpha2.73%2Bge8c8fa914f668f5cfc3945ae4e9e3b5e2a636322.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/edge-lab/v4.3.0-beta2.0%2Bg1e2643c55ef26f60a1206130fc0f0076868b89e9.json",
         "Shasum256": {
-          "any/any": "f665951c9d83420da7f0f5b25b2b65c5bf21a17bf9d38e659eeb63ed718f57f4"
+          "any/any": "3dc3832f38f8110077de2f4778cd18f28ab3e03cc4cb46d8646a38cf24816d9a"
         },
-        "NOJQSource": "edge-lab-v4.3.0-alpha2.73:::https://s3-us-west-2.amazonaws.com/rebar-catalog/edge-lab/v4.3.0-alpha2.73%2Bge8c8fa914f668f5cfc3945ae4e9e3b5e2a636322.json",
+        "NOJQSource": "edge-lab-v4.3.0-beta2.0:::https://s3-us-west-2.amazonaws.com/rebar-catalog/edge-lab/v4.3.0-beta2.0%2Bg1e2643c55ef26f60a1206130fc0f0076868b89e9.json",
+        "Tip": false,
+        "HotFix": false
+      },
+      "edge-lab-v4.3.0-beta2.3": {
+        "Validated": false,
+        "Available": false,
+        "Errors": [],
+        "ReadOnly": false,
+        "Meta": {
+          "Author": "RackN",
+          "CodeSource": "https://github.com/digitalrebar/provision-content",
+          "Color": "green",
+          "Copyright": "RackN 2019",
+          "Description": "Edge Lab (including k3s)",
+          "DisplayName": "Edge Lab",
+          "DocUrl": "https://provision.readthedocs.io/en/tip/doc/content-packages/edgelab.html",
+          "Icon": "lab",
+          "License": "APLv2",
+          "Name": "edge-lab",
+          "Order": "1000",
+          "Prerequisites": "drp-community-content,task-library",
+          "Tags": "kubernetes,edge,integration,rpi,lab"
+        },
+        "Endpoint": "",
+        "Id": "edge-lab-v4.3.0-beta2.3",
+        "Type": "catalog_items",
+        "Name": "edge-lab",
+        "ActualVersion": "v4.3.0-beta2.3+g73a17d73d238c46130a821ba61f3d865c9474760",
+        "Version": "v4.3.0-beta2.3",
+        "ContentType": "ContentPackage",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/edge-lab/v4.3.0-beta2.3%2Bg73a17d73d238c46130a821ba61f3d865c9474760.json",
+        "Shasum256": {
+          "any/any": "375599cb85f7e995d88b388bd9414034ca594f22d3981771f587d679b1311b7f"
+        },
+        "NOJQSource": "edge-lab-v4.3.0-beta2.3:::https://s3-us-west-2.amazonaws.com/rebar-catalog/edge-lab/v4.3.0-beta2.3%2Bg73a17d73d238c46130a821ba61f3d865c9474760.json",
         "Tip": false,
         "HotFix": true
       },
-      "edge-lab-v4.3.0-alpha2.76": {
+      "edge-lab-v4.3.0-beta2.5": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -1554,52 +1589,17 @@
           "Tags": "kubernetes,edge,integration,rpi,lab"
         },
         "Endpoint": "",
-        "Id": "edge-lab-v4.3.0-alpha2.76",
+        "Id": "edge-lab-v4.3.0-beta2.5",
         "Type": "catalog_items",
         "Name": "edge-lab",
-        "ActualVersion": "v4.3.0-alpha2.76+gba0d497b18f1f7474baaecc98fd2e726c0fc6d90",
-        "Version": "v4.3.0-alpha2.76",
+        "ActualVersion": "v4.3.0-beta2.5+g89e44d246000d1ba8e171c5d3396dbc29624a285",
+        "Version": "v4.3.0-beta2.5",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/edge-lab/v4.3.0-alpha2.76%2Bgba0d497b18f1f7474baaecc98fd2e726c0fc6d90.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/edge-lab/v4.3.0-beta2.5%2Bg89e44d246000d1ba8e171c5d3396dbc29624a285.json",
         "Shasum256": {
-          "any/any": "cfb4b9be93eca7d34dac951e3941da610357fa34749ccc3d4a635f7bfeb8d650"
+          "any/any": "a51aad619c12970aba61270324c22a96e77c8e8ecb9730d53bed0fabf952d8cc"
         },
-        "NOJQSource": "edge-lab-v4.3.0-alpha2.76:::https://s3-us-west-2.amazonaws.com/rebar-catalog/edge-lab/v4.3.0-alpha2.76%2Bgba0d497b18f1f7474baaecc98fd2e726c0fc6d90.json",
-        "Tip": false,
-        "HotFix": true
-      },
-      "edge-lab-v4.3.0-alpha2.78": {
-        "Validated": false,
-        "Available": false,
-        "Errors": [],
-        "ReadOnly": false,
-        "Meta": {
-          "Author": "RackN",
-          "CodeSource": "https://github.com/digitalrebar/provision-content",
-          "Color": "green",
-          "Copyright": "RackN 2019",
-          "Description": "Edge Lab (including k3s)",
-          "DisplayName": "Edge Lab",
-          "DocUrl": "https://provision.readthedocs.io/en/tip/doc/content-packages/edgelab.html",
-          "Icon": "lab",
-          "License": "APLv2",
-          "Name": "edge-lab",
-          "Order": "1000",
-          "Prerequisites": "drp-community-content,task-library",
-          "Tags": "kubernetes,edge,integration,rpi,lab"
-        },
-        "Endpoint": "",
-        "Id": "edge-lab-v4.3.0-alpha2.78",
-        "Type": "catalog_items",
-        "Name": "edge-lab",
-        "ActualVersion": "v4.3.0-alpha2.78+gb85357fd32bd316be6f538c45b788903916467e0",
-        "Version": "v4.3.0-alpha2.78",
-        "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/edge-lab/v4.3.0-alpha2.78%2Bgb85357fd32bd316be6f538c45b788903916467e0.json",
-        "Shasum256": {
-          "any/any": "94745e8e201d3791089821f5ec821fa4d5d051f3e76ea91c99f6c75dbd7e698f"
-        },
-        "NOJQSource": "edge-lab-v4.3.0-alpha2.78:::https://s3-us-west-2.amazonaws.com/rebar-catalog/edge-lab/v4.3.0-alpha2.78%2Bgb85357fd32bd316be6f538c45b788903916467e0.json",
+        "NOJQSource": "edge-lab-v4.3.0-beta2.5:::https://s3-us-west-2.amazonaws.com/rebar-catalog/edge-lab/v4.3.0-beta2.5%2Bg89e44d246000d1ba8e171c5d3396dbc29624a285.json",
         "Tip": false,
         "HotFix": true
       },
@@ -1627,14 +1627,14 @@
         "Id": "flexiflow-stable",
         "Type": "catalog_items",
         "Name": "flexiflow",
-        "ActualVersion": "v4.2.8",
+        "ActualVersion": "v4.2.10",
         "Version": "stable",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/flexiflow/v4.2.8.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/flexiflow/v4.2.10.json",
         "Shasum256": {
-          "any/any": "28a3d06c004e1be93c6fb051cfa265a7cc425c5a7d112294e4f8fffe64df4f04"
+          "any/any": "122c23c10c9e3ef1500ca3571ec43316701e41e576c403ee238d7df3062e2683"
         },
-        "NOJQSource": "flexiflow-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/flexiflow/v4.2.8.json",
+        "NOJQSource": "flexiflow-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/flexiflow/v4.2.10.json",
         "Tip": false,
         "HotFix": true
       },
@@ -1662,18 +1662,18 @@
         "Id": "flexiflow-tip",
         "Type": "catalog_items",
         "Name": "flexiflow",
-        "ActualVersion": "v4.3.0-alpha2.78+gb85357fd32bd316be6f538c45b788903916467e0",
+        "ActualVersion": "v4.3.0-beta2.5+g89e44d246000d1ba8e171c5d3396dbc29624a285",
         "Version": "tip",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/flexiflow/v4.3.0-alpha2.78%2Bgb85357fd32bd316be6f538c45b788903916467e0.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/flexiflow/v4.3.0-beta2.5%2Bg89e44d246000d1ba8e171c5d3396dbc29624a285.json",
         "Shasum256": {
-          "any/any": "0b2d5c6f5cf26b49f0ea9b1fd96a70be37fb6d5d7dbc9ad25be3ff3cf46dff3a"
+          "any/any": "6b43c5d24c90fdee87ee291be6bb452a4d701c8479d99c8489c9954d58400e62"
         },
-        "NOJQSource": "flexiflow-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/flexiflow/v4.3.0-alpha2.78%2Bgb85357fd32bd316be6f538c45b788903916467e0.json",
+        "NOJQSource": "flexiflow-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/flexiflow/v4.3.0-beta2.5%2Bg89e44d246000d1ba8e171c5d3396dbc29624a285.json",
         "Tip": true,
         "HotFix": false
       },
-      "flexiflow-v4.2.8": {
+      "flexiflow-v4.2.10": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -1694,21 +1694,21 @@
           "Tags": "advanced,flexiflow,physical"
         },
         "Endpoint": "",
-        "Id": "flexiflow-v4.2.8",
+        "Id": "flexiflow-v4.2.10",
         "Type": "catalog_items",
         "Name": "flexiflow",
-        "ActualVersion": "v4.2.8",
-        "Version": "v4.2.8",
+        "ActualVersion": "v4.2.10",
+        "Version": "v4.2.10",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/flexiflow/v4.2.8.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/flexiflow/v4.2.10.json",
         "Shasum256": {
-          "any/any": "28a3d06c004e1be93c6fb051cfa265a7cc425c5a7d112294e4f8fffe64df4f04"
+          "any/any": "122c23c10c9e3ef1500ca3571ec43316701e41e576c403ee238d7df3062e2683"
         },
-        "NOJQSource": "flexiflow-v4.2.8:::https://s3-us-west-2.amazonaws.com/rebar-catalog/flexiflow/v4.2.8.json",
+        "NOJQSource": "flexiflow-v4.2.10:::https://s3-us-west-2.amazonaws.com/rebar-catalog/flexiflow/v4.2.10.json",
         "Tip": false,
         "HotFix": true
       },
-      "flexiflow-v4.3.0-alpha2.71": {
+      "flexiflow-v4.3.0-alpha2.86": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -1729,21 +1729,21 @@
           "Tags": "advanced,flexiflow,physical"
         },
         "Endpoint": "",
-        "Id": "flexiflow-v4.3.0-alpha2.71",
+        "Id": "flexiflow-v4.3.0-alpha2.86",
         "Type": "catalog_items",
         "Name": "flexiflow",
-        "ActualVersion": "v4.3.0-alpha2.71+g47bb9dc3f63a6bdd2af246bceac9f720d8985abb",
-        "Version": "v4.3.0-alpha2.71",
+        "ActualVersion": "v4.3.0-alpha2.86+gf73cd7dea21a52b44d190d8d7c4786eddd8c1f68",
+        "Version": "v4.3.0-alpha2.86",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/flexiflow/v4.3.0-alpha2.71%2Bg47bb9dc3f63a6bdd2af246bceac9f720d8985abb.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/flexiflow/v4.3.0-alpha2.86%2Bgf73cd7dea21a52b44d190d8d7c4786eddd8c1f68.json",
         "Shasum256": {
-          "any/any": "6cf6efe0266a93da6b53c3c418c7861009407a47003361eccf31c4abd4d83ea0"
+          "any/any": "38363f6945a9e8d98012351e87bce93839f107bce8ec44f9b2e1b4023196fcbe"
         },
-        "NOJQSource": "flexiflow-v4.3.0-alpha2.71:::https://s3-us-west-2.amazonaws.com/rebar-catalog/flexiflow/v4.3.0-alpha2.71%2Bg47bb9dc3f63a6bdd2af246bceac9f720d8985abb.json",
+        "NOJQSource": "flexiflow-v4.3.0-alpha2.86:::https://s3-us-west-2.amazonaws.com/rebar-catalog/flexiflow/v4.3.0-alpha2.86%2Bgf73cd7dea21a52b44d190d8d7c4786eddd8c1f68.json",
         "Tip": false,
         "HotFix": true
       },
-      "flexiflow-v4.3.0-alpha2.73": {
+      "flexiflow-v4.3.0-beta2.0": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -1764,21 +1764,56 @@
           "Tags": "advanced,flexiflow,physical"
         },
         "Endpoint": "",
-        "Id": "flexiflow-v4.3.0-alpha2.73",
+        "Id": "flexiflow-v4.3.0-beta2.0",
         "Type": "catalog_items",
         "Name": "flexiflow",
-        "ActualVersion": "v4.3.0-alpha2.73+ge8c8fa914f668f5cfc3945ae4e9e3b5e2a636322",
-        "Version": "v4.3.0-alpha2.73",
+        "ActualVersion": "v4.3.0-beta2.0+g1e2643c55ef26f60a1206130fc0f0076868b89e9",
+        "Version": "v4.3.0-beta2.0",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/flexiflow/v4.3.0-alpha2.73%2Bge8c8fa914f668f5cfc3945ae4e9e3b5e2a636322.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/flexiflow/v4.3.0-beta2.0%2Bg1e2643c55ef26f60a1206130fc0f0076868b89e9.json",
         "Shasum256": {
-          "any/any": "9adecf93f7ef79bacd19ff4c71229c4f523eb9a693a26ce4264597d7b71da252"
+          "any/any": "3472acff5ecc320313555464fc1b0f1381231074b6d5eeeee5f56fbaf66d0d43"
         },
-        "NOJQSource": "flexiflow-v4.3.0-alpha2.73:::https://s3-us-west-2.amazonaws.com/rebar-catalog/flexiflow/v4.3.0-alpha2.73%2Bge8c8fa914f668f5cfc3945ae4e9e3b5e2a636322.json",
+        "NOJQSource": "flexiflow-v4.3.0-beta2.0:::https://s3-us-west-2.amazonaws.com/rebar-catalog/flexiflow/v4.3.0-beta2.0%2Bg1e2643c55ef26f60a1206130fc0f0076868b89e9.json",
+        "Tip": false,
+        "HotFix": false
+      },
+      "flexiflow-v4.3.0-beta2.3": {
+        "Validated": false,
+        "Available": false,
+        "Errors": [],
+        "ReadOnly": false,
+        "Meta": {
+          "Author": "RackN",
+          "CodeSource": "https://github.com/digitalrebar/provision-content",
+          "Color": "purple",
+          "Copyright": "RackN 2019",
+          "Description": "Provides Flexible Workflow Constructs",
+          "DisplayName": "FlexiFlow",
+          "DocUrl": "https://provision.readthedocs.io/en/latest/doc/content-packages/flexiflow.html",
+          "Icon": "magic",
+          "License": "APLv2",
+          "Name": "flexiflow",
+          "Order": "1000",
+          "Prerequisites": "",
+          "Tags": "advanced,flexiflow,physical"
+        },
+        "Endpoint": "",
+        "Id": "flexiflow-v4.3.0-beta2.3",
+        "Type": "catalog_items",
+        "Name": "flexiflow",
+        "ActualVersion": "v4.3.0-beta2.3+g73a17d73d238c46130a821ba61f3d865c9474760",
+        "Version": "v4.3.0-beta2.3",
+        "ContentType": "ContentPackage",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/flexiflow/v4.3.0-beta2.3%2Bg73a17d73d238c46130a821ba61f3d865c9474760.json",
+        "Shasum256": {
+          "any/any": "55e334851ac39e85643c7c0df1ee712a749df8b0dc13e571e4104bad42144fb8"
+        },
+        "NOJQSource": "flexiflow-v4.3.0-beta2.3:::https://s3-us-west-2.amazonaws.com/rebar-catalog/flexiflow/v4.3.0-beta2.3%2Bg73a17d73d238c46130a821ba61f3d865c9474760.json",
         "Tip": false,
         "HotFix": true
       },
-      "flexiflow-v4.3.0-alpha2.76": {
+      "flexiflow-v4.3.0-beta2.5": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -1799,52 +1834,17 @@
           "Tags": "advanced,flexiflow,physical"
         },
         "Endpoint": "",
-        "Id": "flexiflow-v4.3.0-alpha2.76",
+        "Id": "flexiflow-v4.3.0-beta2.5",
         "Type": "catalog_items",
         "Name": "flexiflow",
-        "ActualVersion": "v4.3.0-alpha2.76+gba0d497b18f1f7474baaecc98fd2e726c0fc6d90",
-        "Version": "v4.3.0-alpha2.76",
+        "ActualVersion": "v4.3.0-beta2.5+g89e44d246000d1ba8e171c5d3396dbc29624a285",
+        "Version": "v4.3.0-beta2.5",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/flexiflow/v4.3.0-alpha2.76%2Bgba0d497b18f1f7474baaecc98fd2e726c0fc6d90.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/flexiflow/v4.3.0-beta2.5%2Bg89e44d246000d1ba8e171c5d3396dbc29624a285.json",
         "Shasum256": {
-          "any/any": "48ecb4dd982274dd9cf098cb4eec18916182b5c06baa45ef80069c14dc776f10"
+          "any/any": "6b43c5d24c90fdee87ee291be6bb452a4d701c8479d99c8489c9954d58400e62"
         },
-        "NOJQSource": "flexiflow-v4.3.0-alpha2.76:::https://s3-us-west-2.amazonaws.com/rebar-catalog/flexiflow/v4.3.0-alpha2.76%2Bgba0d497b18f1f7474baaecc98fd2e726c0fc6d90.json",
-        "Tip": false,
-        "HotFix": true
-      },
-      "flexiflow-v4.3.0-alpha2.78": {
-        "Validated": false,
-        "Available": false,
-        "Errors": [],
-        "ReadOnly": false,
-        "Meta": {
-          "Author": "RackN",
-          "CodeSource": "https://github.com/digitalrebar/provision-content",
-          "Color": "purple",
-          "Copyright": "RackN 2019",
-          "Description": "Provides Flexible Workflow Constructs",
-          "DisplayName": "FlexiFlow",
-          "DocUrl": "https://provision.readthedocs.io/en/latest/doc/content-packages/flexiflow.html",
-          "Icon": "magic",
-          "License": "APLv2",
-          "Name": "flexiflow",
-          "Order": "1000",
-          "Prerequisites": "",
-          "Tags": "advanced,flexiflow,physical"
-        },
-        "Endpoint": "",
-        "Id": "flexiflow-v4.3.0-alpha2.78",
-        "Type": "catalog_items",
-        "Name": "flexiflow",
-        "ActualVersion": "v4.3.0-alpha2.78+gb85357fd32bd316be6f538c45b788903916467e0",
-        "Version": "v4.3.0-alpha2.78",
-        "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/flexiflow/v4.3.0-alpha2.78%2Bgb85357fd32bd316be6f538c45b788903916467e0.json",
-        "Shasum256": {
-          "any/any": "0b2d5c6f5cf26b49f0ea9b1fd96a70be37fb6d5d7dbc9ad25be3ff3cf46dff3a"
-        },
-        "NOJQSource": "flexiflow-v4.3.0-alpha2.78:::https://s3-us-west-2.amazonaws.com/rebar-catalog/flexiflow/v4.3.0-alpha2.78%2Bgb85357fd32bd316be6f538c45b788903916467e0.json",
+        "NOJQSource": "flexiflow-v4.3.0-beta2.5:::https://s3-us-west-2.amazonaws.com/rebar-catalog/flexiflow/v4.3.0-beta2.5%2Bg89e44d246000d1ba8e171c5d3396dbc29624a285.json",
         "Tip": false,
         "HotFix": true
       },
@@ -1908,53 +1908,17 @@
         "Id": "manager-tip",
         "Type": "catalog_items",
         "Name": "manager",
-        "ActualVersion": "v4.2.6-dev.2+g4ec637aa91b68a58261baedbe192eaf9fcaa2e81",
+        "ActualVersion": "v4.3.0-beta2.0+g633d7a46f34debacc32185261139782d917a9244",
         "Version": "tip",
         "ContentType": "PluginProvider",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/manager/v4.2.6-dev.2%2Bg4ec637aa91b68a58261baedbe192eaf9fcaa2e81",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/manager/v4.3.0-beta2.0%2Bg633d7a46f34debacc32185261139782d917a9244",
         "Shasum256": {
-          "amd64/darwin": "e0f9ef64cc1cf9aaaba1603be0b0d1f51e7c73cf86fae68a1b381f0b8c97f4af",
-          "amd64/linux": "7c1037ebf9d46eff9e53d82ee13f250c26164119ac7516eedda7e16c827b0c58"
+          "amd64/darwin": "4d6c5b32c0f984c1ddafb98879d98f11103f02252c978e58f4a3530940df7a07",
+          "amd64/linux": "82fb49641080fba495d1253bc63b345586baaf5f8e75df71b082cdfc01611398"
         },
-        "NOJQSource": "manager-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/manager/v4.2.6-dev.2%2Bg4ec637aa91b68a58261baedbe192eaf9fcaa2e81",
+        "NOJQSource": "manager-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/manager/v4.3.0-beta2.0%2Bg633d7a46f34debacc32185261139782d917a9244",
         "Tip": true,
         "HotFix": false
-      },
-      "manager-v4.2.2": {
-        "Validated": false,
-        "Available": false,
-        "Errors": [],
-        "ReadOnly": false,
-        "Meta": {
-          "Author": "RackN",
-          "CodeSource": "https://github.com/rackn/provision-plugins",
-          "Color": "black",
-          "Copyright": "RackN",
-          "Description": "Plugin that enables a single DRP to manage other DRP instances",
-          "DisplayName": "Multi-Site Manager",
-          "DocUrl": "https://provision.readthedocs.io/en/latest/doc/content-packages/manager.html",
-          "Icon": "chess rook",
-          "License": "RackN",
-          "Name": "manager",
-          "Order": "700",
-          "Prerequisites": "",
-          "Tags": "experimental,rackn,drp,manager,multi-site,edge"
-        },
-        "Endpoint": "",
-        "Id": "manager-v4.2.2",
-        "Type": "catalog_items",
-        "Name": "manager",
-        "ActualVersion": "v4.2.2",
-        "Version": "v4.2.2",
-        "ContentType": "PluginProvider",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/manager/v4.2.2",
-        "Shasum256": {
-          "amd64/darwin": "72e56e1e3318546c8346824f87a07658abb215820634a6704769e536c0b68998",
-          "amd64/linux": "8ce99df8eae360c28769287705e11ceaedd4f521004a03199e25e682ba6f4bec"
-        },
-        "NOJQSource": "manager-v4.2.2:::https://s3-us-west-2.amazonaws.com/rebar-catalog/manager/v4.2.2",
-        "Tip": false,
-        "HotFix": true
       },
       "manager-v4.2.5": {
         "Validated": false,
@@ -2028,6 +1992,42 @@
         "Tip": false,
         "HotFix": true
       },
+      "manager-v4.3.0-beta2.0": {
+        "Validated": false,
+        "Available": false,
+        "Errors": [],
+        "ReadOnly": false,
+        "Meta": {
+          "Author": "RackN",
+          "CodeSource": "https://github.com/rackn/provision-plugins",
+          "Color": "black",
+          "Copyright": "RackN",
+          "Description": "Plugin that enables a single DRP to manage other DRP instances",
+          "DisplayName": "Multi-Site Manager",
+          "DocUrl": "https://provision.readthedocs.io/en/latest/doc/content-packages/manager.html",
+          "Icon": "chess rook",
+          "License": "RackN",
+          "Name": "manager",
+          "Order": "700",
+          "Prerequisites": "",
+          "Tags": "experimental,rackn,drp,manager,multi-site,edge"
+        },
+        "Endpoint": "",
+        "Id": "manager-v4.3.0-beta2.0",
+        "Type": "catalog_items",
+        "Name": "manager",
+        "ActualVersion": "v4.3.0-beta2.0+g633d7a46f34debacc32185261139782d917a9244",
+        "Version": "v4.3.0-beta2.0",
+        "ContentType": "PluginProvider",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/manager/v4.3.0-beta2.0%2Bg633d7a46f34debacc32185261139782d917a9244",
+        "Shasum256": {
+          "amd64/darwin": "4d6c5b32c0f984c1ddafb98879d98f11103f02252c978e58f4a3530940df7a07",
+          "amd64/linux": "82fb49641080fba495d1253bc63b345586baaf5f8e75df71b082cdfc01611398"
+        },
+        "NOJQSource": "manager-v4.3.0-beta2.0:::https://s3-us-west-2.amazonaws.com/rebar-catalog/manager/v4.3.0-beta2.0%2Bg633d7a46f34debacc32185261139782d917a9244",
+        "Tip": false,
+        "HotFix": false
+      },
       "task-library-stable": {
         "Validated": false,
         "Available": false,
@@ -2052,14 +2052,14 @@
         "Id": "task-library-stable",
         "Type": "catalog_items",
         "Name": "task-library",
-        "ActualVersion": "v4.2.8",
+        "ActualVersion": "v4.2.10",
         "Version": "stable",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.2.8.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.2.10.json",
         "Shasum256": {
-          "any/any": "9500dbc22fc31d609308ee59e996e23208765256a0c0779c108fc1c91c126598"
+          "any/any": "2169e52bc095cbac8e1faab2d80a59533138db49b90ad1ce3492e0bf7c7f7cda"
         },
-        "NOJQSource": "task-library-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.2.8.json",
+        "NOJQSource": "task-library-stable:::https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.2.10.json",
         "Tip": false,
         "HotFix": true
       },
@@ -2087,18 +2087,18 @@
         "Id": "task-library-tip",
         "Type": "catalog_items",
         "Name": "task-library",
-        "ActualVersion": "v4.3.0-alpha2.78+gb85357fd32bd316be6f538c45b788903916467e0",
+        "ActualVersion": "v4.3.0-beta2.5+g89e44d246000d1ba8e171c5d3396dbc29624a285",
         "Version": "tip",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.3.0-alpha2.78%2Bgb85357fd32bd316be6f538c45b788903916467e0.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.3.0-beta2.5%2Bg89e44d246000d1ba8e171c5d3396dbc29624a285.json",
         "Shasum256": {
-          "any/any": "4a4ba2bd76df6ebd8fcf4ab331ca5953c7f3b9ffa7fb74a0bf63261eef7ed9eb"
+          "any/any": "08170282d609b51c905f593002e732cbf1c0118c979047c107d3062c3d606668"
         },
-        "NOJQSource": "task-library-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.3.0-alpha2.78%2Bgb85357fd32bd316be6f538c45b788903916467e0.json",
+        "NOJQSource": "task-library-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.3.0-beta2.5%2Bg89e44d246000d1ba8e171c5d3396dbc29624a285.json",
         "Tip": true,
         "HotFix": false
       },
-      "task-library-v4.2.8": {
+      "task-library-v4.2.10": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -2119,21 +2119,21 @@
           "Tags": "base,rackn,tasks,linux,library"
         },
         "Endpoint": "",
-        "Id": "task-library-v4.2.8",
+        "Id": "task-library-v4.2.10",
         "Type": "catalog_items",
         "Name": "task-library",
-        "ActualVersion": "v4.2.8",
-        "Version": "v4.2.8",
+        "ActualVersion": "v4.2.10",
+        "Version": "v4.2.10",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.2.8.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.2.10.json",
         "Shasum256": {
-          "any/any": "9500dbc22fc31d609308ee59e996e23208765256a0c0779c108fc1c91c126598"
+          "any/any": "2169e52bc095cbac8e1faab2d80a59533138db49b90ad1ce3492e0bf7c7f7cda"
         },
-        "NOJQSource": "task-library-v4.2.8:::https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.2.8.json",
+        "NOJQSource": "task-library-v4.2.10:::https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.2.10.json",
         "Tip": false,
         "HotFix": true
       },
-      "task-library-v4.3.0-alpha2.71": {
+      "task-library-v4.3.0-alpha2.86": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -2154,21 +2154,21 @@
           "Tags": "base,rackn,tasks,linux,library"
         },
         "Endpoint": "",
-        "Id": "task-library-v4.3.0-alpha2.71",
+        "Id": "task-library-v4.3.0-alpha2.86",
         "Type": "catalog_items",
         "Name": "task-library",
-        "ActualVersion": "v4.3.0-alpha2.71+g47bb9dc3f63a6bdd2af246bceac9f720d8985abb",
-        "Version": "v4.3.0-alpha2.71",
+        "ActualVersion": "v4.3.0-alpha2.86+gf73cd7dea21a52b44d190d8d7c4786eddd8c1f68",
+        "Version": "v4.3.0-alpha2.86",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.3.0-alpha2.71%2Bg47bb9dc3f63a6bdd2af246bceac9f720d8985abb.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.3.0-alpha2.86%2Bgf73cd7dea21a52b44d190d8d7c4786eddd8c1f68.json",
         "Shasum256": {
-          "any/any": "9598b07b689126e63c0a4247f8164c68b3cfb58d14c382b97c2d379649249868"
+          "any/any": "5c72657d068f8d815136c160e1d448ea9e55d124e4405fc1ecc4dba5971270db"
         },
-        "NOJQSource": "task-library-v4.3.0-alpha2.71:::https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.3.0-alpha2.71%2Bg47bb9dc3f63a6bdd2af246bceac9f720d8985abb.json",
+        "NOJQSource": "task-library-v4.3.0-alpha2.86:::https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.3.0-alpha2.86%2Bgf73cd7dea21a52b44d190d8d7c4786eddd8c1f68.json",
         "Tip": false,
         "HotFix": true
       },
-      "task-library-v4.3.0-alpha2.73": {
+      "task-library-v4.3.0-beta2.0": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -2189,21 +2189,56 @@
           "Tags": "base,rackn,tasks,linux,library"
         },
         "Endpoint": "",
-        "Id": "task-library-v4.3.0-alpha2.73",
+        "Id": "task-library-v4.3.0-beta2.0",
         "Type": "catalog_items",
         "Name": "task-library",
-        "ActualVersion": "v4.3.0-alpha2.73+ge8c8fa914f668f5cfc3945ae4e9e3b5e2a636322",
-        "Version": "v4.3.0-alpha2.73",
+        "ActualVersion": "v4.3.0-beta2.0+g1e2643c55ef26f60a1206130fc0f0076868b89e9",
+        "Version": "v4.3.0-beta2.0",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.3.0-alpha2.73%2Bge8c8fa914f668f5cfc3945ae4e9e3b5e2a636322.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.3.0-beta2.0%2Bg1e2643c55ef26f60a1206130fc0f0076868b89e9.json",
         "Shasum256": {
-          "any/any": "1b17c998ee6ce121a9d220146f6035e237b031a927801e8b2bd83e815f5ddf31"
+          "any/any": "ef7a025a97f197c144d989ffba442a1ce711a44c4e4d611a38132039eaf15e2b"
         },
-        "NOJQSource": "task-library-v4.3.0-alpha2.73:::https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.3.0-alpha2.73%2Bge8c8fa914f668f5cfc3945ae4e9e3b5e2a636322.json",
+        "NOJQSource": "task-library-v4.3.0-beta2.0:::https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.3.0-beta2.0%2Bg1e2643c55ef26f60a1206130fc0f0076868b89e9.json",
+        "Tip": false,
+        "HotFix": false
+      },
+      "task-library-v4.3.0-beta2.3": {
+        "Validated": false,
+        "Available": false,
+        "Errors": [],
+        "ReadOnly": false,
+        "Meta": {
+          "Author": "RackN",
+          "CodeSource": "https://github.com/rackn/provision-content",
+          "Color": "green",
+          "Copyright": "RackN 2020",
+          "Description": "Essential task and stage library",
+          "DisplayName": "Core Task Library",
+          "DocUrl": "https://provision.readthedocs.io/en/latest/doc/content-packages/task-library.html",
+          "Icon": "shopping basket",
+          "License": "APLv2",
+          "Name": "task-library",
+          "Order": "100",
+          "Prerequisites": "",
+          "Tags": "base,rackn,tasks,linux,library"
+        },
+        "Endpoint": "",
+        "Id": "task-library-v4.3.0-beta2.3",
+        "Type": "catalog_items",
+        "Name": "task-library",
+        "ActualVersion": "v4.3.0-beta2.3+g73a17d73d238c46130a821ba61f3d865c9474760",
+        "Version": "v4.3.0-beta2.3",
+        "ContentType": "ContentPackage",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.3.0-beta2.3%2Bg73a17d73d238c46130a821ba61f3d865c9474760.json",
+        "Shasum256": {
+          "any/any": "7912eb4014fb810649060d5ab95aadb882c520120e1c0995e7a33364d07dafae"
+        },
+        "NOJQSource": "task-library-v4.3.0-beta2.3:::https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.3.0-beta2.3%2Bg73a17d73d238c46130a821ba61f3d865c9474760.json",
         "Tip": false,
         "HotFix": true
       },
-      "task-library-v4.3.0-alpha2.76": {
+      "task-library-v4.3.0-beta2.5": {
         "Validated": false,
         "Available": false,
         "Errors": [],
@@ -2224,52 +2259,17 @@
           "Tags": "base,rackn,tasks,linux,library"
         },
         "Endpoint": "",
-        "Id": "task-library-v4.3.0-alpha2.76",
+        "Id": "task-library-v4.3.0-beta2.5",
         "Type": "catalog_items",
         "Name": "task-library",
-        "ActualVersion": "v4.3.0-alpha2.76+gba0d497b18f1f7474baaecc98fd2e726c0fc6d90",
-        "Version": "v4.3.0-alpha2.76",
+        "ActualVersion": "v4.3.0-beta2.5+g89e44d246000d1ba8e171c5d3396dbc29624a285",
+        "Version": "v4.3.0-beta2.5",
         "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.3.0-alpha2.76%2Bgba0d497b18f1f7474baaecc98fd2e726c0fc6d90.json",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.3.0-beta2.5%2Bg89e44d246000d1ba8e171c5d3396dbc29624a285.json",
         "Shasum256": {
-          "any/any": "05a3f4e0aa1476478753f60c6b6801a072567a31bbd32891645a427f228834b7"
+          "any/any": "08170282d609b51c905f593002e732cbf1c0118c979047c107d3062c3d606668"
         },
-        "NOJQSource": "task-library-v4.3.0-alpha2.76:::https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.3.0-alpha2.76%2Bgba0d497b18f1f7474baaecc98fd2e726c0fc6d90.json",
-        "Tip": false,
-        "HotFix": true
-      },
-      "task-library-v4.3.0-alpha2.78": {
-        "Validated": false,
-        "Available": false,
-        "Errors": [],
-        "ReadOnly": false,
-        "Meta": {
-          "Author": "RackN",
-          "CodeSource": "https://github.com/rackn/provision-content",
-          "Color": "green",
-          "Copyright": "RackN 2020",
-          "Description": "Essential task and stage library",
-          "DisplayName": "Core Task Library",
-          "DocUrl": "https://provision.readthedocs.io/en/latest/doc/content-packages/task-library.html",
-          "Icon": "shopping basket",
-          "License": "APLv2",
-          "Name": "task-library",
-          "Order": "100",
-          "Prerequisites": "",
-          "Tags": "base,rackn,tasks,linux,library"
-        },
-        "Endpoint": "",
-        "Id": "task-library-v4.3.0-alpha2.78",
-        "Type": "catalog_items",
-        "Name": "task-library",
-        "ActualVersion": "v4.3.0-alpha2.78+gb85357fd32bd316be6f538c45b788903916467e0",
-        "Version": "v4.3.0-alpha2.78",
-        "ContentType": "ContentPackage",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.3.0-alpha2.78%2Bgb85357fd32bd316be6f538c45b788903916467e0.json",
-        "Shasum256": {
-          "any/any": "4a4ba2bd76df6ebd8fcf4ab331ca5953c7f3b9ffa7fb74a0bf63261eef7ed9eb"
-        },
-        "NOJQSource": "task-library-v4.3.0-alpha2.78:::https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.3.0-alpha2.78%2Bgb85357fd32bd316be6f538c45b788903916467e0.json",
+        "NOJQSource": "task-library-v4.3.0-beta2.5:::https://s3-us-west-2.amazonaws.com/rebar-catalog/task-library/v4.3.0-beta2.5%2Bg89e44d246000d1ba8e171c5d3396dbc29624a285.json",
         "Tip": false,
         "HotFix": true
       },
@@ -2333,53 +2333,17 @@
         "Id": "ux-views-tip",
         "Type": "catalog_items",
         "Name": "ux-views",
-        "ActualVersion": "v4.2.6-dev.2+g4ec637aa91b68a58261baedbe192eaf9fcaa2e81",
+        "ActualVersion": "v4.3.0-beta2.0+g633d7a46f34debacc32185261139782d917a9244",
         "Version": "tip",
         "ContentType": "PluginProvider",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/ux-views/v4.2.6-dev.2%2Bg4ec637aa91b68a58261baedbe192eaf9fcaa2e81",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/ux-views/v4.3.0-beta2.0%2Bg633d7a46f34debacc32185261139782d917a9244",
         "Shasum256": {
-          "amd64/darwin": "105324fa2a0e1518346db49184955b03d54f0cf7ad0c4b7a45d0a1c4af8be910",
-          "amd64/linux": "0a2cb060ad3fd4d853637b8b6eb99784549a3efcf83cb2bdfdfe5d5ba9cc2e76"
+          "amd64/darwin": "3e87f2f887b292eb17987e08e13c730e3539a5b76983e301687fdf13004227e7",
+          "amd64/linux": "1c205975bae223165530f7e58d0cea388fa635128f9f14ddeee688cf5501f51e"
         },
-        "NOJQSource": "ux-views-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/ux-views/v4.2.6-dev.2%2Bg4ec637aa91b68a58261baedbe192eaf9fcaa2e81",
+        "NOJQSource": "ux-views-tip:::https://s3-us-west-2.amazonaws.com/rebar-catalog/ux-views/v4.3.0-beta2.0%2Bg633d7a46f34debacc32185261139782d917a9244",
         "Tip": true,
         "HotFix": false
-      },
-      "ux-views-v4.2.2": {
-        "Validated": false,
-        "Available": false,
-        "Errors": [],
-        "ReadOnly": false,
-        "Meta": {
-          "Author": "RackN",
-          "CodeSource": "https://github.com/rackn/provision-plugins",
-          "Color": "black",
-          "Copyright": "RackN 2019",
-          "Description": "Enable specialized user views",
-          "DisplayName": "UX Views",
-          "DocUrl": "https://provision.readthedocs.io/en/latest/doc/content-packages/ux-views.html",
-          "Icon": "street view",
-          "License": "RackN",
-          "Name": "ux-views",
-          "Order": "1000",
-          "Prerequisites": "",
-          "Tags": "enterprise,ux"
-        },
-        "Endpoint": "",
-        "Id": "ux-views-v4.2.2",
-        "Type": "catalog_items",
-        "Name": "ux-views",
-        "ActualVersion": "v4.2.2",
-        "Version": "v4.2.2",
-        "ContentType": "PluginProvider",
-        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/ux-views/v4.2.2",
-        "Shasum256": {
-          "amd64/darwin": "e40b35f854c4c99caa80e53c8757e69fbf39948575ad67f597026eb1b18ad900",
-          "amd64/linux": "0d0c257fb49c4f477d943b1fdea1b770230664b0320b64bc461330ac7fcdb5cb"
-        },
-        "NOJQSource": "ux-views-v4.2.2:::https://s3-us-west-2.amazonaws.com/rebar-catalog/ux-views/v4.2.2",
-        "Tip": false,
-        "HotFix": true
       },
       "ux-views-v4.2.5": {
         "Validated": false,
@@ -2452,6 +2416,42 @@
         "NOJQSource": "ux-views-v4.2.6-dev.2:::https://s3-us-west-2.amazonaws.com/rebar-catalog/ux-views/v4.2.6-dev.2%2Bg4ec637aa91b68a58261baedbe192eaf9fcaa2e81",
         "Tip": false,
         "HotFix": true
+      },
+      "ux-views-v4.3.0-beta2.0": {
+        "Validated": false,
+        "Available": false,
+        "Errors": [],
+        "ReadOnly": false,
+        "Meta": {
+          "Author": "RackN",
+          "CodeSource": "https://github.com/rackn/provision-plugins",
+          "Color": "black",
+          "Copyright": "RackN 2019",
+          "Description": "Enable specialized user views",
+          "DisplayName": "UX Views",
+          "DocUrl": "https://provision.readthedocs.io/en/latest/doc/content-packages/ux-views.html",
+          "Icon": "street view",
+          "License": "RackN",
+          "Name": "ux-views",
+          "Order": "1000",
+          "Prerequisites": "",
+          "Tags": "enterprise,ux"
+        },
+        "Endpoint": "",
+        "Id": "ux-views-v4.3.0-beta2.0",
+        "Type": "catalog_items",
+        "Name": "ux-views",
+        "ActualVersion": "v4.3.0-beta2.0+g633d7a46f34debacc32185261139782d917a9244",
+        "Version": "v4.3.0-beta2.0",
+        "ContentType": "PluginProvider",
+        "Source": "https://s3-us-west-2.amazonaws.com/rebar-catalog/ux-views/v4.3.0-beta2.0%2Bg633d7a46f34debacc32185261139782d917a9244",
+        "Shasum256": {
+          "amd64/darwin": "3e87f2f887b292eb17987e08e13c730e3539a5b76983e301687fdf13004227e7",
+          "amd64/linux": "1c205975bae223165530f7e58d0cea388fa635128f9f14ddeee688cf5501f51e"
+        },
+        "NOJQSource": "ux-views-v4.3.0-beta2.0:::https://s3-us-west-2.amazonaws.com/rebar-catalog/ux-views/v4.3.0-beta2.0%2Bg633d7a46f34debacc32185261139782d917a9244",
+        "Tip": false,
+        "HotFix": false
       }
     }
   }

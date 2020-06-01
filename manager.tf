@@ -32,6 +32,10 @@ variable "cluster_prefix" {
   type      = string
 }
 
+variable "ssh_key" {
+  type      = string
+}
+
 resource "linode_instance" "drp_manager" {
   image     = var.manager_image
   label     = var.manager_label
@@ -39,12 +43,15 @@ resource "linode_instance" "drp_manager" {
   type      = var.manager_type
   root_pass = var.manager_password
   tags      = [ "cluster-${var.cluster_prefix}"]
+  authorized_keys = ["${var.ssh_key}"]
 
   stackscript_id = "626699"
   stackscript_data = {
     "drp_version" = "tip"
     "drp_password" = var.manager_password
     "drp_id" = var.manager_label
+    "initial_workflow" = "discover-advanced"
+    "initial_contents" = "drp-community-content, task-library"
   }
 }
 
