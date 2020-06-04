@@ -316,7 +316,7 @@ echo "upload edge-lab"
 _drpcli catalog item install edge-lab --version=tip >/dev/null
 
 echo "Waiting for Manager to finish bootstrap"
-_drpcli machines wait "Name:$MGR_LBL" Stage "bootstrap-lock-mc" 360
+_drpcli machines wait "Name:$MGR_LBL" Stage "complete-nobootenv" 360
 
 _drpcli contents upload multi-site-demo.json >/dev/null
 _drpcli contents upload linode.json >/dev/null
