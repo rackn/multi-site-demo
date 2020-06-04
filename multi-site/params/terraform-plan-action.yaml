@@ -10,6 +10,6 @@ Schema:
   type: "string"
   default: "apply"
 Meta:
-  color: "red"
+  color: "blue"
   icon: "map"
   title: "RackN Content"

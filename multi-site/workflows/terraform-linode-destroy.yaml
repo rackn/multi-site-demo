@@ -1,0 +1,15 @@
+Name: "tf-machine-destroy"
+Description: "Destroy Remote Machine Using Terraform"
+Documentation: |
+  Requires that operator has created a Contexts for "runner" and "terraform"
+  that can run DRP Angent and Terraform
+
+  Leaves the machines in machine Context
+Stages:
+  - "terraform-destroy"
+  - "context-runner"
+  - "complete-nobootenv"
+Meta:
+  color: "purple"
+  icon: "cog"
+  title: "RackN Content"

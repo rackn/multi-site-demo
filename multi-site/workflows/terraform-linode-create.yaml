@@ -1,0 +1,18 @@
+Name: "tf-machine-create"
+Description: "Create Remote Machine Using Terraform"
+Documentation: |
+  Requires that operator has created a Contexts for "runner" and "terraform"
+  that can run DRP Angent and Terraform
+
+  Leaves the machines in machine Context
+Stages:
+  - "terraform-apply"
+  - "context-clear"
+  - "discover-nobootenv"
+  - "network-firewall"
+  - "runner-service"
+  - "complete-nobootenv"
+Meta:
+  color: "purple"
+  icon: "cog"
+  title: "RackN Content"
