@@ -34,11 +34,3 @@
         content: "{{`{{ new_linode.instance }}`}}"
         dest: "{{ .Machine.Name }}.json"
 
-    - name: Wait for the instances to boot by checking the ssh port
-      wait_for:
-        host: "{{`{{ new_linode.instance.ipv4[0] }}`}}"
-        port: 22
-        delay: 0
-        timeout: 300
-        state: "started"
-    
