@@ -12,17 +12,24 @@ Documentation: |
   multiple calls to this task.
 
   Information can be chained together by having the plan output saved
-  on the machine as ``Param.terraform/output``.  Only parts of the Machine are
-  automatically passed into the plan; however, the plans can use the .Param
-  and .ParamExists template renders to pull anything needed.
+  on the machine as ``Param.terraform-vars/[output var]``.
 
-  Terraform State is stored as a param on the Machine after execution.
+  Only Name, UUID, Address of the Machine are automatically passed into the plan;
+  however, the plans can use the .Param and .ParamExists template 
+  to pull any value needed.
 
-  Note: having SSH keys requires using the sshkey generator task.
+  Terraform State is stored as a Param 'terraform/tfstate' the Machine after first
+  execution.  It is then retrieved for all subsequent runs so that Terraform
+  is able to correctly use it's state values.
+
+  Notes:
+  * having SSH keys requires using the 'rsa-key-create' generator task.
+  * if creating cloud machines, use the 'ansible-join-up' task for join
 RequiredParams:
   - "terraform/plan-templates"
   - "terraform/plan-action"
 OptionalParams:
+  - terraform/tfstate
   - rsa/key-user
   - rsa/key-public
 Templates:
@@ -153,7 +160,7 @@ Templates:
             {{ if .ParamExists "terraform-var/machine_ip" }}          
               echo "Clear IP and terraform-var/machine_ip when performing destroy with IP"
               drpcli machines update $RS_UUID "{\"Address\":\"\"}" | jq .Address
-               drpcli machines remove $RS_UUID param terraform-var/machine_ip
+              drpcli machines remove $RS_UUID param terraform-var/machine_ip
             {{ else }}
               echo "Does not set IP, do not clear IP"
             {{ end }}
@@ -179,7 +186,7 @@ Templates:
       fi
 
       echo "done"
-      # end
+      exit 0
 Meta:
   icon: "map"
   color: "blue"
