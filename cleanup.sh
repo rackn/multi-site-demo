@@ -26,10 +26,10 @@ for mc in $sites;
 do
   if drpcli machines exists Name:$mc > /dev/null
   then
-    drpcli machines meta set Name:$mc key BaseContext to ""
+    drpcli machines update Name:$mc '{"Locked":false}' > /dev/null
+    drpcli machines meta set Name:$mc key BaseContext to "runner"
     drpcli machines workflow Name:$mc site-destroy > /dev/null
     # backslash escape seems to be needed, otherwise it's being intepreted as YAML input
-    drpcli machines meta set Name:$mc key BaseContext to \"terraform\"
     drpcli machines set Name:$mc param Runnable to true
   else
     echo "machine $mc already does not exist"
@@ -45,6 +45,22 @@ do
     drpcli machines destroy Name:$mc
   fi
 done
+
+echo "Downloading Contexts for next run"
+raw=$(drpcli contexts list Engine=docker-context)
+contexts=$(jq -r ".[].Name" <<< "${raw}")
+i=0
+for context in $contexts; do
+  image=$(jq -r ".[$i].Image" <<< "${raw}")
+  if [[ -f $context.tar ]] ; then
+    echo "has $context.tar file, skipping download"
+  else
+    echo "downloading $image for $context context"
+    drpcli files download "contexts/docker-context/$image" > $context.tar
+  fi
+  i=$(($i + 1))
+done
+
 
 if [[ "$(drpcli machines list | jq length)" == "1" ]]; then
 

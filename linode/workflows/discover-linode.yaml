@@ -4,7 +4,7 @@ Documentation: |
   Discover plus opens ports required for Linode
 Stages:
   - "discover"
-  - "network-firewalld"
+  - "network-firewall"
   - "runner-service"
   - "complete-nobootenv"
 Meta:

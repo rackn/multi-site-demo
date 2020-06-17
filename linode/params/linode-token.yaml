@@ -8,6 +8,6 @@ Schema:
   type: "string"
   default: "not-set-required"
 Meta:
-  color: "red"
+  color: "green"
   icon: "key"
   title: "RackN Content"

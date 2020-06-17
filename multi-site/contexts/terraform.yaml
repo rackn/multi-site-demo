@@ -1,10 +1,10 @@
 ---
 Name: "terraform"
-Description: "Run Terraform in Docker Context"
+Description: "Run Terraform Plan in Docker Context"
 Engine: "docker-context"
-Image: "digitalrebar-terraform"
+Image: "digitalrebar-context-terraform"
 Meta:
-  icon: "map"
+  icon: "cog"
   color: "green"
   title: "RackN Content"
-  Dockerfile: "https://raw.githubusercontent.com/digitalrebar/provision-content/v4/integrations/docker-context/terraform-dockerfile"
+  Dockerpull: "digitalrebar/context-terraform"

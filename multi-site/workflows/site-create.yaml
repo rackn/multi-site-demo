@@ -6,13 +6,12 @@ Documentation: |
 
   Leaves the machines in a Runner Context not on the machine
 Stages:
-  - "terraform-apply"
+  - "ansible-linode-create"
   - "context-clear"
-  - "discover"
-  - "network-firewalld"
+  - "discover-nobootenv"
+  - "network-firewall"
   - "runner-service"
   - "dr-server-install"
-  - "context-runner"
   - "complete-nobootenv"
 Meta:
   color: "purple"

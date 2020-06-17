@@ -2,3 +2,20 @@
 provider "linode" {
   token = "{{ .Param "linode/token" }}"
 }
+
+resource "linode_instance" "drp_nodes" {
+	image     = "{{ .Param "linode/instance-image" }}"
+	label     = "{{ .Machine.Name }}"
+	region    = "{{ .Param "linode/region" -}}"
+	type      = "{{ .Param "linode/instance-type" }}"
+	root_pass = "{{ .Param "linode/root-password" }}"
+	tags      = [ "cluster-{{ .Param "demo/cluster-prefix" }}" ]
+	{{ if .ParamExists "rsa/key-public" }}
+	authorized_keys = ["{{ .Param "rsa/key-public" }}"]
+	{{ end }}
+}
+
+output "machine_ip" {
+	value       = linode_instance.drp_nodes.ip_address
+	description = "The IP of Machine"
+}

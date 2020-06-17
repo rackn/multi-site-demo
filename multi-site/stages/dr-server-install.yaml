@@ -14,6 +14,9 @@ Documentation: |
 Tasks:
   - "context:"
   - "dr-server-install"
+  - "dr-server-register"
+  - "bootstrap-contexts"
+  - "dr-server-seed"
 Meta:
   icon: "heart"
   color: "green"

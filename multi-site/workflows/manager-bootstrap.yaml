@@ -5,6 +5,7 @@ Documentation: |
   And pulls in other data
 Stages:
   - "manager-bootstrap"
+  - "lock-machine"
   - "complete-nobootenv"
 Meta:
   color: "purple"

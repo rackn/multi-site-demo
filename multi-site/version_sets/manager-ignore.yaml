@@ -5,9 +5,6 @@ Apply: true
 Meta:
   icon: chess rook
 Components:
-- Name: multi-site-demo
-  Type: ContentPackage
-  Version: ignore
 - Name: rackn-catalog
   Type: ContentPackage
   Version: ignore
