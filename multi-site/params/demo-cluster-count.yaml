@@ -1,0 +1,11 @@
+---
+Name: "demo/cluster-count"
+Description: "Size of Leaf Sites"
+Schema:
+  type: "integer"
+  default: 3
+Meta:
+  type: "id"
+  icon: "hashtag"
+  color: "blue"
+  title: "Digital Rebar Community Content"

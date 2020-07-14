@@ -4,7 +4,8 @@ Documentation: |
   Ensures that sytem can run the contexts that are defined
   And pulls in other data
 Stages:
-  - "manager-bootstrap"
+  - "bootstrap-base"
+  - "bootstrap-advanced"
   - "lock-machine"
   - "complete-nobootenv"
 Meta:

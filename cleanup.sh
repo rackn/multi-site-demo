@@ -28,7 +28,8 @@ do
   then
     drpcli machines update Name:$mc '{"Locked":false}' > /dev/null
     drpcli machines meta set Name:$mc key BaseContext to "runner"
-    drpcli machines workflow Name:$mc site-destroy > /dev/null
+    drpcli machines update Name:$mc '{"Context":"runner"}' > /dev/null
+    drpcli machines workflow Name:$mc cloud-decommission > /dev/null
     # backslash escape seems to be needed, otherwise it's being intepreted as YAML input
     drpcli machines set Name:$mc param Runnable to true
   else
@@ -46,31 +47,11 @@ do
   fi
 done
 
-echo "Downloading Contexts for next run"
-raw=$(drpcli contexts list Engine=docker-context)
-contexts=$(jq -r ".[].Name" <<< "${raw}")
-i=0
-for context in $contexts; do
-  image=$(jq -r ".[$i].Image" <<< "${raw}")
-  if [[ -f $context.tar ]] ; then
-    echo "has $context.tar file, skipping download"
-  else
-    echo "downloading $image for $context context"
-    drpcli files download "contexts/docker-context/$image" > $context.tar
-  fi
-  i=$(($i + 1))
-done
-
-
 if [[ "$(drpcli machines list | jq length)" == "1" ]]; then
 
   echo "removing manager"
   terraform init -no-color
   terraform destroy -no-color -auto-approve -var-file=manager.tfvars
-
-  if [[ -e "linode.json" ]]; then
-    rm linode.json
-  fi
 
   if [[ -e "multi-site-demo.json" ]]; then
     rm multi-site-demo.json

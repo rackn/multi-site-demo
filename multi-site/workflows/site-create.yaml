@@ -6,12 +6,13 @@ Documentation: |
 
   Leaves the machines in a Runner Context not on the machine
 Stages:
-  - "ansible-linode-create"
+  - "cloud-provision"
   - "context-clear"
   - "discover-nobootenv"
+  - "cloud-inspect"
   - "network-firewall"
   - "runner-service"
-  - "dr-server-install"
+  - "site-expand"
   - "complete-nobootenv"
 Meta:
   color: "purple"
