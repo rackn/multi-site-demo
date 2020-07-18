@@ -229,6 +229,17 @@ if [[ -f rackn-license.json ]]; then
     KEY="$(jq -r '.sections.profiles["rackn-license"].Params["rackn/license"]' <<< ${LICENSE})"
     VERSION="$(jq -r .Version <<< ${LICENSEBASE})"
     cp rackn-license.json rackn-license.old
+    # first, add the leaf endpoints    
+    for mc in $SITES; do
+      echo "adding $mc to license"
+      curl -X GET "https://1p0q9a8qob.execute-api.us-west-2.amazonaws.com/v40/license" \
+        -H "rackn-contactid: ${CONTACTID}" \
+        -H "rackn-ownerid: ${OWNERID}" \
+        -H "rackn-endpointid: ${mc}" \
+        -H "rackn-key: ${KEY}" \
+        -H "rackn-version: ${VERSION}" \
+        >/dev/null
+    done
     curl -X GET "https://1p0q9a8qob.execute-api.us-west-2.amazonaws.com/v40/license" \
       -H "rackn-contactid: ${CONTACTID}" \
       -H "rackn-ownerid: ${OWNERID}" \
@@ -267,7 +278,13 @@ for c in $items; do
 done
 
 echo "Setting Catalog On Manager files"
-#_drpcli files upload multi-site-demo.json to "rebar-catalog/multi-site-demo/v1.2.0.json" >/dev/null
+
+msdv=$(cat multi-site-demo.json | jq -r .meta.Version)
+_drpcli files upload multi-site-demo.json to "rebar-catalog/multi-site-demo/${msdv}.json" >/dev/null
+
+rlv=$(cat rackn-license.json | jq -r .meta.Version)
+_drpcli files upload rackn-license.json to "rebar-catalog/rackn-license/${rlv}.json"
+
 #_drpcli profiles set global set catalog_url to - >/dev/null <<< $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
 #_drpcli files upload rackn-catalog.json as static-catalog.json >/dev/null
 #if [[ -f static-catalog.zip ]] ; then

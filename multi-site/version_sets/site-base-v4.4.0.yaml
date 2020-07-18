@@ -6,9 +6,6 @@ Meta:
   icon: paw
 DRPVersion: v4.4.0
 Components:
-- Name: rackn-license
-  Type: ContentPackage
-  Version: tip
 - Name: docker-context
   Type: PluginProvider
   Version: tip
@@ -27,13 +24,10 @@ Components:
 - Name: multi-site-demo
   Type: ContentPackage
   Version: v2.0.0
-Plugins:
-- Name: docker-context
-  Provider: docker-context
 Prefs:
   defaultBootEnv: local
   defaultStage: none
-  defaultWorkflow: discover-joinup
+  defaultWorkflow: discover-base
   unknownBootEnv: discovery
   completeJobsPurgedAfter: never
   failedJobsPurgedAfter: never

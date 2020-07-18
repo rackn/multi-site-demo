@@ -1,3 +1,4 @@
+---
 Name: "site-expand"
 Description: "Expand Remote Site"
 Documentation: |
@@ -5,9 +6,6 @@ Documentation: |
   that can run DRP Angent and Ansible
 
   Leaves the machines in a Runner Context not on the machine
-Params:
-  - demo/machines: "001 002 003"
-  - demo/workflow: "machine-create"
 Stages:
   - "site-expand"
   - "complete-nobootenv"

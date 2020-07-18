@@ -1,3 +1,4 @@
+---
 Name: "site-create"
 Description: "Create Remote Site using Terraform Plan"
 Documentation: |
@@ -12,7 +13,7 @@ Stages:
   - "cloud-inspect"
   - "network-firewall"
   - "runner-service"
-  - "site-expand"
+  - "site-create"
   - "complete-nobootenv"
 Meta:
   color: "purple"

@@ -6,9 +6,6 @@ Meta:
   icon: paw
 DRPVersion: stable
 Components:
-- Name: rackn-license
-  Type: ContentPackage
-  Version: tip
 - Name: docker-context
   Type: PluginProvider
   Version: stable
@@ -27,13 +24,10 @@ Components:
 - Name: multi-site-demo
   Type: ContentPackage
   Version: v2.0.0
-Plugins:
-- Name: docker-context
-  Provider: docker-context
 Prefs:
   defaultBootEnv: local
   defaultStage: none
-  defaultWorkflow: discover-linode
+  defaultWorkflow: discover-base
   unknownBootEnv: discovery
   completeJobsPurgedAfter: never
   failedJobsPurgedAfter: never

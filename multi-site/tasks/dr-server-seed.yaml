@@ -37,9 +37,7 @@ Templates:
       for context in $contexts; do
         image=$(jq -r ".[$i].Image" <<< "${raw}")
         echo "Installing Container for $context named from $image"
-        drpcli -x plugins runaction docker-context imageUpload \
-          context/image-name ${image} \
-          context/image-path files/contexts/docker-context/${image}
+        drpcli files upload http://{{ .ProvisionerURL }}/files/contexts/docker-context/${image} as contexts/docker-context/${image}
         i=$(($i + 1))
       done
 
