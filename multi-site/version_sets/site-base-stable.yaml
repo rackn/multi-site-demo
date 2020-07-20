@@ -6,9 +6,6 @@ Meta:
   icon: paw
 DRPVersion: stable
 Components:
-- Name: rackn-license
-  Type: ContentPackage
-  Version: tip
 - Name: docker-context
   Type: PluginProvider
   Version: stable
@@ -21,26 +18,16 @@ Components:
 - Name: task-library
   Type: ContentPackage
   Version: stable
-- Name: linode
+- Name: cloud-wrappers
   Type: ContentPackage
-  Version: v1.1.0
+  Version: stable
 - Name: multi-site-demo
   Type: ContentPackage
-  Version: v1.2.0
-Plugins:
-- Name: docker-context
-  Provider: docker-context
-Files:
-- Path: "files/contexts/docker-context/digitalrebar-ansible"
-  Source: "{{.ProvisionerURL}}/files/contexts/docker-context/digitalrebar-ansible"
-  Sha256Sum: "42c86494e8d4a7a05c7277c46612d6a4"
-- Path: "files/contexts/docker-context/digitalrebar-runner"
-  Source: "{{.ProvisionerURL}}/files/contexts/docker-context/digitalrebar-runner"
-  Sha256Sum: "e4ce4d76312653b274b6d93e10ce9ee3"
+  Version: v2.0.0
 Prefs:
   defaultBootEnv: local
   defaultStage: none
-  defaultWorkflow: discover-linode
+  defaultWorkflow: discover-base
   unknownBootEnv: discovery
   completeJobsPurgedAfter: never
   failedJobsPurgedAfter: never

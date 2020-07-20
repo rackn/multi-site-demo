@@ -1,10 +1,10 @@
 ---
-Id: site-base-tip
+Id: site-base-v4.4.0
 Description: "Core Components needed by all Sites"
 Apply: true
 Meta:
   icon: paw
-DRPVersion: tip
+DRPVersion: v4.4.0
 Components:
 - Name: docker-context
   Type: PluginProvider

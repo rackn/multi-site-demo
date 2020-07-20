@@ -45,13 +45,13 @@ resource "linode_instance" "drp_manager" {
   tags      = [ "cluster-${var.cluster_prefix}"]
   authorized_keys = ["${var.ssh_key}"]
 
-  stackscript_id = "626699"
+  stackscript_id = "657412"
   stackscript_data = {
     "drp_version" = "tip"
     "drp_password" = var.manager_password
     "drp_id" = var.manager_label
-    "initial_workflow" = "discover-advanced"
-    "initial_contents" = "drp-community-content, task-library"
+    "initial_workflow" = "bootstrap-advanced"
+    "initial_contents" = "drp-community-content, task-library, edge-lab"
   }
 }
 

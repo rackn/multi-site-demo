@@ -1,0 +1,16 @@
+---
+Name: "site-create"
+Description: "Install DRP Edge DR Server"
+Documentation: |
+  * Create New Machines
+  * Run Machine-Create Workflow
+Params:
+  demo/machines: ""
+  demo/workflow: "discover-base"
+Tasks:
+  - "context:"
+  - "dr-server-install"
+Meta:
+  icon: "bus"
+  color: "green"
+  title: "RackN Content"

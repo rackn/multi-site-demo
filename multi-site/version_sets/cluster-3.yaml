@@ -10,7 +10,6 @@ Global:
   linode/instance-image: linode/centos7
   linode/instance-type: g6-standard-1
   linode/root-password: r0cketsk8ts
-  linode/stackscript_id: 548252
   network/firewalld-ports:
   - 22/tcp
   - 8091/tcp

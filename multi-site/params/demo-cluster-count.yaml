@@ -1,12 +1,11 @@
 ---
 Name: "demo/cluster-count"
-Description: "number of nodes to add into cluster"
-Documentation: |
-  In addition to master, add nodes to cluster
+Description: "Size of Leaf Sites"
 Schema:
-  type: integer
-  default: 0
+  type: "integer"
+  default: 3
 Meta:
-  color: "black"
-  icon: "box"
-  title: "RackN Content"
+  type: "id"
+  icon: "hashtag"
+  color: "blue"
+  title: "Digital Rebar Community Content"

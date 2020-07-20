@@ -13,14 +13,6 @@ Templates:
       set -e
       {{template "setup.tmpl" .}}
 
-      if drpcli plugin_providers exists "manager" 2>/dev/null >/dev/null ; then
-        echo "Manager Plugin already installed, skipping"
-      else
-        echo "Installing Manager Plugin"
-        drpcli catalog item install manager --version=tip >/dev/null
-      fi
-
-
       echo "Setting up empty local manager catalog to update."
       drpcli plugins runaction manager buildCatalog
 

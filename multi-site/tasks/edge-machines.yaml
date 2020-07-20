@@ -1,0 +1,59 @@
+---
+Description: "Setup Edge Machines"
+Name: "edge-machines"
+ExtraClaims:
+  - scope: "machines"
+    action: "*"
+    specific: "*"
+Templates:
+  - Contents: |-
+      #!/bin/bash
+      # RackN Copyright 2020
+
+      set -e
+      {{template "setup.tmpl" .}}
+
+      {{ $addr := .Machine.Address -}}
+
+      export RS_KEY="rocketskates:r0cketsk8ts"
+      export RS_ENDPOINT="https://{{$addr}}:8092"
+      unset RS_TOKEN
+      unset RS_LOCAL_PROXY
+
+      echo "reviewing machines {{ .Param "demo/machines" }}"
+      for mc in {{ .Param "demo/machines" }}
+      do
+        machine="{{ .Param "demo/cluster-prefix" }}-{{ .Param "linode/region" }}-$mc"
+        if drpcli machines exists Name:$machine; then
+          echo "$machine exists, updating workflow"
+          drpcli machines update Name:$machine "{\"Workflow\":\"{{ .Param "demo/workflow" }}\"}"
+        else
+          echo "no $machine, creating"
+          drpcli machines create "{\"Name\":\"${machine}\", \
+            \"Workflow\":\"{{ .Param "demo/workflow" }}\", \
+            \"Description\":\"Worker Server\", \
+            \"Meta\":{\"BaseContext\":\"runner\", \"icon\":\"star\"}}" >/dev/null
+        fi
+      done
+
+      echo "waiting for machines to complete"
+      for mc in {{ .Param "demo/machines" }}
+      do
+        machine="{{ .Param "demo/cluster-prefix" }}-{{ .Param "linode/region" }}-$mc"
+        if drpcli machines exists Name:$machine; then
+          echo "$machine exists, updating workflow"
+          drpcli machines wait "Name:$machine" Stage "complete-nobootenv" 360
+        else
+          echo "$machine missing! skip"
+        fi
+      done
+
+      echo "Edge Machines Updated"
+      exit 0
+
+    Name: "edge-machines"
+Meta:
+  icon: "server"
+  color: "yellow"
+  title: "Digital Rebar Community Content"
+  feature-flags: "sane-exit-codes"

@@ -1,0 +1,18 @@
+---
+Name: "site-expand"
+Description: "Add Machines Under Edge DR Server"
+Documentation: |
+  * Create New Machines
+  * Run Machine-Create Workflow
+Params:
+  demo/machines: "001 002 003"
+  demo/workflow: "discover-base"
+Tasks:
+  - "context:"
+  - "dr-server-install"
+  - "edge-machines"
+  - "lock-machine"
+Meta:
+  icon: "bus"
+  color: "green"
+  title: "RackN Content"
