@@ -1,6 +1,13 @@
 ---
 Description: "Setup the Manager's Local Catalog"
 Name: "bootstrap-catalog"
+Documentation: |
+  Runs the catalog building operations from the Manager endpoint
+
+  This is very helpful because building the catalog can take a long
+  time while resources are collected.
+
+  Process looks for custom catalogs first.
 ExtraClaims:
   - scope: "*"
     action: "*"
@@ -12,6 +19,8 @@ Templates:
 
       set -e
       {{template "setup.tmpl" .}}
+
+      drpcli prefs set manager true
 
       echo "Setting up empty local manager catalog to update."
       drpcli plugins runaction manager buildCatalog

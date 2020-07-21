@@ -1,4 +1,4 @@
-Name: "manager-bootstrap"
+Name: "bootstrap-manager"
 Description: "Setup DRP for Multi-Site Manager"
 Documentation: |
   Ensures that sytem can run the contexts that are defined
@@ -6,6 +6,7 @@ Documentation: |
 Stages:
   - "bootstrap-base"
   - "bootstrap-advanced"
+  - "bootstrap-manager"
   - "lock-machine"
   - "complete-nobootenv"
 Meta:
