@@ -212,13 +212,6 @@ terraform apply -no-color -auto-approve -var-file=manager.tfvars
 export RS_ENDPOINT=$(terraform output drp_manager)
 export RS_IP=$(terraform output drp_ip)
 
-if [[ ! -e "rackn-catalog.json" ]]; then
-  echo "Missing rackn-catalog.json... using the provided .ref version"
-  cp rackn-catalog.ref rackn-catalog.json
-else
-  echo "catalog files exist - skipping"
-fi
-
 if [[ -f rackn-license.json ]]; then
   if [[ "$VALIDATE_LIC" == "true" ]] ; then
     echo "Checking Online License for rackn-license updates"
@@ -292,8 +285,11 @@ _drpcli files upload multi-site-demo.json to "rebar-catalog/multi-site-demo/${ms
 rlv=$(cat rackn-license.json | jq -r .meta.Version)
 _drpcli files upload rackn-license.json to "rebar-catalog/rackn-license/${rlv}.json"
 
-#_drpcli profiles set global set catalog_url to - >/dev/null <<< $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
-#_drpcli files upload rackn-catalog.json as static-catalog.json >/dev/null
+echo "Building catalog"
+./catalogger.py --items drp,task-library,drp-community-content,docker-context,edge-lab,dev-library,cloud-wrappers > rackn-catalog.json
+_drpcli profiles set global set catalog_url to - >/dev/null <<< $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
+_drpcli files upload rackn-catalog.json as "rebar-catalog/static-catalog.json" >/dev/null
+
 #if [[ -f static-catalog.zip ]] ; then
 #  echo "Using custom static-catalog.zip ... upload to manager"
 #  _drpcli files upload static-catalog.zip >/dev/null
@@ -324,7 +320,7 @@ else
   _drpcli profiles set linode set "linode/root-password" to "r0cketsk8ts" >/dev/null
 fi
 
-if ! drpcli profiles get global param "demo/cluster-prefix" ; then
+if [[ "$(_drpcli profiles get global param "demo/cluster-prefix")" != "$PREFIX" ]]; then
   _drpcli profiles set global set "demo/cluster-prefix" to $PREFIX >/dev/null || true
 fi
 echo "drpcli profiles set global param network/firewall-ports to ... "

@@ -15,6 +15,9 @@ Components:
 - Name: edge-lab
   Type: ContentPackage
   Version: tip
+- Name: dev-library
+  Type: ContentPackage
+  Version: tip
 - Name: task-library
   Type: ContentPackage
   Version: tip

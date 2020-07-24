@@ -6,6 +6,19 @@ set -e
 
 export RS_ENDPOINT=$(terraform output drp_manager)
 
+FORCE="false"
+while getopts ":f" CmdLineOpts
+do
+  case $CmdLineOpts in
+    f) FORCE="true"          ;;
+    u) usage; exit 0          ;;
+    \?)
+      echo "Incorrect usage.  Invalid flag '${OPTARG}'."
+      exit 1
+      ;;
+  esac
+done
+
 sites="us-central us-west us-east us-southeast"
 if [[ -r manager.tfvars ]]
 then
@@ -47,7 +60,7 @@ do
   fi
 done
 
-if [[ "$(drpcli machines list | jq length)" == "1" ]]; then
+if [ "$FORCE" == "true" ] || [ "$(drpcli machines list | jq length)" == "1" ]; then
 
   echo "removing manager"
   terraform init -no-color
