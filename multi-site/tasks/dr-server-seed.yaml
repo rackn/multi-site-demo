@@ -3,54 +3,54 @@ Name: "dr-server-seed"
 Description: "Setup Files for Digital Rebar Server"
 Documentation: |
   Copy Files from Multi-Site-Manager to Local DR Server
+ExtraClaims:
+  - scope: "files"
+    action: "*"
+    specific: "*"
+  - scope: "contexts"
+    action: "*"
+    specific: "*"
+  - scope: "profiles"
+    action: "*"
+    specific: "global"
 Templates:
   - Contents: |-
       #!/bin/bash
       # RackN Copyright 2020
 
       set -e
-      # DO NOT INCLUDE template "setup.tmpl" !!
+      {{template "setup.tmpl" .}}
 
+      # local endpoint
       drpcli contexts show runner > runner.json
 
-      {{ $addr := .Machine.Address -}}
-
-      export RS_KEY="rocketskates:r0cketsk8ts"
-      export RS_ENDPOINT="https://{{$addr}}:8092"
-      unset RS_TOKEN
-      unset RS_LOCAL_PROXY
-
-      echo "Pointing DRPCLI to $RS_ENDPOINT using $RS_KEY"
-
-      drpcli -x profiles show global
+      EPID={{ .Machine.Name }}
+      echo "Pointing DRPCLI to Proxy Endpoint $EPID"
 
       echo "copy over Linode Token (value NOT shown)"
-      drpcli -x profiles set global set "linode/token" to "{{ .Param "linode/token" }}" >/dev/null
+      drpcli -u $EPID profiles set global set "linode/token" to "{{ .Param "linode/token" }}" >/dev/null
 
       echo "copy over Linode Region to {{ .Param "linode/region" }}"
-      drpcli -x profiles set global set "linode/region" to "{{ .Param "linode/region" }}" >/dev/null
+      drpcli -u $EPID profiles set global set "linode/region" to "{{ .Param "linode/region" }}" >/dev/null
 
       echo "copy over Prefix to {{ .Param "demo/cluster-prefix" }}"
-      drpcli -x profiles set global set "demo/cluster-prefix" to "{{ .Param "demo/cluster-prefix" }}" >/dev/null
+      drpcli -u $EPID profiles set global set "demo/cluster-prefix" to "{{ .Param "demo/cluster-prefix" }}" >/dev/null
 
-      if drpcli contexts exists runner ; then
+      if drpcli -u $EPID contexts exists runner ; then
         echo "runner context already installed"
       else
         echo "adding local runner context"
-        drpcli -x contexts create - < runner.json
+        drpcli -u $EPID contexts create - < runner.json
       fi
 
-      echo "Populate the contexts"
+      echo "Populate the contexts from local"
       raw=$(drpcli contexts list Engine=docker-context)
       contexts=$(jq -r ".[].Name" <<< "${raw}")
       i=0
       for context in $contexts; do
         image=$(jq -r ".[$i].Image" <<< "${raw}")
         echo "Installing Container for $context named from $image"
-        drpcli files upload {{ .ProvisionerURL }}/files/contexts/docker-context/${image} as contexts/docker-context/${image}
-        drpcli plugins runaction docker-context imageUpload \
-          context/image-name ${image} \
-          context/image-path files/contexts/docker-context/${image}
+        drpcli -u $EPID files upload {{ .ProvisionerURL }}/files/contexts/docker-context/${image} as contexts/docker-context/${image}
         i=$(($i + 1))
       done
 
