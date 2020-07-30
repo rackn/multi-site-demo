@@ -13,6 +13,9 @@ ExtraClaims:
   - scope: "profiles"
     action: "*"
     specific: "global"
+  - scope: "contents"
+    action: "*"
+    specific: "*"
 Templates:
   - Contents: |-
       #!/bin/bash
@@ -24,14 +27,20 @@ Templates:
       # local endpoint
       drpcli contexts show runner > runner.json
 
-      EPID={{ .Machine.Name }}
-      echo "Pointing DRPCLI to Proxy Endpoint $EPID"
+      echo "whoa... let's rest for a 15 seconds to allow new DRP to prepare"
+      sleep 15
 
-      echo "copy over Linode Token (value NOT shown)"
-      drpcli -u $EPID profiles set global set "linode/token" to "{{ .Param "linode/token" }}" >/dev/null
+
+      EPID={{ .Machine.Name }}
+      echo "Pointing DRPCLI to Proxy Endpoint $EPID"drpcli
+
+      drpcli -u $EPID catalog item install cloud-wrappers --version=tip
 
       echo "copy over Linode Region to {{ .Param "linode/region" }}"
       drpcli -u $EPID profiles set global set "linode/region" to "{{ .Param "linode/region" }}" >/dev/null
+
+      echo "copy over Linode Token (value NOT shown)"
+      drpcli -u $EPID profiles set global set "linode/token" to "{{ .Param "linode/token" }}" >/dev/null
 
       echo "copy over Prefix to {{ .Param "demo/cluster-prefix" }}"
       drpcli -u $EPID profiles set global set "demo/cluster-prefix" to "{{ .Param "demo/cluster-prefix" }}" >/dev/null

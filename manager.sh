@@ -109,8 +109,8 @@ set -e
 #            you must insure your input is sane and matches real values
 #            that can be set for the terraform provider (linode)
 ###
-PREP="false"
-BASE="site-base-v4.4.0"           # "stable" is not fully available in the catalog
+PREP="true"
+BASE="site-base-tip"           # "stable" is not fully available in the catalog
 OPTS=""
 MGR_LBL="global-manager"
 MGR_PWD="r0cketsk8ts"
@@ -265,7 +265,7 @@ echo "Script is idempotent - restart if needed!"
 echo "Waiting for endpoint to be up.  export RS_ENDPOINT=$RS_ENDPOINT"
 timeout 300 bash -c 'while [[ "$(curl -fsSLk -o /dev/null -w %{http_code} ${RS_ENDPOINT} 2>/dev/null)" != "200" ]]; do sleep 3; done' || false
 
-items="rackn-license contents task-library multi-site-demo edge-lab"
+items="rackn-license contents task-library multi-site-demo edge-lab dev-library"
 for c in $items; do
   if [[ -f $c.json ]] ; then
      echo "found local content $c.json"
@@ -313,12 +313,12 @@ if _drpcli profiles exists linode ; then
   echo "Profile linode exists, skipping"
 else
   _drpcli profiles create '{"Name":"linode"}'
-  _drpcli profiles set linode set "cloud/provider" to "linode" >/dev/null
-  _drpcli profiles set linode set "linode/token" to "$LINODE_TOKEN" >/dev/null
-  _drpcli profiles set linode set "linode/instance-image" to "linode/centos8" >/dev/null
-  _drpcli profiles set linode set "linode/instance-type" to "g6-standard-1" >/dev/null
-  _drpcli profiles set linode set "linode/root-password" to "r0cketsk8ts" >/dev/null
 fi
+_drpcli profiles set linode set "cloud/provider" to "linode" >/dev/null
+_drpcli profiles set linode set "linode/token" to "$LINODE_TOKEN" >/dev/null
+_drpcli profiles set linode set "linode/instance-image" to "linode/centos8" >/dev/null
+_drpcli profiles set linode set "linode/instance-type" to "g6-standard-1" >/dev/null
+_drpcli profiles set linode set "linode/root-password" to "r0cketsk8ts" >/dev/null
 
 if [[ "$(_drpcli profiles get global param "demo/cluster-prefix")" != "$PREFIX" ]]; then
   _drpcli profiles set global set "demo/cluster-prefix" to $PREFIX >/dev/null || true
@@ -335,7 +335,7 @@ _drpcli prefs set manager true
 _drpcli machines wait "Name:$MGR_LBL" Stage "complete-nobootenv" 360
 
 # after bootstrap, install more stuff
-items="cloud-wrappers multi-site-demo"
+items="cloud-wrappers multi-site-demo dev-library"
 for c in $items; do
   if [[ -f $c.json ]] ; then
      echo "found local content $c"
@@ -394,7 +394,7 @@ then
   BAIL=120
   WAIT=5
 
-  _drpcli endpoints update $MGR_LBL '{"VersionSets":["license","manager-ignore","'$BASE'"]}'
+  _drpcli endpoints update $MGR_LBL '{"VersionSets":["license","'$BASE'"]}'
   _drpcli endpoints update $MGR_LBL '{"Apply":true}'
 
   # need to "wait" - monitor that we've finish applying this ...
