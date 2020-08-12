@@ -1,0 +1,20 @@
+---
+Name: "bootstrap-manager"
+Description: "Bootstrap Multi-Site Manager Install"
+Documentation: |
+  Bootstrap stage to build out an Manager setup
+
+  This augments the bootstrap-base & bootstrap-advanced.  It does NOT replace it.
+
+  Bootstrap Operations:
+  * 
+  * Pull Manager Catalogs
+  
+Tasks:
+  - "bootstrap-catalog"
+Meta:
+  icon: "sort amount up"
+  color: "yellow"
+  title: "Community Content"
+  copyright: "RackN 2020"
+

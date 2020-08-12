@@ -15,6 +15,9 @@ Components:
 - Name: edge-lab
   Type: ContentPackage
   Version: stable
+- Name: dev-library
+  Type: ContentPackage
+  Version: tip
 - Name: task-library
   Type: ContentPackage
   Version: stable
@@ -24,6 +27,9 @@ Components:
 - Name: multi-site-demo
   Type: ContentPackage
   Version: v2.0.0
+Plugins:
+- Name: docker-context
+  Provider: docker-context
 Prefs:
   defaultBootEnv: local
   defaultStage: none
@@ -34,3 +40,64 @@ Prefs:
   jobsToKeep: "50"
   knownTokenTimeout: "3600"
   unknownTokenTimeout: "600"
+Global:
+  dev/wait-icons:
+  - "bath"
+  - "bed"
+  - "fighter jet"
+  - "gamepad"
+  - "glass martini"
+  - "lemon"
+  - "magnet"
+  - "paw"
+  - "rocket"
+  - "shower"
+  - "umbrella"
+  - book
+  - box
+  - bolt
+  - tty
+  - "hand point up"
+  - redo
+  - sort
+  - reply
+  - undo
+  - podcast
+  - microphone
+  - circle
+  - play
+  - rss
+  - bullhorn
+  - certificate
+  - calendar
+  - copy
+  - copyright
+  - file
+  - cut
+  - tag
+  - folder
+  - barcode
+  - sitemap
+  - mobile
+  - at
+  - bell
+  - phone
+  - inbox
+  - download
+  - tv
+  - save
+  - upload
+  - hdd
+  - headphones
+  - hourglass
+  - stopwatch
+  - clone
+  - chrosshairs
+  - tint
+  - bold
+  - pencil
+  - italic
+  - sync
+  - share
+  - linkify
+  - font

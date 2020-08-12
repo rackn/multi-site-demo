@@ -1,0 +1,34 @@
+---
+Name: "podman-install"
+Description: "Install Podman (requires internet access)"
+Documentation: |
+  Uses standard Podman install process
+Templates:
+  - Contents: |-
+      #!/bin/bash
+      # RackN Copyright 2020
+
+      set -e
+      {{template "setup.tmpl" .}}
+
+      if ! which podman ; then
+        echo "Installing Podman"
+        case $osfamily in
+          redhat|centos) yum install -y dnf; dnf install -y podman ;;
+          debian|ubuntu) . /etc/os-release
+            echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /" | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
+            curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/Release.key | sudo apt-key add -
+            sudo apt-get update -qq; sudo apt-get -qq -y install podman ;;
+          *) >&2 echo "Unsupported package manager family '$osfamily'."
+             exit 1 ;;
+        esac
+      fi
+
+      echo "Podman installed successfully"
+      exit 0
+    Name: "podman-install"
+Meta:
+  icon: "box"
+  color: "brown"
+  title: "RackN Content"
+  feature-flags: "sane-exit-codes"

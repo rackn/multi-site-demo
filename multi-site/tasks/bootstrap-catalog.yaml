@@ -1,6 +1,13 @@
 ---
 Description: "Setup the Manager's Local Catalog"
 Name: "bootstrap-catalog"
+Documentation: |
+  Runs the catalog building operations from the Manager endpoint
+
+  This is very helpful because building the catalog can take a long
+  time while resources are collected.
+
+  Process looks for custom catalogs first.
 ExtraClaims:
   - scope: "*"
     action: "*"
@@ -13,27 +20,10 @@ Templates:
       set -e
       {{template "setup.tmpl" .}}
 
+      drpcli prefs set manager true
+
       echo "Setting up empty local manager catalog to update."
       drpcli plugins runaction manager buildCatalog
-
-      catalog_sum=$(drpcli files exists static-catalog.zip 2>/dev/null || true)
-      if [[ "$catalog_sum" != "" ]]; then
-        echo "Using already present static-catalog.zip. Move it in place..."
-        drpcli files download static-catalog.zip > /root/static-catalog.zip
-      else
-        if [[ ! -f /root/static-catalog.zip ]] ; then
-          echo "Retrieving the starting static catalog"
-          curl --compressed -o /root/static-catalog.zip https://rackn-private.s3-us-west-2.amazonaws.com/static-catalog.zip
-        fi
-      fi
-
-      catalog_sum=$(drpcli files exists rebar-catalog/static-catalog.zip 2>/dev/null || true)
-      if [[ "$catalog_sum" == "" ]]; then
-        echo "Uploading the static-catalog.zip file"
-        drpcli files upload /root/static-catalog.zip as "rebar-catalog/static-catalog.zip" --explode
-      else
-        echo "catalog already uploaded, skipping...($catalog_sum)"
-      fi
 
       catalog_file_sum=$(drpcli files exists static-catalog.json 2>/dev/null || true)
       if [[ -f /root/rackn-catalog.json ]] ; then

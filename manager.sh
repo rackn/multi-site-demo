@@ -109,8 +109,8 @@ set -e
 #            you must insure your input is sane and matches real values
 #            that can be set for the terraform provider (linode)
 ###
-PREP="false"
-BASE="site-base-v4.4.0"           # "stable" is not fully available in the catalog
+PREP="true"
+BASE="site-base-tip"           # "stable" is not fully available in the catalog
 OPTS=""
 MGR_LBL="global-manager"
 MGR_PWD="r0cketsk8ts"
@@ -212,13 +212,6 @@ terraform apply -no-color -auto-approve -var-file=manager.tfvars
 export RS_ENDPOINT=$(terraform output drp_manager)
 export RS_IP=$(terraform output drp_ip)
 
-if [[ ! -e "rackn-catalog.json" ]]; then
-  echo "Missing rackn-catalog.json... using the provided .ref version"
-  cp rackn-catalog.ref rackn-catalog.json
-else
-  echo "catalog files exist - skipping"
-fi
-
 if [[ -f rackn-license.json ]]; then
   if [[ "$VALIDATE_LIC" == "true" ]] ; then
     echo "Checking Online License for rackn-license updates"
@@ -230,15 +223,22 @@ if [[ -f rackn-license.json ]]; then
     VERSION="$(jq -r .Version <<< ${LICENSEBASE})"
     cp rackn-license.json rackn-license.old
     # first, add the leaf endpoints    
+    endpoints=$(cat rackn-license.json | jq -r '.sections.profiles["rackn-license"].Params["rackn/license-object"].Endpoints')
     for mc in $SITES; do
-      echo "adding $mc to license"
-      curl -X GET "https://1p0q9a8qob.execute-api.us-west-2.amazonaws.com/v40/license" \
-        -H "rackn-contactid: ${CONTACTID}" \
-        -H "rackn-ownerid: ${OWNERID}" \
-        -H "rackn-endpointid: ${mc}" \
-        -H "rackn-key: ${KEY}" \
-        -H "rackn-version: ${VERSION}" \
-        >/dev/null
+      licensed=$(jq --arg m "$mc" -r 'contains(["$m"])' <<< $endpoints)
+      echo "ZEHICLE TESTING BYPASS $mc $licensed"
+      if [[ "${licensed}" == "true" ]]; then
+        echo "endpoint $mc found in license!"
+      else
+        echo "adding $mc to license"
+        curl -X GET "https://1p0q9a8qob.execute-api.us-west-2.amazonaws.com/v40/license" \
+          -H "rackn-contactid: ${CONTACTID}" \
+          -H "rackn-ownerid: ${OWNERID}" \
+          -H "rackn-endpointid: ${mc}" \
+          -H "rackn-key: ${KEY}" \
+          -H "rackn-version: ${VERSION}" \
+          >/dev/null
+      fi
     done
     curl -X GET "https://1p0q9a8qob.execute-api.us-west-2.amazonaws.com/v40/license" \
       -H "rackn-contactid: ${CONTACTID}" \
@@ -265,7 +265,7 @@ echo "Script is idempotent - restart if needed!"
 echo "Waiting for endpoint to be up.  export RS_ENDPOINT=$RS_ENDPOINT"
 timeout 300 bash -c 'while [[ "$(curl -fsSLk -o /dev/null -w %{http_code} ${RS_ENDPOINT} 2>/dev/null)" != "200" ]]; do sleep 3; done' || false
 
-items="rackn-license contents task-library multi-site-demo edge-lab"
+items="rackn-license contents task-library multi-site-demo edge-lab dev-library"
 for c in $items; do
   if [[ -f $c.json ]] ; then
      echo "found local content $c.json"
@@ -285,8 +285,11 @@ _drpcli files upload multi-site-demo.json to "rebar-catalog/multi-site-demo/${ms
 rlv=$(cat rackn-license.json | jq -r .meta.Version)
 _drpcli files upload rackn-license.json to "rebar-catalog/rackn-license/${rlv}.json"
 
-#_drpcli profiles set global set catalog_url to - >/dev/null <<< $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
-#_drpcli files upload rackn-catalog.json as static-catalog.json >/dev/null
+echo "Building catalog"
+./catalogger.py --items drp,task-library,drp-community-content,docker-context,edge-lab,dev-library,cloud-wrappers > rackn-catalog.json
+_drpcli profiles set global set catalog_url to - >/dev/null <<< $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
+_drpcli files upload rackn-catalog.json as "rebar-catalog/static-catalog.json" >/dev/null
+
 #if [[ -f static-catalog.zip ]] ; then
 #  echo "Using custom static-catalog.zip ... upload to manager"
 #  _drpcli files upload static-catalog.zip >/dev/null
@@ -300,17 +303,26 @@ _drpcli files upload rackn-license.json to "rebar-catalog/rackn-license/${rlv}.j
 
 
 echo "Setting the 'demo/cluster-prefix' param"
-_drpcli profiles create "{\"Name\":\"$PREFIX\"}"
+if _drpcli profiles exists $PREFIX ; then
+  echo "Profile $PREFIX exists, skipping"
+else
+  _drpcli profiles create "{\"Name\":\"$PREFIX\"}" 
+fi
 
-_drpcli profiles create '{"Name":"linode"}' || true
+if _drpcli profiles exists linode ; then
+  echo "Profile linode exists, skipping"
+else
+  _drpcli profiles create '{"Name":"linode"}'
+fi
 _drpcli profiles set linode set "cloud/provider" to "linode" >/dev/null
 _drpcli profiles set linode set "linode/token" to "$LINODE_TOKEN" >/dev/null
 _drpcli profiles set linode set "linode/instance-image" to "linode/centos8" >/dev/null
 _drpcli profiles set linode set "linode/instance-type" to "g6-standard-1" >/dev/null
 _drpcli profiles set linode set "linode/root-password" to "r0cketsk8ts" >/dev/null
 
-_drpcli profiles set global set "demo/cluster-count" to 0 >/dev/null
-_drpcli profiles set global set "demo/cluster-prefix" to $PREFIX >/dev/null
+if [[ "$(_drpcli profiles get global param "demo/cluster-prefix")" != "$PREFIX" ]]; then
+  _drpcli profiles set global set "demo/cluster-prefix" to $PREFIX >/dev/null || true
+fi
 echo "drpcli profiles set global param network/firewall-ports to ... "
 drpcli profiles set global param "network/firewall-ports" to '[
   "22/tcp", "8091/tcp", "8092/tcp", "6443/tcp", "8379/tcp", "8080/tcp", "8380/tcp", "10250/tcp"
@@ -319,10 +331,11 @@ drpcli profiles set global param "network/firewall-ports" to '[
 echo "BOOTSTRAP export RS_ENDPOINT=$RS_ENDPOINT"
 
 echo "Waiting for Manager to finish bootstrap"
+_drpcli prefs set manager true
 _drpcli machines wait "Name:$MGR_LBL" Stage "complete-nobootenv" 360
 
 # after bootstrap, install more stuff
-items="cloud-wrappers multi-site-demo"
+items="cloud-wrappers multi-site-demo dev-library"
 for c in $items; do
   if [[ -f $c.json ]] ; then
      echo "found local content $c"
@@ -335,14 +348,14 @@ done
 # re-run the bootstrap
 _drpcli machines update "Name:$MGR_LBL" '{"Locked":false}'
 _drpcli machines update "Name:$MGR_LBL" '{"Workflow":""}'
-_drpcli machines workflow "Name:$MGR_LBL" "bootstrap-advanced"
+_drpcli machines workflow "Name:$MGR_LBL" "bootstrap-manager"
 
-echo "Waiting for Manager to finish (re)bootstrap"
-_drpcli machines wait "Name:$MGR_LBL" Stage "complete-nobootenv" 360
+echo "Waiting for Manager to reach catalog state in (re)bootstrap"
+_drpcli machines wait "Name:$MGR_LBL" Stage "bootstrap-manager" 360
 
+_drpcli prefs set defaultWorkflow discover-joinup defaultBootEnv sledgehammer unknownBootEnv discovery
 for mc in $SITES;
 do
-  _drpcli prefs set manager true defaultWorkflow discover-joinup defaultBootEnv sledgehammer unknownBootEnv discovery
   if ! _drpcli machines exists Name:$mc 2>/dev/null >/dev/null; then
     reg=$mc
     [[ -n "$PREFIX" ]] && reg=$(echo $mc | sed 's/'${PREFIX}'-//g')
@@ -368,21 +381,23 @@ then
   # wait for the regional controllers to finish up before trying to do VersionSets
   for mc in $SITES
   do
-    if drpcli machines exists Name:$mc > /dev/null; then
+    if drpcli machines exists Name:$mc c; then
       _drpcli machines wait Name:$mc Stage "complete-nobootenv" 240 &
+    fi
+    echo "$mc completed bootstrap"
+    if drpcli endpoints exists $mc > /dev/null; then
+      echo "Setting VersionSets $BASE on $mc"
+      _drpcli endpoints update $mc '{"VersionSets":["license","'$BASE'"]}' > /dev/null
+      _drpcli endpoints update $mc '{"Apply":true}' > /dev/null
     fi
   done
 
   wait
-  echo "Regional endpoints done, starting VersionSet prep on global manager."
 
   # start at 1, do BAIL iterations of WAIT length (10 mins by default)
   LOOP=1
   BAIL=120
   WAIT=5
-
-  _drpcli endpoints update $MGR_LBL '{"VersionSets":["license","manager-ignore","'$BASE'"]}'
-  _drpcli endpoints update $MGR_LBL '{"Apply":true}'
 
   # need to "wait" - monitor that we've finish applying this ...
   # check if apply set to true

@@ -9,7 +9,9 @@ Params:
   demo/workflow: "discover-base"
 Tasks:
   - "context:"
+  - "podman-install"
   - "dr-server-install"
+  - "dr-server-seed"
 Meta:
   icon: "bus"
   color: "green"

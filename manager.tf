@@ -51,7 +51,7 @@ resource "linode_instance" "drp_manager" {
     "drp_password" = var.manager_password
     "drp_id" = var.manager_label
     "initial_workflow" = "bootstrap-advanced"
-    "initial_contents" = "drp-community-content, task-library, edge-lab"
+    "initial_contents" = "drp-community-content, task-library, edge-lab, dev-library"
   }
 }
 

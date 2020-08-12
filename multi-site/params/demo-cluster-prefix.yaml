@@ -1,0 +1,11 @@
+---
+Name: "demo/cluster-prefix"
+Description: "Name of Cluster"
+Schema:
+  type: "string"
+  default: "cluster"
+Meta:
+  type: "id"
+  icon: "hashtag"
+  color: "blue"
+  title: "Digital Rebar Community Content"
