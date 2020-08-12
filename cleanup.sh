@@ -73,7 +73,7 @@ if [ "$FORCE" == "true" ] || [ "$(drpcli machines list | jq length)" == "1" ]; t
   rm -f terraform.tfstate terraform.tfstate.backup
 
 else
-  echo "WARNING machines still exist - did not destroy manager"
+  echo "WARNING machines still exist - did not destroy manager.  Call with -f to force!"
 fi
 
 

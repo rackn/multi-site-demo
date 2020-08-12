@@ -14,7 +14,7 @@
 # limitations under the License.
 
 # pip install requests
-import requests, argparse, json, urllib3, os
+import requests, argparse, json, os
 
 def main():
 

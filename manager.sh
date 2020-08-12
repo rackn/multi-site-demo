@@ -381,21 +381,23 @@ then
   # wait for the regional controllers to finish up before trying to do VersionSets
   for mc in $SITES
   do
-    if drpcli machines exists Name:$mc > /dev/null; then
+    if drpcli machines exists Name:$mc c; then
       _drpcli machines wait Name:$mc Stage "complete-nobootenv" 240 &
+    fi
+    echo "$mc completed bootstrap"
+    if drpcli endpoints exists $mc > /dev/null; then
+      echo "Setting VersionSets $BASE on $mc"
+      _drpcli endpoints update $mc '{"VersionSets":["license","'$BASE'"]}' > /dev/null
+      _drpcli endpoints update $mc '{"Apply":true}' > /dev/null
     fi
   done
 
   wait
-  echo "Regional endpoints done, starting VersionSet prep on global manager."
 
   # start at 1, do BAIL iterations of WAIT length (10 mins by default)
   LOOP=1
   BAIL=120
   WAIT=5
-
-  _drpcli endpoints update $MGR_LBL '{"VersionSets":["license","'$BASE'"]}'
-  _drpcli endpoints update $MGR_LBL '{"Apply":true}'
 
   # need to "wait" - monitor that we've finish applying this ...
   # check if apply set to true
