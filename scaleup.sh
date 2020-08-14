@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # RackN Copyright 2020
 # Build Manager Demo
 
@@ -40,7 +40,7 @@ i=1
 while (( i < SCALE )); do
   for s in $sites;
   do
-    mc="$s-$i"
+    mc=$(printf "$s-%05d" $i)
     if drpcli -u $s machines exists Name:$mc > /dev/null ; then
       if [ "$REMOVE" == "true" ] ; then
         echo "removing machine $mc."
