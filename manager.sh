@@ -221,7 +221,6 @@ if [[ -f rackn-license.json ]]; then
     OWNERID="$(jq -r .OwnerId <<< ${LICENSEBASE})"
     KEY="$(jq -r '.sections.profiles["rackn-license"].Params["rackn/license"]' <<< ${LICENSE})"
     VERSION="$(jq -r .Version <<< ${LICENSEBASE})"
-    cp rackn-license.json rackn-license.old
     # first, add the leaf endpoints
     endpoints=$(cat rackn-license.json | jq -r '.sections.profiles["rackn-license"].Params["rackn/license-object"].Endpoints')
     matchany=$(jq -r "contains([\"MatchAny\"])" <<< $endpoints)
@@ -244,6 +243,7 @@ if [[ -f rackn-license.json ]]; then
       fi
     done
     if [[ "$updated" == "true" ]] ; then
+      cp rackn-license.json rackn-license.old
       curl -X GET "https://1p0q9a8qob.execute-api.us-west-2.amazonaws.com/v40/license" \
         -H "rackn-contactid: ${CONTACTID}" \
         -H "rackn-ownerid: ${OWNERID}" \
@@ -381,18 +381,18 @@ done
 
 if [[ "$PREP" == "true" ]]
 then
-  echo "VersionSet prep was requested."
+          echo "VersionSet prep was requested."
   echo "Waiting for regional endpoints to reach 'complete-nobootenv'"
   # wait for the regional controllers to finish up before trying to do VersionSets
   for mc in $SITES
   do
     if drpcli machines exists Name:$mc ; then
-      _drpcli machines wait Name:$mc Stage "complete-nobootenv" 240 &
+      _drpcli machines wait Name:$mc Stage "complete-nobootenv" 600 &
     fi
     echo "$mc completed bootstrap"
     if drpcli endpoints exists $mc > /dev/null; then
       echo "Setting VersionSets $BASE on $mc"
-      _drpcli endpoints update $mc '{"VersionSets":["license","'$BASE'"]}' > /dev/null
+      _drpcli endpoints update $mc "{\"VersionSets\":[\"license\",\"$BASE\"]}" > /dev/null
       _drpcli endpoints update $mc '{"Apply":true}' > /dev/null
     fi
   done
@@ -406,34 +406,37 @@ then
 
   # need to "wait" - monitor that we've finish applying this ...
   # check if apply set to true
-  if [[ "$(drpcli endpoints show $MGR_LBL  | jq -r '.Apply')" == "true" ]]
-  then
-    BRKMSG="Actions have been completed on global manager..."
-
-    while (( LOOP <= BAIL ))
-    do
-      COUNTER=$WAIT
-      # if Actions object goes away, we've drained the queue of work
-      [[ "$(drpcli endpoints show $MGR_LBL | jq -r '.Actions')" == "null" ]] && { echo $BRKMSG; break; }
-      printf "Waiting for VersionSet Actions to complete ... (sleep $WAIT seconds ) ... "
-      while (( COUNTER ))
-      do
-        sleep $WAIT
-        printf "%s " $COUNTER
-        (( COUNTER-- ))
-      done
-      (( LOOP++ ))
-      echo ""
-    done
-    (( TOT = BAIL * WAIT ))
-
-    if [[ $LOOP == $BAIL ]]
+  for mc in $SITES
+  do
+    if [[ "$(drpcli endpoints show $mc  | jq -r '.Apply')" == "true" ]]
     then
-      xiterr 1 "VersionSet apply actions FAILED to complete in $TOT seconds."
+      BRKMSG="Actions have been completed on $mc ..."
+
+      while (( LOOP <= BAIL ))
+      do
+        COUNTER=$WAIT
+        # if Actions object goes away, we've drained the queue of work
+        [[ "$(drpcli endpoints show $mc | jq -r '.Actions')" == "null" ]] && { echo $BRKMSG; break; }
+        printf "Waiting for VersionSet Actions to complete ... (sleep $WAIT seconds ) ... "
+        while (( COUNTER ))
+        do
+          sleep $WAIT
+          printf "%s " $COUNTER
+          (( COUNTER-- ))
+        done
+        (( LOOP++ ))
+        echo ""
+      done
+      (( TOT = BAIL * WAIT ))
+
+      if [[ $LOOP == $BAIL ]]
+      then
+        xiterr 1 "VersionSet apply actions FAILED to complete in $TOT seconds."
+      fi
+    else
+      echo "!!! Apply was not found to be 'true', check Endpoints received VersionSets appropriately."
     fi
-  else
-    echo "!!! Apply was not found to be 'true', check Endpoints received VersionSets appropriately."
-  fi
+  done
 fi # end if PREP
 
 echo ""
