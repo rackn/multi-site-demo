@@ -118,3 +118,33 @@ export LINODE_TOKEN=<<<YOUR_SECRET_TOKEN>>>
 ```
 
 Now you can run the `manager.sh` script.
+
+manager.sh
+----------
+
+Builds the cluster on Linode using Terraform and then does a bunch of setup and prep.  Uses bootstrap processes, so minimal upload is required.  Will create a 4 site manager.
+
+Recommended to use `-c [clustername]` so that your cluster is easy to identify in Linode.
+
+There are a lot of other flags, look at the code to review them.
+
+scaleup.sh
+----------
+
+Used to create runner agents with workload for testing.
+
+Options:
+
+  * -s ## = number of instances per site (default = 10)
+  * -r = remove test instances
+
+cleanup.sh
+----------
+
+Destroys all the VMs.  Will use cloud-decommission to remove sites and wait for that to complete.  Then uses Terraform locally to remove the manager.
+
+Will NOT work (without -f) if there are machine entries beyond the Sites and Manager.
+
+Options:
+
+  * -f = force cleanup even if there are other VMs
