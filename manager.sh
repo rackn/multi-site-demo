@@ -381,7 +381,7 @@ done
 
 if [[ "$PREP" == "true" ]]
 then
-          echo "VersionSet prep was requested."
+  echo "VersionSet prep was requested."
   echo "Waiting for regional endpoints to reach 'complete-nobootenv'"
   # wait for the regional controllers to finish up before trying to do VersionSets
   for mc in $SITES
@@ -389,6 +389,12 @@ then
     if drpcli machines exists Name:$mc ; then
       _drpcli machines wait Name:$mc Stage "complete-nobootenv" 600 &
     fi
+  done
+
+  wait
+
+  for mc in $SITES
+  do
     echo "$mc completed bootstrap"
     if drpcli endpoints exists $mc > /dev/null; then
       echo "Setting VersionSets $BASE on $mc"
@@ -396,8 +402,6 @@ then
       _drpcli endpoints update $mc '{"Apply":true}' > /dev/null
     fi
   done
-
-  wait
 
   # start at 1, do BAIL iterations of WAIT length (10 mins by default)
   LOOP=1

@@ -57,6 +57,7 @@ do
   then
     drpcli machines wait Name:$mc Stage "complete-nobootenv" 120
     drpcli machines destroy Name:$mc
+    drpcli endpoints destroy $mc
   fi
 done
 
