@@ -222,14 +222,17 @@ if [[ -f rackn-license.json ]]; then
     KEY="$(jq -r '.sections.profiles["rackn-license"].Params["rackn/license"]' <<< ${LICENSE})"
     VERSION="$(jq -r .Version <<< ${LICENSEBASE})"
     cp rackn-license.json rackn-license.old
-    # first, add the leaf endpoints    
+    # first, add the leaf endpoints
     endpoints=$(cat rackn-license.json | jq -r '.sections.profiles["rackn-license"].Params["rackn/license-object"].Endpoints')
+    matchany=$(jq -r "contains([\"MatchAny\"])" <<< $endpoints)
+    updated=false
     for mc in $SITES; do
-      licensed=$(jq --arg m "$mc" -r 'contains(["$m"])' <<< $endpoints)
+      licensed=$(jq -r "contains([\"$mc\"])" <<< $endpoints)
       echo "ZEHICLE TESTING BYPASS $mc $licensed"
-      if [[ "${licensed}" == "true" ]]; then
+      if [[ "${licensed}" == "true" || "${matchany}" == "true" ]]; then
         echo "endpoint $mc found in license!"
       else
+        updated=true
         echo "adding $mc to license"
         curl -X GET "https://1p0q9a8qob.execute-api.us-west-2.amazonaws.com/v40/license" \
           -H "rackn-contactid: ${CONTACTID}" \
@@ -240,14 +243,16 @@ if [[ -f rackn-license.json ]]; then
           >/dev/null
       fi
     done
-    curl -X GET "https://1p0q9a8qob.execute-api.us-west-2.amazonaws.com/v40/license" \
-      -H "rackn-contactid: ${CONTACTID}" \
-      -H "rackn-ownerid: ${OWNERID}" \
-      -H "rackn-endpointid: ${MGR_LBL}" \
-      -H "rackn-key: ${KEY}" \
-      -H "rackn-version: ${VERSION}" \
-      -o rackn-license.json
-    echo "License Verified"
+    if [[ "$updated" == "true" ]] ; then
+      curl -X GET "https://1p0q9a8qob.execute-api.us-west-2.amazonaws.com/v40/license" \
+        -H "rackn-contactid: ${CONTACTID}" \
+        -H "rackn-ownerid: ${OWNERID}" \
+        -H "rackn-endpointid: ${MGR_LBL}" \
+        -H "rackn-key: ${KEY}" \
+        -H "rackn-version: ${VERSION}" \
+        -o rackn-license.json
+      echo "License Verified"
+    fi
   fi
 else
   echo "MISSING REQUIRED RACKN-LICENSE FILE"
@@ -317,7 +322,7 @@ fi
 _drpcli profiles set linode set "cloud/provider" to "linode" >/dev/null
 _drpcli profiles set linode set "linode/token" to "$LINODE_TOKEN" >/dev/null
 _drpcli profiles set linode set "linode/instance-image" to "linode/centos8" >/dev/null
-_drpcli profiles set linode set "linode/instance-type" to "g6-standard-1" >/dev/null
+_drpcli profiles set linode set "linode/instance-type" to "g6-standard-2" >/dev/null
 _drpcli profiles set linode set "linode/root-password" to "r0cketsk8ts" >/dev/null
 
 if [[ "$(_drpcli profiles get global param "demo/cluster-prefix")" != "$PREFIX" ]]; then
@@ -381,7 +386,7 @@ then
   # wait for the regional controllers to finish up before trying to do VersionSets
   for mc in $SITES
   do
-    if drpcli machines exists Name:$mc c; then
+    if drpcli machines exists Name:$mc ; then
       _drpcli machines wait Name:$mc Stage "complete-nobootenv" 240 &
     fi
     echo "$mc completed bootstrap"

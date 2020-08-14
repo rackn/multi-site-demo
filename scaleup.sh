@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # RackN Copyright 2020
 # Build Manager Demo
 
