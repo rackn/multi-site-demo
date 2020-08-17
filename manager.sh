@@ -116,7 +116,7 @@ MGR_LBL="global-manager"
 MGR_PWD="r0cketsk8ts"
 MGR_RGN="us-west"
 MGR_IMG="linode/centos8"
-MGR_TYP="g6-standard-2"
+MGR_TYP="g6-standard-4"
 SSH_KEY="$(cat ~/.ssh/id_rsa.pub)"
 LINODE_TOKEN=${LINODE_TOKEN:-""}
 SITES="us-central us-east us-west us-southeast"
@@ -337,7 +337,7 @@ echo "BOOTSTRAP export RS_ENDPOINT=$RS_ENDPOINT"
 
 echo "Waiting for Manager to finish bootstrap"
 _drpcli prefs set manager true
-_drpcli machines wait "Name:$MGR_LBL" Stage "complete-nobootenv" 360
+_drpcli machines wait "Name:$MGR_LBL" WorkflowComplete true 360
 
 # after bootstrap, install more stuff
 items="cloud-wrappers multi-site-demo dev-library"
@@ -387,7 +387,7 @@ then
   for mc in $SITES
   do
     if drpcli machines exists Name:$mc ; then
-      _drpcli machines wait Name:$mc Stage "complete-nobootenv" 600 &
+      _drpcli machines wait Name:$mc WorkflowComplete true 240 &
     fi
   done
 
