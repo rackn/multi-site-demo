@@ -273,11 +273,13 @@ timeout 300 bash -c 'while [[ "$(curl -fsSLk -o /dev/null -w %{http_code} ${RS_E
 items="rackn-license contents task-library multi-site-demo edge-lab dev-library"
 for c in $items; do
   if [[ -f $c.json ]] ; then
-     echo "found local content $c.json"
+     echo "ALERT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+     echo "overriding catalog with local content $c.json"
      _drpcli contents upload $c.json >/dev/null
   fi
   if [[ -f $c.yaml ]] ; then
-     echo "found local content $c.yaml"
+     echo "ALERT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+     echo "overriding catalog with local content $c.yaml"
      _drpcli contents upload $c.yaml >/dev/null
   fi
 done
@@ -343,7 +345,8 @@ _drpcli machines wait "Name:$MGR_LBL" WorkflowComplete true 360
 items="cloud-wrappers multi-site-demo dev-library"
 for c in $items; do
   if [[ -f $c.json ]] ; then
-     echo "found local content $c"
+     echo "ALERT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+     echo "overriding catalog with local content $c"
      _drpcli contents upload $c.json >/dev/null
   else
      _drpcli catalog item install $c --version=tip >/dev/null 
@@ -359,6 +362,7 @@ echo "Waiting for Manager to reach catalog state in (re)bootstrap"
 _drpcli machines wait "Name:$MGR_LBL" Stage "bootstrap-manager" 360
 
 _drpcli prefs set defaultWorkflow discover-joinup defaultBootEnv sledgehammer unknownBootEnv discovery
+
 for mc in $SITES;
 do
   if ! _drpcli machines exists Name:$mc 2>/dev/null >/dev/null; then
@@ -387,7 +391,7 @@ then
   for mc in $SITES
   do
     if drpcli machines exists Name:$mc ; then
-      _drpcli machines wait Name:$mc WorkflowComplete true 240 &
+      _drpcli machines wait Name:$mc WorkflowComplete true 600 &
     fi
   done
 
