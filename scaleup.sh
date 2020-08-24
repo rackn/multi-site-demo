@@ -44,10 +44,10 @@ while (( i < SCALE )); do
     if drpcli -u $s machines exists Name:$mc > /dev/null ; then
       if [ "$REMOVE" == "true" ] ; then
         echo "removing machine $mc."
-        drpcli -u $s machines destroy Name:${mc} >/dev/null
+        drpcli -u $s machines destroy Name:${mc} >/dev/null &
       else
         echo "machine $mc already exists.  restarting load-generator"
-        drpcli -u $s machines workflow Name:${mc} "load-generator" >/dev/null
+        drpcli -u $s machines workflow Name:${mc} "load-generator" >/dev/null &
       fi
     else
       if [ "$REMOVE" != "true" ] ; then
@@ -55,9 +55,11 @@ while (( i < SCALE )); do
         drpcli -u $s machines create "{\"Name\":\"${mc}\", \
           \"Workflow\":\"load-generator\", \
           \"Description\":\"Load Test $i\", \
-          \"Meta\":{\"BaseContext\":\"runner\", \"icon\":\"cloud\"}}" >/dev/null
+          \"Meta\":{\"BaseContext\":\"runner\", \"icon\":\"cloud\"}}" >/dev/null &
       fi
     fi
   done
   (( i++ ))
 done
+
+wait
