@@ -4,6 +4,8 @@
 
 set -e
 
+PATH=$PATH:.
+
 export RS_ENDPOINT=$(terraform output drp_manager)
 
 FORCE="false"

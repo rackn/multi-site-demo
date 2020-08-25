@@ -4,6 +4,8 @@
 
 set -e
 
+PATH=$PATH:.
+
 export RS_ENDPOINT=$(terraform output drp_manager)
 
 REMOVE="false"
@@ -40,14 +42,15 @@ i=1
 while (( i < SCALE )); do
   for s in $sites;
   do
+  (
     mc=$(printf "$s-%05d" $i)
     if drpcli -u $s machines exists Name:$mc > /dev/null ; then
       if [ "$REMOVE" == "true" ] ; then
         echo "removing machine $mc."
-        drpcli -u $s machines destroy Name:${mc} >/dev/null &
+        drpcli -u $s machines destroy Name:${mc} >/dev/null
       else
         echo "machine $mc already exists.  restarting load-generator"
-        drpcli -u $s machines workflow Name:${mc} "load-generator" >/dev/null &
+        drpcli -u $s machines workflow Name:${mc} "load-generator" >/dev/null
       fi
     else
       if [ "$REMOVE" != "true" ] ; then
@@ -55,9 +58,10 @@ while (( i < SCALE )); do
         drpcli -u $s machines create "{\"Name\":\"${mc}\", \
           \"Workflow\":\"load-generator\", \
           \"Description\":\"Load Test $i\", \
-          \"Meta\":{\"BaseContext\":\"runner\", \"icon\":\"cloud\"}}" >/dev/null &
+          \"Meta\":{\"BaseContext\":\"runner\", \"icon\":\"cloud\"}}" >/dev/null
       fi
     fi
+  ) &
   done
   (( i++ ))
 done
