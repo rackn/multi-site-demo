@@ -25,3 +25,4 @@ endpoint-exec
 static-catalog.zip
 manager.tfvars
 contexts/*
+versions.tf

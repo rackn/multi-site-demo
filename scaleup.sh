@@ -4,6 +4,8 @@
 
 set -e
 
+PATH=$PATH:.
+
 export RS_ENDPOINT=$(terraform output drp_manager)
 
 REMOVE="false"
@@ -40,6 +42,7 @@ i=1
 while (( i < SCALE )); do
   for s in $sites;
   do
+  (
     mc=$(printf "$s-%05d" $i)
     if drpcli -u $s machines exists Name:$mc > /dev/null ; then
       if [ "$REMOVE" == "true" ] ; then
@@ -58,6 +61,9 @@ while (( i < SCALE )); do
           \"Meta\":{\"BaseContext\":\"runner\", \"icon\":\"cloud\"}}" >/dev/null
       fi
     fi
+  ) &
   done
   (( i++ ))
 done
+
+wait
