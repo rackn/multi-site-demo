@@ -70,7 +70,7 @@ install_tools() {
     ln -s $(which drpcli) jq
   fi
   if ! which terraform >/dev/null 2>/dev/null ; then
-    curl -s -o tf.zip https://releases.hashicorp.com/terraform/0.12.13/terraform_0.12.13_${os}_amd64.zip
+    curl -s -o tf.zip https://releases.hashicorp.com/terraform/0.13.0/terraform_0.13.0_${os}_amd64.zip
     unzip tf.zip
     rm -f tf.zip
     chmod +x terraform
