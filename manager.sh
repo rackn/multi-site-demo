@@ -49,13 +49,13 @@ usage() {
 
   NOTES:  * if '-b site-base-VER' specified, '-p' (prep-manager) is implied
           * Regions: $SITES
-          * if cluster_prefix is set, then Regional Controllers, and LINDOE
+          * if cluster_prefix (must be 3+ chars) is set, then Regional Controllers, and LINDOE
             machine names will be prefixed with '<cluster-prefix>-REGION
             eg. '-c foo' produces a region controller named 'foo-us-west'
           * cluster_prefix is prepended to Manager Label and regional managers
 
           * SHANE's preferred start up:
-            ./manager.sh -p -c sg -L global
+            ./manager.sh -p -c syg -L global
 
 EO_USAGE
 }
@@ -290,7 +290,7 @@ msdv=$(cat multi-site-demo.json | jq -r .meta.Version)
 _drpcli files upload multi-site-demo.json to "rebar-catalog/multi-site-demo/${msdv}.json" >/dev/null
 
 rlv=$(cat rackn-license.json | jq -r .meta.Version)
-_drpcli files upload rackn-license.json to "rebar-catalog/rackn-license/${rlv}.json"
+_drpcli files upload rackn-license.json to "rebar-catalog/rackn-license/${rlv}.json"  >/dev/null
 
 echo "Building catalog"
 ./catalogger.py --items drp,task-library,drp-community-content,docker-context,edge-lab,dev-library,cloud-wrappers > rackn-catalog.json
@@ -319,7 +319,7 @@ fi
 if _drpcli profiles exists linode ; then
   echo "Profile linode exists, skipping"
 else
-  _drpcli profiles create '{"Name":"linode"}'
+  _drpcli profiles create '{"Name":"linode"}'  >/dev/null
 fi
 _drpcli profiles set linode set "cloud/provider" to "linode" >/dev/null
 _drpcli profiles set linode set "linode/token" to "$LINODE_TOKEN" >/dev/null
@@ -338,7 +338,7 @@ drpcli profiles set global param "network/firewall-ports" to '[
 echo "BOOTSTRAP export RS_ENDPOINT=$RS_ENDPOINT"
 
 echo "Waiting for Manager to finish bootstrap"
-_drpcli prefs set manager true
+_drpcli prefs set manager true  >/dev/null
 _drpcli machines wait "Name:$MGR_LBL" WorkflowComplete true 360
 
 # after bootstrap, install more stuff
@@ -354,14 +354,14 @@ for c in $items; do
 done
 
 # re-run the bootstrap
-_drpcli machines update "Name:$MGR_LBL" '{"Locked":false}'
-_drpcli machines update "Name:$MGR_LBL" '{"Workflow":""}'
-_drpcli machines workflow "Name:$MGR_LBL" "bootstrap-manager"
+_drpcli machines update "Name:$MGR_LBL" '{"Locked":false}'  >/dev/null
+_drpcli machines update "Name:$MGR_LBL" '{"Workflow":""}' >/dev/null
+_drpcli machines workflow "Name:$MGR_LBL" "bootstrap-manager" >/dev/null
 
 echo "Waiting for Manager to reach catalog state in (re)bootstrap"
 _drpcli machines wait "Name:$MGR_LBL" Stage "bootstrap-manager" 360
 
-_drpcli prefs set defaultWorkflow discover-joinup defaultBootEnv sledgehammer unknownBootEnv discovery
+_drpcli prefs set defaultWorkflow discover-joinup defaultBootEnv sledgehammer unknownBootEnv discovery  >/dev/null
 
 for mc in $SITES;
 do
