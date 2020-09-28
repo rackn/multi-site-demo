@@ -15,6 +15,7 @@ Templates:
         echo "Installing Podman"
         case $osfamily in
           redhat|centos) yum install -y dnf; dnf install -y podman ;;
+          amzn) sudo yum update -y; sudo amazon-linux-extras install docker; yum install -y docker; sudo service docker start; sudo usermod -a -G docker ec2-user ;;
           debian|ubuntu) . /etc/os-release
             echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /" | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
             curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/Release.key | sudo apt-key add -

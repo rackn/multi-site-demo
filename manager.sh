@@ -262,15 +262,80 @@ fi
 echo "Building Multi-Site Content"
 
 cd multi-site
+
+# upload aws & google credentials
+mkdir profiles || true
+if [[ -f ~/.aws/credentials ]]; then
+    echo "Adding AWS profile for cloud-wrap"
+    tee profiles/aws-credentials.yaml >/dev/null << EOF
+---
+Name: "aws"
+Description: "AWS Credentials"
+Params:
+  "cloud/provider": "aws"
+  "aws/secret-key": $(awk '/aws_secret_access_key/{ print $3}' ~/.aws/credentials)
+  "aws/access-key-id": $(awk '/aws_access_key_id/{ print $3}' ~/.aws/credentials)
+  "rsa/key-user": "ec2-user"
+Meta:
+  color: "purple"
+  icon: "cloud"
+  title: "generated"
+EOF
+else
+  echo "no AWS credentials, skipping"
+fi
+
+# upload aws & google credentials
+google=$(ls ~/.gconf/desktop/*.json)
+if [[ -f $google ]]; then
+    echo "Adding Google profile for cloud-wrap"
+    gconf=$(cat $google)
+    tee profiles/google-credentials.json >/dev/null << EOF
+{
+  "Name": "google",
+  "Description": "GCE Credentials",
+  "Params": {
+    "cloud/provider": "google",
+    "google/project-id": "$(jq -r .project_id <<< "$gconf")",
+    "rsa/key-user": "rob",
+    "google/credential": $(cat $google)
+  },  
+  "Meta": {
+    "color": "orange",
+    "icon": "cloud",
+    "title": "generated"
+  }
+}
+EOF
+else
+  echo "no Google credentials, skipping"
+fi
+
+# upload linode credentials
+tee profiles/linode.yaml >/dev/null << EOF
+---
+Name: "linode"
+Description: "Linode Credentials"
+Params:
+  "cloud/provider": "linode"
+  "linode/token": "$LINODE_TOKEN"
+  "linode/instance-image": "linode/centos8"
+  "linode/instance-type": "g6-standard-2"
+  "linode/root-password": "r0cketsk8ts"
+Meta:
+  color: "green"
+  icon: "cloud"
+  title: "generated"
+EOF
+
 _drpcli contents bundle ../multi-site-demo.json >/dev/null
 cd ..
-
 
 echo "Script is idempotent - restart if needed!"
 echo "Waiting for endpoint to be up.  export RS_ENDPOINT=$RS_ENDPOINT"
 timeout 300 bash -c 'while [[ "$(curl -fsSLk -o /dev/null -w %{http_code} ${RS_ENDPOINT} 2>/dev/null)" != "200" ]]; do sleep 3; done' || false
 
-items="rackn-license contents task-library multi-site-demo edge-lab dev-library"
+items="rackn-license contents task-library multi-site-demo edge-lab dev-library billing"
 for c in $items; do
   if [[ -f $c.json ]] ; then
      echo "ALERT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
@@ -316,17 +381,6 @@ else
   _drpcli profiles create "{\"Name\":\"$PREFIX\"}" 
 fi
 
-if _drpcli profiles exists linode ; then
-  echo "Profile linode exists, skipping"
-else
-  _drpcli profiles create '{"Name":"linode"}'  >/dev/null
-fi
-_drpcli profiles set linode set "cloud/provider" to "linode" >/dev/null
-_drpcli profiles set linode set "linode/token" to "$LINODE_TOKEN" >/dev/null
-_drpcli profiles set linode set "linode/instance-image" to "linode/centos8" >/dev/null
-_drpcli profiles set linode set "linode/instance-type" to "g6-standard-2" >/dev/null
-_drpcli profiles set linode set "linode/root-password" to "r0cketsk8ts" >/dev/null
-
 if [[ "$(_drpcli profiles get global param "demo/cluster-prefix")" != "$PREFIX" ]]; then
   _drpcli profiles set global set "demo/cluster-prefix" to $PREFIX >/dev/null || true
 fi
@@ -370,7 +424,7 @@ do
     [[ -n "$PREFIX" ]] && reg=$(echo $mc | sed 's/'${PREFIX}'-//g')
     echo "Creating $mc"
     echo "drpcli machines create \"{\"Name\":\"${mc}\", ... "
-    drpcli machines create "{\"Name\":\"${mc}\", \
+    _drpcli machines create "{\"Name\":\"${mc}\", \
       \"Workflow\":\"site-create\", \
       \"BootEnv\":\"sledgehammer\", \
       \"Description\":\"Edge DR Server\", \
