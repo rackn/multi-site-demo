@@ -227,7 +227,6 @@ if [[ -f rackn-license.json ]]; then
     updated=false
     for mc in $SITES; do
       licensed=$(jq -r "contains([\"$mc\"])" <<< $endpoints)
-      echo "ZEHICLE TESTING BYPASS $mc $licensed"
       if [[ "${licensed}" == "true" || "${matchany}" == "true" ]]; then
         echo "endpoint $mc found in license!"
       else
@@ -257,6 +256,17 @@ if [[ -f rackn-license.json ]]; then
 else
   echo "MISSING REQUIRED RACKN-LICENSE FILE"
   exit 1
+fi
+
+if [[ "$(_drpcli profiles get global param access-keys-global)" == "null" ]]; then
+   echo "Adding SSH_KEY"
+  _drpcli profiles add "global" param "access-keys-global" to - > /dev/null << EOF
+{
+   "${MGR_LBL}":"${SSH_KEY}"
+}
+EOF
+else
+   echo "SSH_KEY already installed: \"$(_drpcli profiles get global param access-keys-global)\""
 fi
 
 echo "Building Multi-Site Content"
@@ -424,7 +434,7 @@ do
     [[ -n "$PREFIX" ]] && reg=$(echo $mc | sed 's/'${PREFIX}'-//g')
     echo "Creating $mc"
     echo "drpcli machines create \"{\"Name\":\"${mc}\", ... "
-    _drpcli machines create "{\"Name\":\"${mc}\", \
+    drpcli machines create "{\"Name\":\"${mc}\", \
       \"Workflow\":\"site-create\", \
       \"BootEnv\":\"sledgehammer\", \
       \"Description\":\"Edge DR Server\", \
@@ -445,7 +455,7 @@ then
   for mc in $SITES
   do
     if drpcli machines exists Name:$mc ; then
-      _drpcli machines wait Name:$mc WorkflowComplete true 600 &
+      drpcli machines wait Name:$mc WorkflowComplete true 600 &
     fi
   done
 
