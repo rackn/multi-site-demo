@@ -1,0 +1,11 @@
+---
+Id: testing
+Description: Load Generator
+Meta:
+  color: green
+  icon: compass outline
+  title: Testing
+AllocateActions:
+  Workflow: load-generator
+ReleaseActions:
+  Workflow: load-generator

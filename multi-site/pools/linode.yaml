@@ -1,0 +1,17 @@
+---
+Id: linode
+Description: Linode provisioning operations
+Meta:
+  color: green
+  icon: linode
+  title: Google Profile
+EnterActions:
+  AddProfiles:
+    - linode
+ExitActions:
+  RemoveProfiles:
+    - linode
+AllocateActions:
+  Workflow: cloud-provision
+ReleaseActions:
+  Workflow: cloud-decommission

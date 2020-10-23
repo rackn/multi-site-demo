@@ -1,0 +1,17 @@
+---
+Id: google
+Description: Google provisioning operations
+Meta:
+  color: blue
+  icon: google
+  title: Google Profile
+EnterActions:
+  AddProfiles:
+    - google
+ExitActions:
+  RemoveProfiles:
+    - google
+AllocateActions:
+  Workflow: cloud-provision
+ReleaseActions:
+  Workflow: cloud-decommission

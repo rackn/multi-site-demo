@@ -338,6 +338,19 @@ Meta:
   title: "generated"
 EOF
 
+
+echo "Setting the cluster-prefix profile ($PREFIX)"
+# upload linode credentials
+tee profiles/$PREFIX.yaml >/dev/null << EOF
+---
+Name: "$PREFIX"
+Meta:
+  color: "blue"
+  icon: "user md"
+  title: "generated"
+EOF
+
+
 _drpcli contents bundle ../multi-site-demo.json >/dev/null
 cd ..
 
@@ -383,13 +396,6 @@ _drpcli files upload rackn-catalog.json as "rebar-catalog/static-catalog.json" >
 #_drpcli files upload v4.2.15.zip to "rebar-catalog/drp/v4.2.15.zip"
 # XXX: When moved into static-catalog.zip, then remove
 
-
-echo "Setting the 'demo/cluster-prefix' param"
-if _drpcli profiles exists $PREFIX ; then
-  echo "Profile $PREFIX exists, skipping"
-else
-  _drpcli profiles create "{\"Name\":\"$PREFIX\"}" 
-fi
 
 if [[ "$(_drpcli profiles get global param "demo/cluster-prefix")" != "$PREFIX" ]]; then
   _drpcli profiles set global set "demo/cluster-prefix" to $PREFIX >/dev/null || true
