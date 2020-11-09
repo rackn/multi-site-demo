@@ -16,11 +16,15 @@ linode.json
 linode.yaml
 linode/linode.json
 linode/linode.yaml
+linode/bundle.yaml
 multi-site-demo.json
 multi-site-demo.yaml
+multi-site/profiles/*
 multi-site/manager.yaml
 multi-site/multi-site-demo.json
 multi-site/multi-site-demo.yaml
+multi-site/bundle.yaml
+multi-site/multi-site.yaml
 endpoint-exec
 static-catalog.zip
 manager.tfvars

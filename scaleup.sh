@@ -55,6 +55,7 @@ while (( i < SCALE )); do
     else
       if [ "$REMOVE" != "true" ] ; then
         echo "creating $mc in $s"
+        sleep 1
         drpcli -u $s machines create "{\"Name\":\"${mc}\", \
           \"Workflow\":\"load-generator\", \
           \"Description\":\"Load Test $i\", \

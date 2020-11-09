@@ -1,0 +1,17 @@
+---
+Id: aws
+Description: AWS provisioning operations
+Meta:
+  color: orange
+  icon: aws
+  title: AWS profile
+EnterActions:
+  AddProfiles:
+    - aws
+ExitActions:
+  RemoveProfiles:
+    - aws
+AllocateActions:
+  Workflow: cloud-provision
+ReleaseActions:
+  Workflow: cloud-decommission

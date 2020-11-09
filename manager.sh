@@ -49,13 +49,13 @@ usage() {
 
   NOTES:  * if '-b site-base-VER' specified, '-p' (prep-manager) is implied
           * Regions: $SITES
-          * if cluster_prefix is set, then Regional Controllers, and LINDOE
+          * if cluster_prefix (must be 3+ chars) is set, then Regional Controllers, and LINDOE
             machine names will be prefixed with '<cluster-prefix>-REGION
             eg. '-c foo' produces a region controller named 'foo-us-west'
           * cluster_prefix is prepended to Manager Label and regional managers
 
           * SHANE's preferred start up:
-            ./manager.sh -p -c sg -L global
+            ./manager.sh -p -c syg -L global
 
 EO_USAGE
 }
@@ -116,7 +116,7 @@ MGR_LBL="global-manager"
 MGR_PWD="r0cketsk8ts"
 MGR_RGN="us-west"
 MGR_IMG="linode/centos8"
-MGR_TYP="g6-standard-2"
+MGR_TYP="g6-standard-4"
 SSH_KEY="$(cat ~/.ssh/id_rsa.pub)"
 LINODE_TOKEN=${LINODE_TOKEN:-""}
 SITES="us-central us-east us-west us-southeast"
@@ -227,7 +227,6 @@ if [[ -f rackn-license.json ]]; then
     updated=false
     for mc in $SITES; do
       licensed=$(jq -r "contains([\"$mc\"])" <<< $endpoints)
-      echo "ZEHICLE TESTING BYPASS $mc $licensed"
       if [[ "${licensed}" == "true" || "${matchany}" == "true" ]]; then
         echo "endpoint $mc found in license!"
       else
@@ -259,25 +258,116 @@ else
   exit 1
 fi
 
+if [[ "$(_drpcli profiles get global param access-keys-global)" == "null" ]]; then
+   echo "Adding SSH_KEY"
+  _drpcli profiles add "global" param "access-keys-global" to - > /dev/null << EOF
+{
+   "${MGR_LBL}":"${SSH_KEY}"
+}
+EOF
+else
+   echo "SSH_KEY already installed: \"$(_drpcli profiles get global param access-keys-global)\""
+fi
+
 echo "Building Multi-Site Content"
 
 cd multi-site
+
+# upload aws & google credentials
+mkdir profiles || true
+if [[ -f ~/.aws/credentials ]]; then
+    echo "Adding AWS profile for cloud-wrap"
+    tee profiles/aws-credentials.yaml >/dev/null << EOF
+---
+Name: "aws"
+Description: "AWS Credentials"
+Params:
+  "cloud/provider": "aws"
+  "aws/secret-key": $(awk '/aws_secret_access_key/{ print $3}' ~/.aws/credentials)
+  "aws/access-key-id": $(awk '/aws_access_key_id/{ print $3}' ~/.aws/credentials)
+  "rsa/key-user": "ec2-user"
+Meta:
+  color: "purple"
+  icon: "cloud"
+  title: "generated"
+EOF
+else
+  echo "no AWS credentials, skipping"
+fi
+
+# upload aws & google credentials
+google=$(ls ~/.gconf/desktop/*.json)
+if [[ -f $google ]]; then
+    echo "Adding Google profile for cloud-wrap"
+    gconf=$(cat $google)
+    tee profiles/google-credentials.json >/dev/null << EOF
+{
+  "Name": "google",
+  "Description": "GCE Credentials",
+  "Params": {
+    "cloud/provider": "google",
+    "google/project-id": "$(jq -r .project_id <<< "$gconf")",
+    "rsa/key-user": "rob",
+    "google/credential": $(cat $google)
+  },  
+  "Meta": {
+    "color": "orange",
+    "icon": "cloud",
+    "title": "generated"
+  }
+}
+EOF
+else
+  echo "no Google credentials, skipping"
+fi
+
+# upload linode credentials
+tee profiles/linode.yaml >/dev/null << EOF
+---
+Name: "linode"
+Description: "Linode Credentials"
+Params:
+  "cloud/provider": "linode"
+  "linode/token": "$LINODE_TOKEN"
+  "linode/instance-image": "linode/centos8"
+  "linode/instance-type": "g6-standard-2"
+  "linode/root-password": "r0cketsk8ts"
+Meta:
+  color: "green"
+  icon: "cloud"
+  title: "generated"
+EOF
+
+
+echo "Setting the cluster-prefix profile ($PREFIX)"
+# upload linode credentials
+tee profiles/$PREFIX.yaml >/dev/null << EOF
+---
+Name: "$PREFIX"
+Meta:
+  color: "blue"
+  icon: "user md"
+  title: "generated"
+EOF
+
+
 _drpcli contents bundle ../multi-site-demo.json >/dev/null
 cd ..
-
 
 echo "Script is idempotent - restart if needed!"
 echo "Waiting for endpoint to be up.  export RS_ENDPOINT=$RS_ENDPOINT"
 timeout 300 bash -c 'while [[ "$(curl -fsSLk -o /dev/null -w %{http_code} ${RS_ENDPOINT} 2>/dev/null)" != "200" ]]; do sleep 3; done' || false
 
-items="rackn-license contents task-library multi-site-demo edge-lab dev-library"
+items="rackn-license contents task-library multi-site-demo edge-lab dev-library billing"
 for c in $items; do
   if [[ -f $c.json ]] ; then
-     echo "found local content $c.json"
+     echo "ALERT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+     echo "overriding catalog with local content $c.json"
      _drpcli contents upload $c.json >/dev/null
   fi
   if [[ -f $c.yaml ]] ; then
-     echo "found local content $c.yaml"
+     echo "ALERT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+     echo "overriding catalog with local content $c.yaml"
      _drpcli contents upload $c.yaml >/dev/null
   fi
 done
@@ -288,7 +378,7 @@ msdv=$(cat multi-site-demo.json | jq -r .meta.Version)
 _drpcli files upload multi-site-demo.json to "rebar-catalog/multi-site-demo/${msdv}.json" >/dev/null
 
 rlv=$(cat rackn-license.json | jq -r .meta.Version)
-_drpcli files upload rackn-license.json to "rebar-catalog/rackn-license/${rlv}.json"
+_drpcli files upload rackn-license.json to "rebar-catalog/rackn-license/${rlv}.json"  >/dev/null
 
 echo "Building catalog"
 ./catalogger.py --items drp,task-library,drp-community-content,docker-context,edge-lab,dev-library,cloud-wrappers > rackn-catalog.json
@@ -307,24 +397,6 @@ _drpcli files upload rackn-catalog.json as "rebar-catalog/static-catalog.json" >
 # XXX: When moved into static-catalog.zip, then remove
 
 
-echo "Setting the 'demo/cluster-prefix' param"
-if _drpcli profiles exists $PREFIX ; then
-  echo "Profile $PREFIX exists, skipping"
-else
-  _drpcli profiles create "{\"Name\":\"$PREFIX\"}" 
-fi
-
-if _drpcli profiles exists linode ; then
-  echo "Profile linode exists, skipping"
-else
-  _drpcli profiles create '{"Name":"linode"}'
-fi
-_drpcli profiles set linode set "cloud/provider" to "linode" >/dev/null
-_drpcli profiles set linode set "linode/token" to "$LINODE_TOKEN" >/dev/null
-_drpcli profiles set linode set "linode/instance-image" to "linode/centos8" >/dev/null
-_drpcli profiles set linode set "linode/instance-type" to "g6-standard-2" >/dev/null
-_drpcli profiles set linode set "linode/root-password" to "r0cketsk8ts" >/dev/null
-
 if [[ "$(_drpcli profiles get global param "demo/cluster-prefix")" != "$PREFIX" ]]; then
   _drpcli profiles set global set "demo/cluster-prefix" to $PREFIX >/dev/null || true
 fi
@@ -336,14 +408,15 @@ drpcli profiles set global param "network/firewall-ports" to '[
 echo "BOOTSTRAP export RS_ENDPOINT=$RS_ENDPOINT"
 
 echo "Waiting for Manager to finish bootstrap"
-_drpcli prefs set manager true
-_drpcli machines wait "Name:$MGR_LBL" Stage "complete-nobootenv" 360
+_drpcli prefs set manager true  >/dev/null
+_drpcli machines wait "Name:$MGR_LBL" WorkflowComplete true 360
 
 # after bootstrap, install more stuff
 items="cloud-wrappers multi-site-demo dev-library"
 for c in $items; do
   if [[ -f $c.json ]] ; then
-     echo "found local content $c"
+     echo "ALERT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+     echo "overriding catalog with local content $c"
      _drpcli contents upload $c.json >/dev/null
   else
      _drpcli catalog item install $c --version=tip >/dev/null 
@@ -351,14 +424,15 @@ for c in $items; do
 done
 
 # re-run the bootstrap
-_drpcli machines update "Name:$MGR_LBL" '{"Locked":false}'
-_drpcli machines update "Name:$MGR_LBL" '{"Workflow":""}'
-_drpcli machines workflow "Name:$MGR_LBL" "bootstrap-manager"
+_drpcli machines update "Name:$MGR_LBL" '{"Locked":false}'  >/dev/null
+_drpcli machines update "Name:$MGR_LBL" '{"Workflow":""}' >/dev/null
+_drpcli machines workflow "Name:$MGR_LBL" "bootstrap-manager" >/dev/null
 
 echo "Waiting for Manager to reach catalog state in (re)bootstrap"
 _drpcli machines wait "Name:$MGR_LBL" Stage "bootstrap-manager" 360
 
-_drpcli prefs set defaultWorkflow discover-joinup defaultBootEnv sledgehammer unknownBootEnv discovery
+_drpcli prefs set defaultWorkflow discover-joinup defaultBootEnv sledgehammer unknownBootEnv discovery  >/dev/null
+
 for mc in $SITES;
 do
   if ! _drpcli machines exists Name:$mc 2>/dev/null >/dev/null; then
@@ -387,7 +461,7 @@ then
   for mc in $SITES
   do
     if drpcli machines exists Name:$mc ; then
-      _drpcli machines wait Name:$mc Stage "complete-nobootenv" 600 &
+      drpcli machines wait Name:$mc WorkflowComplete true 600 &
     fi
   done
 

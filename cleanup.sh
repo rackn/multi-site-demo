@@ -8,6 +8,10 @@ PATH=$PATH:.
 
 export RS_ENDPOINT=$(terraform output drp_manager)
 
+rm -f profiles/linode.yaml
+rm -f profiles/aws.yaml
+rm -f profiles/google.yaml
+
 FORCE="false"
 while getopts ":f" CmdLineOpts
 do
@@ -20,6 +24,27 @@ do
       ;;
   esac
 done
+
+pools="linode aws google testing"
+if [[ -r manager.tfvars ]]
+then
+  for P in $pools
+  do
+    if [[ $(drpcli pools status $P | jq -r '.InUse | length') -gt 0 ]]; then
+      echo "Releasing machines in $P"
+      drpcli pools manage release $P --all-machines > /dev/null
+    else
+      echo "No allocated machines in $P"
+    fi
+  done
+fi
+
+echo "waiting for all machines to be WorkflowComplete"
+while [[ $(drpcli machines count WorkflowComplete=false) -gt 0 ]]; do
+  echo "... waiting 5 seconds"
+  sleep 5
+done
+echo "done waiting"
 
 sites="us-central us-west us-east us-southeast"
 if [[ -r manager.tfvars ]]
@@ -57,7 +82,7 @@ for mc in $sites;
 do
   if drpcli machines exists Name:$mc > /dev/null
   then
-    drpcli machines wait Name:$mc Stage "complete-nobootenv" 120
+    drpcli machines wait Name:$mc WorkflowComplete true 120
     drpcli machines destroy Name:$mc
     drpcli endpoints destroy $mc
   fi

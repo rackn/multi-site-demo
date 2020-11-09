@@ -1,0 +1,19 @@
+---
+Id: remote-sites
+Description: Multi-Site Deployer
+Meta:
+  color: purple
+  icon: star outline
+  title: Distributed Site
+EnterActions:
+  AddProfiles:
+    - linode
+    - zehicle
+ExitActions:
+  RemoveProfiles:
+    - linode
+    - zehicle
+AllocateActions:
+  Workflow: site-create
+ReleaseActions:
+  Workflow: cloud-decommission
