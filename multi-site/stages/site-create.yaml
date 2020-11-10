@@ -9,8 +9,10 @@ Params:
   demo/workflow: "discover-base"
 Tasks:
   - "context:"
-  - "podman-install"
   - "dr-server-install"
+  - "podman-install"
+  - "dr-register-endpoint"
+  - "context:runner"
   - "dr-server-seed"
 Meta:
   icon: "bus"

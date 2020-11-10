@@ -1,35 +1,40 @@
 ---
-Id: site-base-v4.4.0
+Id: site-base-v4.5
 Description: "Core Components needed by all Sites"
 Apply: true
 Meta:
   icon: paw
-DRPVersion: v4.4.0
+DRPVersion: v4.5.2
 Components:
+- Name: ux-views
+  Type: PluginProvider
+  Version: v4.5.2
 - Name: docker-context
   Type: PluginProvider
-  Version: tip
+  Version: v4.5.2
 - Name: drp-community-content
   Type: ContentPackage
-  Version: tip
+  Version: v4.5.2
 - Name: edge-lab
   Type: ContentPackage
-  Version: tip
+  Version: v4.5.2
 - Name: dev-library
   Type: ContentPackage
-  Version: tip
+  Version: v4.5.2
 - Name: task-library
   Type: ContentPackage
-  Version: tip
+  Version: v4.5.2
 - Name: cloud-wrappers
   Type: ContentPackage
-  Version: tip
+  Version: v4.5.2
 - Name: multi-site-demo
   Type: ContentPackage
   Version: v2.0.0
 Plugins:
 - Name: docker-context
   Provider: docker-context
+- Name: ux-views
+  Provider: ux-views
 Prefs:
   defaultBootEnv: local
   defaultStage: none

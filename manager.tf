@@ -49,9 +49,10 @@ resource "linode_instance" "drp_manager" {
   stackscript_data = {
     "drp_version" = "tip"
     "drp_password" = var.manager_password
+    "drp_user" = "rocketskates"
     "drp_id" = var.manager_label
     "initial_workflow" = "bootstrap-advanced"
-    "initial_contents" = "drp-community-content, task-library, edge-lab, dev-library"
+    "initial_contents" = "drp-community-content, task-library"
   }
 }
 

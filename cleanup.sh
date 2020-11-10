@@ -6,16 +6,16 @@ set -e
 
 PATH=$PATH:.
 
-export RS_ENDPOINT=$(terraform output drp_manager)
-
 rm -f profiles/linode.yaml
 rm -f profiles/aws.yaml
 rm -f profiles/google.yaml
 
 FORCE="false"
-while getopts ":f" CmdLineOpts
+PASSWORD="r0cketsk8ts"
+while getopts ":P:f" CmdLineOpts
 do
   case $CmdLineOpts in
+    P) PASSWORD=${OPTARG}     ;;
     f) FORCE="true"          ;;
     u) usage; exit 0          ;;
     \?)
@@ -24,6 +24,10 @@ do
       ;;
   esac
 done
+
+export RS_ENDPOINT=$(terraform output drp_manager)
+export RS_KEY="rocketskates:${PASSWORD}"
+echo "Using RS_ENDPOINT=$RS_ENDPOINT and RS_KEY=$RS_KEY"
 
 pools="linode aws google testing"
 if [[ -r manager.tfvars ]]

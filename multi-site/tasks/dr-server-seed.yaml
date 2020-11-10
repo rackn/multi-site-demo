@@ -13,9 +13,6 @@ ExtraClaims:
   - scope: "profiles"
     action: "*"
     specific: "global"
-  - scope: "contents"
-    action: "*"
-    specific: "*"
 Templates:
   - Contents: |-
       #!/bin/bash
@@ -25,14 +22,13 @@ Templates:
       {{template "setup.tmpl" .}}
 
       # local endpoint
+      echo "Collecting info from manager"
       drpcli contexts show runner > runner.json
+      raw=$(drpcli contexts list Engine=docker-context)
+      contexts=$(jq -r ".[].Name" <<< "${raw}")
 
-      echo "whoa... let's rest for a 15 seconds to allow new DRP to prepare"
-      sleep 15
-
-
-      EPID={{ .Machine.Name }}
       echo "Pointing DRPCLI to Proxy Endpoint $EPID"
+      EPID={{ .Machine.Name }}
 
       echo "copy over Prefix to {{ .Param "demo/cluster-prefix" }}"
       drpcli -u $EPID profiles set global set "demo/cluster-prefix" to "{{ .Param "demo/cluster-prefix" }}" >/dev/null
@@ -44,9 +40,18 @@ Templates:
         drpcli -u $EPID contexts create - < runner.json
       fi
 
+      {{ if .ParamExists "color "}}
+        echo "setting UX color to {{ .Param "color" }}"
+        drpcli extended -l ux_settings create '{
+          "Target": "user++rocketskates",
+          "Type": "ux_settings",
+          "Option": "ux.cosmetic.navbar_color",
+          "Id": "user++rocketskates++ux.cosmetic.navbar_color",
+          "Value": "{{ .Param "color" }}"
+        }' > /dev/null
+      {{ end }}
+
       echo "Populate the contexts from local"
-      raw=$(drpcli contexts list Engine=docker-context)
-      contexts=$(jq -r ".[].Name" <<< "${raw}")
       i=0
       for context in $contexts; do
         image=$(jq -r ".[$i].Image" <<< "${raw}")
@@ -55,6 +60,7 @@ Templates:
         i=$(($i + 1))
       done
 
+      echo "done"
       exit 0
     Name: "drp-install"
 Meta:
