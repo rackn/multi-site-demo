@@ -216,8 +216,10 @@ export RS_IP=$(terraform output drp_ip)
 export RS_KEY="rocketskates:${MGR_PWD}"
 echo "Terraform Finished, expecting: export RS_ENDPOINT=${RS_ENDPOINT} && export RS_KEY=${RS_KEY}"
 
-if drpcli -P ${MGR_PWD} info status > /dev/null ; then 
-  echo "no change: password reset to $MGR_PWD"
+timeout 30 bash -c 'while [[ "$(curl -fsSL --insecure -o /dev/null -w %{http_code} $RS_ENDPOINT/swagger.json)" != "200" ]]; do sleep 2; done' || false
+
+if _drpcli -P ${MGR_PWD} info check > /dev/null ; then 
+  echo "no change: password already set to $MGR_PWD"
 else
   echo "setting rocketskates password to $MGR_PWD"
   _drpcli users password "rocketskates" "${MGR_PWD}" > /dev/null
@@ -333,11 +335,19 @@ else
   echo "no Google credentials, skipping"
 fi
 
-if az account list; then
-  # see https://www.terraform.io/docs/providers/azurerm/guides/service_principal_client_secret.html
-  azure_subscription_id=$(az account list | jq -r '.[0].id')
-  azure_resource=$(az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/$azure_subscription_id")
-  tee profiles/azure-credentials.json >/dev/null << EOF
+if which az > /dev/null ; then
+  if az vm list > /dev/null ; then
+    echo "Azure login verified"
+  else
+    if ! az login > /dev/null ; then
+      echo "WARNING: no azure credentials!"
+    fi
+  fi
+  if az account list > /dev/null; then
+    # see https://www.terraform.io/docs/providers/azurerm/guides/service_principal_client_secret.html
+    azure_subscription_id=$(az account list | jq -r '.[0].id')
+    azure_resource=$(az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/$azure_subscription_id")
+    tee profiles/azure-credentials.json >/dev/null << EOF
 {
   "Name": "azure",
   "Description": "Azure Credentials",
@@ -356,8 +366,11 @@ if az account list; then
   }
 }
 EOF
+  else
+    echo "WARNING: az account list failed"
+  fi
 else
-  echo "no azure credentials"
+  echo "Skipping Azure, no az cli installed"
 fi
 
 # upload linode credentials
@@ -397,7 +410,7 @@ echo "Script is idempotent - restart if needed!"
 echo "Waiting for endpoint to be up.  export RS_ENDPOINT=${RS_ENDPOINT} && export RS_KEY=${RS_KEY}"
 timeout 300 bash -c 'while [[ "$(curl -fsSLk -o /dev/null -w %{http_code} ${RS_ENDPOINT} 2>/dev/null)" != "200" ]]; do sleep 3; done' || false
 
-items="rackn-license contents task-library multi-site-demo edge-lab dev-library billing ux-views"
+items="rackn-license contents task-library multi-site-demo edge-lab dev-library billing ux-views cloud-wrappers"
 for c in $items; do
   if [[ -f $c.json ]] ; then
      echo "ALERT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
@@ -445,6 +458,10 @@ drpcli profiles set global param "network/firewall-ports" to '[
   "22/tcp", "8091/tcp", "8092/tcp", "6443/tcp", "8379/tcp", "8080/tcp", "8380/tcp", "10250/tcp"
 ]' >/dev/null
 
+_drpcli machines update "Name:$MGR_LBL" '{"Locked":false}'  >/dev/null
+_drpcli machines update "Name:$MGR_LBL" '{"Workflow":""}' >/dev/null
+_drpcli machines workflow "Name:$MGR_LBL" "bootstrap-advanced" >/dev/null
+
 echo "BOOTSTRAP export RS_ENDPOINT=$RS_ENDPOINT && export RS_KEY=${RS_KEY}"
 
 echo "Waiting for Manager to finish bootstrap"
@@ -472,6 +489,15 @@ echo "Waiting for Manager to reach catalog state in (re)bootstrap"
 _drpcli machines wait "Name:$MGR_LBL" Stage "bootstrap-manager" 360
 
 _drpcli prefs set defaultWorkflow discover-joinup defaultBootEnv sledgehammer unknownBootEnv discovery  >/dev/null
+
+echo "Setting Banner Color "
+drpcli extended -l ux_settings create '{
+  "Target": "user++rocketskates",
+  "Type": "ux_settings",
+  "Option": "ux.cosmetic.navbar_color",
+  "Id": "user++rocketskates++ux.cosmetic.navbar_color",
+  "Value": "blue"
+}' > /dev/null
 
 for mc in $SITES;
 do

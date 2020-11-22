@@ -50,17 +50,8 @@ while [[ $(drpcli machines count WorkflowComplete=false) -gt 0 ]]; do
 done
 echo "done waiting"
 
-sites="us-central us-west us-east us-southeast"
-if [[ -r manager.tfvars ]]
-then
-  PRE=$(cat manager.tfvars | grep cluster_prefix | cut -d '"' -f2)
-  for S in $sites
-  do
-    s+="$PRE-$S "
-  done
-  sites=$s
-fi
 
+sites=$(drpcli endpoints list | jq -r .[].Id)
 echo ""
 echo "sites set to:"
 echo $sites
