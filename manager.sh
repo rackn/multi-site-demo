@@ -215,15 +215,29 @@ export RS_ENDPOINT=$(terraform output drp_manager)
 export RS_IP=$(terraform output drp_ip)
 export RS_KEY="rocketskates:${MGR_PWD}"
 echo "Terraform Finished, expecting: export RS_ENDPOINT=${RS_ENDPOINT} && export RS_KEY=${RS_KEY}"
+echo "Script is idempotent - restart if needed!"
 
-timeout 30 bash -c 'while [[ "$(curl -fsSL --insecure -o /dev/null -w %{http_code} $RS_ENDPOINT/swagger.json)" != "200" ]]; do sleep 2; done' || false
+echo "Waiting for API to be available"
+timeout 120 bash -c 'while [[ "$(curl -fsSL -o /dev/null -w %{http_code} http://$RS_IP:8091)" != "200" ]]; do sleep 3; done' || false
 
-if _drpcli -P ${MGR_PWD} info check > /dev/null ; then 
-  echo "no change: password already set to $MGR_PWD"
-else
-  echo "setting rocketskates password to $MGR_PWD"
-  _drpcli users password "rocketskates" "${MGR_PWD}" > /dev/null
+attempt=1
+while (( $attempt < 5 )); do
+  sleep 2
+  if _drpcli -P ${MGR_PWD} info check > /dev/null ; then 
+    echo "no change: password already set to $MGR_PWD"
+    break
+  else
+    echo "setting rocketskates password to $MGR_PWD"
+    _drpcli users password "rocketskates" "${MGR_PWD}" > /dev/null || true
+    rm -f ~/.cache/drpcli/tokens/.rocketskates.token || true
+  fi
+  attempt=$(( attempt + 1 ))
+done
+if [[ $attempt -gt 4 ]]; then
+  echo "ERROR: could not login"
+  exit 1
 fi
+
 export RS_TOKEN="$(_drpcli users token "rocketskates" | jq -r .Token)"
 
 if [[ -f rackn-license.json ]]; then
@@ -406,10 +420,6 @@ EOF
 _drpcli contents bundle ../multi-site-demo.json >/dev/null
 cd ..
 
-echo "Script is idempotent - restart if needed!"
-echo "Waiting for endpoint to be up.  export RS_ENDPOINT=${RS_ENDPOINT} && export RS_KEY=${RS_KEY}"
-timeout 300 bash -c 'while [[ "$(curl -fsSLk -o /dev/null -w %{http_code} ${RS_ENDPOINT} 2>/dev/null)" != "200" ]]; do sleep 3; done' || false
-
 items="rackn-license contents task-library multi-site-demo edge-lab dev-library billing ux-views cloud-wrappers"
 for c in $items; do
   if [[ -f $c.json ]] ; then
@@ -488,7 +498,7 @@ _drpcli machines workflow "Name:$MGR_LBL" "bootstrap-manager" >/dev/null
 echo "Waiting for Manager to reach catalog state in (re)bootstrap"
 _drpcli machines wait "Name:$MGR_LBL" Stage "bootstrap-manager" 360
 
-_drpcli prefs set defaultWorkflow discover-joinup defaultBootEnv sledgehammer unknownBootEnv discovery  >/dev/null
+_drpcli prefs set defaultWorkflow discover-base defaultBootEnv sledgehammer unknownBootEnv discovery  >/dev/null
 
 echo "Setting Banner Color "
 drpcli extended -l ux_settings create '{
@@ -496,14 +506,14 @@ drpcli extended -l ux_settings create '{
   "Type": "ux_settings",
   "Option": "ux.cosmetic.navbar_color",
   "Id": "user++rocketskates++ux.cosmetic.navbar_color",
-  "Value": "blue"
+  "Value": "\"blue\""
 }' > /dev/null
 
 for mc in $SITES;
 do
   case $mc in
     *-us-east) color="brown" ;;
-    *-us-central) color="blue" ;;
+    *-us-central) color="green" ;;
     *-us-west) color="purple" ;;
     *-us-southeast) color="orange" ;;
     *) color="black"

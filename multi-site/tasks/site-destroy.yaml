@@ -1,0 +1,43 @@
+---
+Name: "site-destroy"
+Description: "Cleanup Edge Site for Multi-Site Manager"
+Documentation: |
+  Relies on Cloud-Decomission
+ExtraClaims:
+  - scope: "machines"
+    action: "*"
+    specific: "*"
+  - scope: "endpoints"
+    action: "*"
+    specific: "*"
+Templates:
+  - Contents: |-
+      #!/bin/bash
+      # RackN Copyright 2020
+
+      set -e
+      {{template "setup.tmpl" .}}
+
+      # get machines on local endpoint
+      echo "Collecting machines on edge"
+      uuid=$(drpcli -u {{ .Machine.Name }} machines list Context Eq "" | jq -r '.[].Uuid')
+      for uuid in $UUIDS; do
+        drpcli -u {{ .Machine.Name }} machines workflow $uuid "cloud-decommission" > /dev/null
+      done
+
+      echo "Waiting for complete"
+      for uuid in $UUIDS; do
+        drpcli -u {{ .Machine.Name }} machines wait $uuid WorkflowComplete true 360  > /dev/null
+      done
+
+      echo "Destroying Endpoint registration"
+      drpcli endpoints destroy {{ .Machine.Name }} > /dev/null
+
+      echo "done"
+      exit 0
+    Name: "drp-endpoint-destroy"
+Meta:
+  icon: "heart"
+  color: "green"
+  title: "RackN Content"
+  feature-flags: "sane-exit-codes"

@@ -47,7 +47,7 @@ Templates:
           "Type": "ux_settings",
           "Option": "ux.cosmetic.navbar_color",
           "Id": "user++rocketskates++ux.cosmetic.navbar_color",
-          "Value": "{{ .Param "color" }}"
+          "Value": "\"{{ .Param "color" }}\""
         }' > /dev/null
       {{ end }}
 

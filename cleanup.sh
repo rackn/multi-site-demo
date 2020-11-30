@@ -64,7 +64,7 @@ do
     drpcli machines update Name:$mc '{"Locked":false}' > /dev/null
     drpcli machines meta set Name:$mc key BaseContext to "runner"
     drpcli machines update Name:$mc '{"Context":"runner"}' > /dev/null
-    drpcli machines workflow Name:$mc cloud-decommission > /dev/null
+    drpcli machines workflow Name:$mc site-destroy > /dev/null
     # backslash escape seems to be needed, otherwise it's being intepreted as YAML input
     drpcli machines set Name:$mc param Runnable to true
   else
@@ -79,11 +79,10 @@ do
   then
     drpcli machines wait Name:$mc WorkflowComplete true 120
     drpcli machines destroy Name:$mc
-    drpcli endpoints destroy $mc
   fi
 done
 
-if [ "$FORCE" == "true" ] || [ "$(drpcli machines list | jq length)" == "1" ]; then
+if [ "$FORCE" == "true" ] || [ $(drpcli machines count Context Eq "" ) -gt 1 ]; then
 
   echo "removing manager"
   terraform init -no-color
@@ -96,7 +95,7 @@ if [ "$FORCE" == "true" ] || [ "$(drpcli machines list | jq length)" == "1" ]; t
   rm -f terraform.tfstate terraform.tfstate.backup
 
 else
-  echo "WARNING machines still exist - did not destroy manager.  Call with -f to force!"
+  echo "WARNING provisioned machines still exist - did not destroy manager.  Call with -f to force!"
 fi
 
 
