@@ -82,7 +82,7 @@ do
   fi
 done
 
-if [ "$FORCE" == "true" ] || [ $(drpcli machines count Context Eq "" ) -gt 1 ]; then
+if [ "$FORCE" == "true" ] || [ $(drpcli machines count Context Eq "") -eq 1 ]; then
 
   echo "removing manager"
   terraform init -no-color
