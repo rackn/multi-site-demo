@@ -1,0 +1,51 @@
+---
+Name: "dr-register-endpoint"
+Description: "Register Digital Rebar Server as Endpoint"
+Documentation: |
+  Registers the system as a managed endpoint by the Multi-Site Manager  
+ExtraClaims:
+  - scope: "endpoints"
+    action: "*"
+    specific: "*"
+Templates:
+  - Contents: |-
+      #!/bin/bash
+      # RackN Copyright 2020
+
+      set -e
+      {{template "setup.tmpl" .}}
+
+      manager="$(drpcli info get | jq -r .manager)"
+      if [[ "$manager" == "true" ]] ; then
+
+        if drpcli endpoints exists {{ .Machine.Name }} ; then
+          echo "Endpoint {{ .Machine.Name }} already registered in Manager"
+        else
+          echo "Manager, register new endpoint"
+          drpcli endpoints create '{"Id":"{{ .Machine.Name }}",
+            "Params":{"manager/url": "https://{{ .Machine.Address }}:8092"},
+            "Meta":{{ .Machine.Meta | toJson }} }' > /dev/null
+          drpcli endpoints set {{ .Machine.Name }} param "manager/username" to "{{ .Param "dr-server/initial-user" }}" > /dev/null
+          drpcli endpoints set {{ .Machine.Name}}  param "manager/password" to "{{ .Param "dr-server/initial-password" }}" > /dev/null
+        fi
+
+        echo "let's let things settle for a bit"
+        sleep 30
+
+        if [[ "$(drpcli endpoints show zehicle-us-west | jq -r .Available)" == "true" ]]; then
+          echo "Yes: Endpoint is Available"
+        else
+          echo "WARNING: Endpoint is NOT available"
+        fi
+
+      else
+        echo "Not a manager, no action"
+      fi
+
+      exit 0
+    Name: "drp-reguster"
+Meta:
+  icon: "chess"
+  color: "purple"
+  title: "RackN Content"
+  feature-flags: "sane-exit-codes"

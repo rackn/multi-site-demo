@@ -1,0 +1,17 @@
+---
+Id: azure
+Description: Azure provisioning operations
+Meta:
+  color: blue
+  icon: microsoft
+  title: Azure Profile
+EnterActions:
+  AddProfiles:
+    - azure
+ExitActions:
+  RemoveProfiles:
+    - azure
+AllocateActions:
+  Workflow: cloud-provision
+ReleaseActions:
+  Workflow: cloud-decommission

@@ -6,16 +6,16 @@ set -e
 
 PATH=$PATH:.
 
-export RS_ENDPOINT=$(terraform output drp_manager)
-
 rm -f profiles/linode.yaml
 rm -f profiles/aws.yaml
 rm -f profiles/google.yaml
 
 FORCE="false"
-while getopts ":f" CmdLineOpts
+PASSWORD="r0cketsk8ts"
+while getopts ":P:f" CmdLineOpts
 do
   case $CmdLineOpts in
+    P) PASSWORD=${OPTARG}     ;;
     f) FORCE="true"          ;;
     u) usage; exit 0          ;;
     \?)
@@ -24,6 +24,10 @@ do
       ;;
   esac
 done
+
+export RS_ENDPOINT=$(terraform output drp_manager)
+export RS_KEY="rocketskates:${PASSWORD}"
+echo "Using RS_ENDPOINT=$RS_ENDPOINT and RS_KEY=$RS_KEY"
 
 pools="linode aws google testing"
 if [[ -r manager.tfvars ]]
@@ -46,17 +50,8 @@ while [[ $(drpcli machines count WorkflowComplete=false) -gt 0 ]]; do
 done
 echo "done waiting"
 
-sites="us-central us-west us-east us-southeast"
-if [[ -r manager.tfvars ]]
-then
-  PRE=$(cat manager.tfvars | grep cluster_prefix | cut -d '"' -f2)
-  for S in $sites
-  do
-    s+="$PRE-$S "
-  done
-  sites=$s
-fi
 
+sites=$(drpcli endpoints list | jq -r .[].Id)
 echo ""
 echo "sites set to:"
 echo $sites
@@ -69,7 +64,7 @@ do
     drpcli machines update Name:$mc '{"Locked":false}' > /dev/null
     drpcli machines meta set Name:$mc key BaseContext to "runner"
     drpcli machines update Name:$mc '{"Context":"runner"}' > /dev/null
-    drpcli machines workflow Name:$mc cloud-decommission > /dev/null
+    drpcli machines workflow Name:$mc site-destroy > /dev/null
     # backslash escape seems to be needed, otherwise it's being intepreted as YAML input
     drpcli machines set Name:$mc param Runnable to true
   else
@@ -84,11 +79,10 @@ do
   then
     drpcli machines wait Name:$mc WorkflowComplete true 120
     drpcli machines destroy Name:$mc
-    drpcli endpoints destroy $mc
   fi
 done
 
-if [ "$FORCE" == "true" ] || [ "$(drpcli machines list | jq length)" == "1" ]; then
+if [ "$FORCE" == "true" ] || [ $(drpcli machines count Context Eq "") -eq 1 ]; then
 
   echo "removing manager"
   terraform init -no-color
@@ -101,7 +95,7 @@ if [ "$FORCE" == "true" ] || [ "$(drpcli machines list | jq length)" == "1" ]; t
   rm -f terraform.tfstate terraform.tfstate.backup
 
 else
-  echo "WARNING machines still exist - did not destroy manager.  Call with -f to force!"
+  echo "WARNING provisioned machines still exist - did not destroy manager.  Call with -f to force!"
 fi
 
 

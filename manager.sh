@@ -113,7 +113,7 @@ PREP="true"
 BASE="site-base-tip"           # "stable" is not fully available in the catalog
 OPTS=""
 MGR_LBL="global-manager"
-MGR_PWD="r0cketsk8ts"
+MGR_PWD="digitalrebar"
 MGR_RGN="us-west"
 MGR_IMG="linode/centos8"
 MGR_TYP="g6-standard-4"
@@ -199,6 +199,8 @@ EO_MANAGER_VARS
 
 echo "remove cached DRP token"
 rm -f ~/.cache/drpcli/tokens/.rocketskates.token || true
+unset RS_TOKEN
+unset RS_LOCAL_PROXY
 
 (( $DBG )) && { echo "manager.tfvars set to:"; cat manager.tfvars; }
 
@@ -211,6 +213,32 @@ terraform apply -no-color -auto-approve -var-file=manager.tfvars
 
 export RS_ENDPOINT=$(terraform output drp_manager)
 export RS_IP=$(terraform output drp_ip)
+export RS_KEY="rocketskates:${MGR_PWD}"
+echo "Terraform Finished, expecting: export RS_ENDPOINT=${RS_ENDPOINT} && export RS_KEY=${RS_KEY}"
+echo "Script is idempotent - restart if needed!"
+
+echo "Waiting for API to be available"
+timeout 120 bash -c 'while [[ "$(curl -fsSL -o /dev/null -w %{http_code} http://$RS_IP:8091)" != "200" ]]; do sleep 3; done' || false
+
+attempt=1
+while (( $attempt < 5 )); do
+  sleep 2
+  if _drpcli -P ${MGR_PWD} info check > /dev/null ; then 
+    echo "no change: password already set to $MGR_PWD"
+    break
+  else
+    echo "setting rocketskates password to $MGR_PWD"
+    _drpcli users password "rocketskates" "${MGR_PWD}" > /dev/null || true
+    rm -f ~/.cache/drpcli/tokens/.rocketskates.token || true
+  fi
+  attempt=$(( attempt + 1 ))
+done
+if [[ $attempt -gt 4 ]]; then
+  echo "ERROR: could not login"
+  exit 1
+fi
+
+export RS_TOKEN="$(_drpcli users token "rocketskates" | jq -r .Token)"
 
 if [[ -f rackn-license.json ]]; then
   if [[ "$VALIDATE_LIC" == "true" ]] ; then
@@ -287,8 +315,8 @@ Params:
   "aws/access-key-id": $(awk '/aws_access_key_id/{ print $3}' ~/.aws/credentials)
   "rsa/key-user": "ec2-user"
 Meta:
-  color: "purple"
-  icon: "cloud"
+  color: "blue"
+  icon: "amazon"
   title: "generated"
 EOF
 else
@@ -299,7 +327,7 @@ fi
 google=$(ls ~/.gconf/desktop/*.json)
 if [[ -f $google ]]; then
     echo "Adding Google profile for cloud-wrap"
-    gconf=$(cat $google)
+    gconf=$(cat $google) > /dev/null
     tee profiles/google-credentials.json >/dev/null << EOF
 {
   "Name": "google",
@@ -311,14 +339,52 @@ if [[ -f $google ]]; then
     "google/credential": $(cat $google)
   },  
   "Meta": {
-    "color": "orange",
-    "icon": "cloud",
+    "color": "blue",
+    "icon": "google",
     "title": "generated"
   }
 }
 EOF
 else
   echo "no Google credentials, skipping"
+fi
+
+if which az > /dev/null ; then
+  if az vm list > /dev/null ; then
+    echo "Azure login verified"
+  else
+    if ! az login > /dev/null ; then
+      echo "WARNING: no azure credentials!"
+    fi
+  fi
+  if az account list > /dev/null; then
+    # see https://www.terraform.io/docs/providers/azurerm/guides/service_principal_client_secret.html
+    azure_subscription_id=$(az account list | jq -r '.[0].id')
+    azure_resource=$(az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/$azure_subscription_id")
+    tee profiles/azure-credentials.json >/dev/null << EOF
+{
+  "Name": "azure",
+  "Description": "Azure Credentials",
+  "Params": {
+    "cloud/provider": "azure",
+    "azure/subscription_id": "$azure_subscription_id",
+    "azure/appId": "$(jq -r .appId <<< "$azure_resource")",
+    "azure/password": "$(jq -r .password <<< "$azure_resource")",
+    "azure/tenant": "$(jq -r .tenant <<< "$azure_resource")",
+    "rsa/key-user": "rob"
+  },  
+  "Meta": {
+    "color": "blue",
+    "icon": "microsoft",
+    "title": "generated"
+  }
+}
+EOF
+  else
+    echo "WARNING: az account list failed"
+  fi
+else
+  echo "Skipping Azure, no az cli installed"
 fi
 
 # upload linode credentials
@@ -333,8 +399,8 @@ Params:
   "linode/instance-type": "g6-standard-2"
   "linode/root-password": "r0cketsk8ts"
 Meta:
-  color: "green"
-  icon: "cloud"
+  color: "blue"
+  icon: "linode"
   title: "generated"
 EOF
 
@@ -354,11 +420,7 @@ EOF
 _drpcli contents bundle ../multi-site-demo.json >/dev/null
 cd ..
 
-echo "Script is idempotent - restart if needed!"
-echo "Waiting for endpoint to be up.  export RS_ENDPOINT=$RS_ENDPOINT"
-timeout 300 bash -c 'while [[ "$(curl -fsSLk -o /dev/null -w %{http_code} ${RS_ENDPOINT} 2>/dev/null)" != "200" ]]; do sleep 3; done' || false
-
-items="rackn-license contents task-library multi-site-demo edge-lab dev-library billing"
+items="rackn-license contents task-library multi-site-demo edge-lab dev-library billing ux-views cloud-wrappers"
 for c in $items; do
   if [[ -f $c.json ]] ; then
      echo "ALERT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
@@ -382,7 +444,8 @@ _drpcli files upload rackn-license.json to "rebar-catalog/rackn-license/${rlv}.j
 
 echo "Building catalog"
 ./catalogger.py --items drp,task-library,drp-community-content,docker-context,edge-lab,dev-library,cloud-wrappers > rackn-catalog.json
-_drpcli profiles set global set catalog_url to - >/dev/null <<< $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
+_drpcli profiles set global param catalog_url to - >/dev/null <<< $RS_ENDPOINT/files/rebar-catalog/rackn-catalog.json
+_drpcli profiles set global param "dr-server/initial-password" to "${MGR_PWD}" >/dev/null
 _drpcli files upload rackn-catalog.json as "rebar-catalog/static-catalog.json" >/dev/null
 
 #if [[ -f static-catalog.zip ]] ; then
@@ -405,14 +468,18 @@ drpcli profiles set global param "network/firewall-ports" to '[
   "22/tcp", "8091/tcp", "8092/tcp", "6443/tcp", "8379/tcp", "8080/tcp", "8380/tcp", "10250/tcp"
 ]' >/dev/null
 
-echo "BOOTSTRAP export RS_ENDPOINT=$RS_ENDPOINT"
+_drpcli machines update "Name:$MGR_LBL" '{"Locked":false}'  >/dev/null
+_drpcli machines update "Name:$MGR_LBL" '{"Workflow":""}' >/dev/null
+_drpcli machines workflow "Name:$MGR_LBL" "bootstrap-advanced" >/dev/null
+
+echo "BOOTSTRAP export RS_ENDPOINT=$RS_ENDPOINT && export RS_KEY=${RS_KEY}"
 
 echo "Waiting for Manager to finish bootstrap"
 _drpcli prefs set manager true  >/dev/null
 _drpcli machines wait "Name:$MGR_LBL" WorkflowComplete true 360
 
 # after bootstrap, install more stuff
-items="cloud-wrappers multi-site-demo dev-library"
+items="cloud-wrappers multi-site-demo dev-library ux-views"
 for c in $items; do
   if [[ -f $c.json ]] ; then
      echo "ALERT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
@@ -431,22 +498,38 @@ _drpcli machines workflow "Name:$MGR_LBL" "bootstrap-manager" >/dev/null
 echo "Waiting for Manager to reach catalog state in (re)bootstrap"
 _drpcli machines wait "Name:$MGR_LBL" Stage "bootstrap-manager" 360
 
-_drpcli prefs set defaultWorkflow discover-joinup defaultBootEnv sledgehammer unknownBootEnv discovery  >/dev/null
+_drpcli prefs set defaultWorkflow discover-base defaultBootEnv sledgehammer unknownBootEnv discovery  >/dev/null
+
+echo "Setting Banner Color "
+drpcli extended -l ux_settings create '{
+  "Target": "user++rocketskates",
+  "Type": "ux_settings",
+  "Option": "ux.cosmetic.navbar_color",
+  "Id": "user++rocketskates++ux.cosmetic.navbar_color",
+  "Value": "\"blue\""
+}' > /dev/null
 
 for mc in $SITES;
 do
+  case $mc in
+    *-us-east) color="brown" ;;
+    *-us-central) color="green" ;;
+    *-us-west) color="purple" ;;
+    *-us-southeast) color="orange" ;;
+    *) color="black"
+  esac
   if ! _drpcli machines exists Name:$mc 2>/dev/null >/dev/null; then
     reg=$mc
     [[ -n "$PREFIX" ]] && reg=$(echo $mc | sed 's/'${PREFIX}'-//g')
-    echo "Creating $mc"
+    echo "Creating $mc ($color)"
     echo "drpcli machines create \"{\"Name\":\"${mc}\", ... "
     drpcli machines create "{\"Name\":\"${mc}\", \
       \"Workflow\":\"site-create\", \
       \"BootEnv\":\"sledgehammer\", \
       \"Description\":\"Edge DR Server\", \
       \"Profiles\":[\"$PREFIX\",\"linode\"], \
-      \"Params\":{\"linode/region\": \"${reg}\", \"network\firewall-ports\":[\"22/tcp\",\"8091/tcp\",\"8092/tcp\"] }, \
-      \"Meta\":{\"BaseContext\":\"runner\", \"icon\":\"cloud\"}}" >/dev/null
+      \"Params\":{\"linode/region\": \"${reg}\", \"color\":\"${color}\", \"network\firewall-ports\":[\"22/tcp\",\"8091/tcp\",\"8092/tcp\"] }, \
+      \"Meta\":{\"BaseContext\":\"runner\", \"color\":\"${color}\", \"icon\":\"cloud\"}}" >/dev/null
     sleep $LOOP_WAIT
   else
     echo "machine $mc already exists"
@@ -523,5 +606,5 @@ echo ">>> Cluster Prefix is set to:  $PREFIX"
 echo ">>>"
 echo ">>> DONE !!! Example export for Endpoint:"
 echo ">>>"
-echo "export RS_ENDPOINT=$RS_ENDPOINT"
+echo "export RS_ENDPOINT=$RS_ENDPOINT && export RS_KEY=${RS_KEY}"
 echo ""

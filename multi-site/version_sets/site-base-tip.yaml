@@ -9,6 +9,9 @@ Components:
 - Name: docker-context
   Type: PluginProvider
   Version: tip
+- Name: ux-views
+  Type: PluginProvider
+  Version: tip
 - Name: drp-community-content
   Type: ContentPackage
   Version: tip
@@ -30,6 +33,8 @@ Components:
 Plugins:
 - Name: docker-context
   Provider: docker-context
+- Name: ux-views
+  Provider: ux-views
 Prefs:
   defaultBootEnv: local
   defaultStage: none
@@ -92,7 +97,7 @@ Global:
   - hourglass
   - stopwatch
   - clone
-  - chrosshairs
+  - crosshairs
   - tint
   - bold
   - pencil

@@ -23,28 +23,46 @@ do
   esac
 done
 
-sites="us-central us-west us-east us-southeast"
-if [[ -r manager.tfvars ]]
-then
-  PRE=$(cat manager.tfvars | grep cluster_prefix | cut -d '"' -f2)
-  for S in $sites
-  do
-    s+="$PRE-$S "
-  done
-  sites=$s
+icons=$(drpcli version_sets show site-base-tip | jq '.Global["dev/wait-icons"]')
+if drpcli profiles set global param "dev/wait-icons" to - <<< $icons > /dev/null ; then
+  echo "setting icons"
+else
+  echo "icons already set"
 fi
 
+sites=$(drpcli endpoints list | jq -r .[].Id)
 echo "sites set to:"
 echo $sites
 
 echo "create $SCALE load test machines"
 i=1
 while (( i < SCALE )); do
+  mc=$(printf "scale-%05d-manager" $i)
+  if drpcli machines exists Name:$mc &> /dev/null ; then
+    if [ "$REMOVE" == "true" ] ; then
+      echo "removing machine $mc."
+      drpcli machines destroy Name:${mc} >/dev/null
+    else
+      echo "machine $mc already exists.  restarting load-generator"
+      drpcli machines workflow Name:${mc} "load-generator" >/dev/null
+    fi
+  else
+    if [ "$REMOVE" != "true" ] ; then
+      echo "creating $mc in manager"
+      sleep 1
+      drpcli machines create "{\"Name\":\"${mc}\", \
+        \"Workflow\":\"load-generator\", \
+        \"Description\":\"Load Test $i\", \
+        \"Meta\":{\"BaseContext\":\"runner\", \"icon\":\"cloud\"}}" >/dev/null
+    else
+      echo "skipping, $mc does not exist"
+    fi
+  fi
   for s in $sites;
   do
   (
-    mc=$(printf "$s-%05d" $i)
-    if drpcli -u $s machines exists Name:$mc > /dev/null ; then
+    mc=$(printf "scale-%05d-$s" $i)
+    if drpcli -u $s machines exists Name:$mc &> /dev/null ; then
       if [ "$REMOVE" == "true" ] ; then
         echo "removing machine $mc."
         drpcli -u $s machines destroy Name:${mc} >/dev/null
@@ -60,6 +78,8 @@ while (( i < SCALE )); do
           \"Workflow\":\"load-generator\", \
           \"Description\":\"Load Test $i\", \
           \"Meta\":{\"BaseContext\":\"runner\", \"icon\":\"cloud\"}}" >/dev/null
+      else
+        echo "skipping, $mc does not exist"
       fi
     fi
   ) &
