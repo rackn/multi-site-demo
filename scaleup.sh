@@ -23,6 +23,13 @@ do
   esac
 done
 
+icons=$(drpcli version_sets show site-base-tip | jq '.Global["dev/wait-icons"]')
+if drpcli profiles set global param "dev/wait-icons" to - <<< $icons > /dev/null ; then
+  echo "setting icons"
+else
+  echo "icons already set"
+fi
+
 sites=$(drpcli endpoints list | jq -r .[].Id)
 echo "sites set to:"
 echo $sites
