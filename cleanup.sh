@@ -44,8 +44,9 @@ then
 fi
 
 echo "waiting for all machines to be WorkflowComplete"
-while [[ $(drpcli machines count WorkflowComplete=false) -gt 0 ]]; do
-  echo "... waiting 5 seconds"
+while [[ $(drpcli machines count WorkflowComplete Eq false) -gt 0 ]]; do
+  suspects=$(drpcli machines list WorkflowComplete Eq false | jq -r .[].Name)
+  echo "... waiting 5 seconds.  Working Machines are [$suspects]"
   sleep 5
 done
 echo "done waiting"
