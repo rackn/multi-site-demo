@@ -25,6 +25,9 @@ Templates:
         esac
       fi
 
+      echo "Relax SELinux - not for production!"
+      setenforce Permissive
+
       echo "Podman installed successfully"
       exit 0
     Name: "podman-install"

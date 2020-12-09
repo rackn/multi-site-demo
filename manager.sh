@@ -122,7 +122,7 @@ LINODE_TOKEN=${LINODE_TOKEN:-""}
 SITES="us-central us-east us-west us-southeast"
 DBG=0
 LOOP_WAIT=15
-VER_CONTENT="stable"
+VER_CONTENT="tip"
 VALIDATE_LIC="true"
 
 while getopts ":dxpb:c:t:L:P:R:I:T:S:v:u" CmdLineOpts
