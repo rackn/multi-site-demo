@@ -218,22 +218,18 @@ echo "Terraform Finished, expecting: export RS_ENDPOINT=${RS_ENDPOINT} && export
 echo "Script is idempotent - restart if needed!"
 
 echo "Waiting for API to be available"
-timeout 120 bash -c 'while [[ "$(curl -fsSL -o /dev/null -w %{http_code} http://$RS_IP:8091)" != "200" ]]; do sleep 3; done' || false
+timeout 360 bash -c 'while [[ "$(curl -fsSL -o /dev/null -w %{http_code} http://$RS_IP:8091)" != "200" ]]; do sleep 3; done' || false
 
 attempt=1
-while (( $attempt < 5 )); do
+while (( $attempt < 50 )); do
   sleep 2
-  if _drpcli -P ${MGR_PWD} info check > /dev/null ; then 
+  if _drpcli -P ${MGR_PWD} info get > /dev/null ; then
     echo "no change: password already set to $MGR_PWD"
     break
-  else
-    echo "setting rocketskates password to $MGR_PWD"
-    _drpcli users password "rocketskates" "${MGR_PWD}" > /dev/null || true
-    rm -f ~/.cache/drpcli/tokens/.rocketskates.token || true
   fi
   attempt=$(( attempt + 1 ))
 done
-if [[ $attempt -gt 4 ]]; then
+if [[ $attempt -gt 49 ]]; then
   echo "ERROR: could not login"
   exit 1
 fi
@@ -324,7 +320,7 @@ else
 fi
 
 # upload aws & google credentials
-google=$(ls ~/.gconf/desktop/*.json)
+google=$(ls ~/.gconf/desktop/*.json || echo "none")
 if [[ -f $google ]]; then
     echo "Adding Google profile for cloud-wrap"
     gconf=$(cat $google) > /dev/null
@@ -337,7 +333,7 @@ if [[ -f $google ]]; then
     "google/project-id": "$(jq -r .project_id <<< "$gconf")",
     "rsa/key-user": "rob",
     "google/credential": $(cat $google)
-  },  
+  },
   "Meta": {
     "color": "blue",
     "icon": "google",
@@ -372,7 +368,7 @@ if which az > /dev/null ; then
     "azure/password": "$(jq -r .password <<< "$azure_resource")",
     "azure/tenant": "$(jq -r .tenant <<< "$azure_resource")",
     "rsa/key-user": "rob"
-  },  
+  },
   "Meta": {
     "color": "blue",
     "icon": "microsoft",
@@ -468,9 +464,6 @@ drpcli profiles set global param "network/firewall-ports" to '[
   "22/tcp", "8091/tcp", "8092/tcp", "6443/tcp", "8379/tcp", "8080/tcp", "8380/tcp", "10250/tcp"
 ]' >/dev/null
 
-_drpcli machines update "Name:$MGR_LBL" '{"Locked":false}'  >/dev/null
-_drpcli machines update "Name:$MGR_LBL" '{"Workflow":""}' >/dev/null
-_drpcli machines workflow "Name:$MGR_LBL" "bootstrap-advanced" >/dev/null
 
 echo "BOOTSTRAP export RS_ENDPOINT=$RS_ENDPOINT && export RS_KEY=${RS_KEY}"
 
@@ -486,7 +479,7 @@ for c in $items; do
      echo "overriding catalog with local content $c"
      _drpcli contents upload $c.json >/dev/null
   else
-     _drpcli catalog item install $c --version=tip >/dev/null 
+     _drpcli catalog item install $c --version=tip >/dev/null
   fi
 done
 
@@ -496,18 +489,25 @@ _drpcli machines update "Name:$MGR_LBL" '{"Workflow":""}' >/dev/null
 _drpcli machines workflow "Name:$MGR_LBL" "bootstrap-manager" >/dev/null
 
 echo "Waiting for Manager to reach catalog state in (re)bootstrap"
-_drpcli machines wait "Name:$MGR_LBL" Stage "bootstrap-manager" 360
+_drpcli machines wait "Name:$MGR_LBL" Stage "bootstrap-manager" 600
 
 _drpcli prefs set defaultWorkflow discover-base defaultBootEnv sledgehammer unknownBootEnv discovery  >/dev/null
 
+# This is to attempt to reeval stages
+echo "Hack to reset stages"
+_drpcli contents show cloud-wrappers | _drpcli contents upload - >/dev/null
+_drpcli contents show multi-site-demo --key=/tmp/keyfile.json | _drpcli contents upload --key=/tmp/keyfile.json - >/dev/null
+
 echo "Setting Banner Color "
-drpcli extended -l ux_settings create '{
+if ! drpcli extended -l ux_settings exists "user++rocketskates++ux.cosmetic.navbar_color" ; then
+  drpcli extended -l ux_settings create '{
   "Target": "user++rocketskates",
   "Type": "ux_settings",
   "Option": "ux.cosmetic.navbar_color",
   "Id": "user++rocketskates++ux.cosmetic.navbar_color",
   "Value": "\"blue\""
 }' > /dev/null
+fi
 
 for mc in $SITES;
 do
@@ -549,6 +549,9 @@ then
   done
 
   wait
+
+  # Manager should have a catalog in good state before running version sets
+  _drpcli machines wait "Name:$MGR_LBL" WorkflowComplete true 360
 
   for mc in $SITES
   do
