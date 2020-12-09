@@ -24,6 +24,16 @@ variable "manager_password" {
   type      = string
 }
 
+terraform {
+  required_providers {
+    linode = {
+      source = "linode/linode"
+      version = ">= 1.13.4"
+    }
+  }
+  required_version = ">= 0.13"
+}
+
 provider "linode" {
   token     = var.linode_token
 }
