@@ -80,6 +80,7 @@ do
   then
     drpcli machines wait Name:$mc WorkflowComplete true 120
     drpcli machines destroy Name:$mc
+    drpcli endpoints destroy $mc >/dev/null 2>/dev/null || :
   fi
 done
 
