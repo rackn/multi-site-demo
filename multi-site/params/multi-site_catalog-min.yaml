@@ -1,0 +1,11 @@
+---
+Name: "multi-site/catalog-min"
+Description: "Minimum version to download for catalog"
+Schema:
+  type: "string"
+  default: "v4.5.4"
+Meta:
+  type: "id"
+  icon: "hashtag"
+  color: "blue"
+  title: "Digital Rebar Community Content"
