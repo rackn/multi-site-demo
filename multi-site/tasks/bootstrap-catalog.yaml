@@ -34,7 +34,7 @@ Templates:
         drpcli catalog updateLocal -c static-catalog.json
       else
         echo "Update the local catalog from the RackN default catalog"
-        drpcli catalog updateLocal
+        drpcli catalog updateLocal --version={{.Param "multi-site/catalog-min"}}
       fi
 
       echo "Setting up local manager catalog"
