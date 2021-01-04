@@ -30,7 +30,7 @@ else
   echo "icons already set"
 fi
 
-sites=$(drpcli endpoints list | jq -r .[].Id)
+sites=$(drpcli endpoints list Apply Eq true | jq -r .[].Id)
 echo "sites set to:"
 echo $sites
 

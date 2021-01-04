@@ -43,14 +43,18 @@ then
   done
 fi
 
-echo "waiting for all machines to be WorkflowComplete"
-while [[ $(drpcli machines count WorkflowComplete Eq false) -gt 0 ]]; do
-  suspects=$(drpcli machines list WorkflowComplete Eq false | jq -r .[].Name)
-  echo "... waiting 5 seconds.  Working Machines are [$suspects]"
-  sleep 5
-done
-echo "done waiting"
 
+if [[ "$FORCE" == "true" ]]; then
+  echo "WARNING: potential orphaned servers!! skipping WorkflowComplete test"
+else
+  echo "waiting for all machines to be WorkflowComplete"
+  while [[ $(drpcli machines count WorkflowComplete Eq false) -gt 0 ]]; do
+    suspects=$(drpcli machines list WorkflowComplete Eq false | jq -r .[].Name)
+    echo "... waiting 5 seconds.  Working Machines are [$suspects]"
+    sleep 5
+  done
+  echo "done waiting"
+fi
 
 sites=$(drpcli endpoints list | jq -r .[].Id)
 echo ""
@@ -67,7 +71,7 @@ do
     drpcli machines update Name:$mc '{"Context":"runner"}' > /dev/null
     drpcli machines workflow Name:$mc site-destroy > /dev/null
     # backslash escape seems to be needed, otherwise it's being intepreted as YAML input
-    drpcli machines set Name:$mc param Runnable to true
+    drpcli machines set Name:$mc param Runnable to true > /dev/null
   else
     echo "machine $mc already does not exist"
   fi
