@@ -29,7 +29,7 @@ export RS_ENDPOINT=$(terraform output drp_manager)
 export RS_KEY="rocketskates:${PASSWORD}"
 echo "Using RS_ENDPOINT=$RS_ENDPOINT and RS_KEY=$RS_KEY"
 
-pools="linode aws google testing"
+pools="linode aws google azure digitalocean testing"
 if [[ -r manager.tfvars ]]
 then
   for P in $pools
@@ -97,9 +97,9 @@ if [ "$FORCE" == "true" ] || [ $(drpcli machines count Context Eq "") -eq 1 ]; t
   if [[ -e "multi-site-demo.json" ]]; then
     rm multi-site-demo.json
   fi
+  rm -f multi-site/profiles/*
 
   rm -f terraform.tfstate terraform.tfstate.backup
-
 else
   echo "WARNING provisioned machines still exist - did not destroy manager.  Call with -f to force!"
 fi

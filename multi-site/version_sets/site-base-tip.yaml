@@ -39,6 +39,7 @@ Prefs:
   defaultBootEnv: local
   defaultStage: none
   defaultWorkflow: discover-base
+  defaultBootEnv: discovery
   unknownBootEnv: discovery
   completeJobsPurgedAfter: never
   failedJobsPurgedAfter: never

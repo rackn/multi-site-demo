@@ -36,7 +36,7 @@ Plugins:
 - Name: ux-views
   Provider: ux-views
 Prefs:
-  defaultBootEnv: local
+  defaultBootEnv: discovery
   defaultStage: none
   defaultWorkflow: discover-base
   unknownBootEnv: discovery

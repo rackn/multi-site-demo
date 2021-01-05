@@ -250,6 +250,10 @@ if [[ -f rackn-license.json ]]; then
     matchany=$(jq -r "contains([\"MatchAny\"])" <<< $endpoints)
     updated=false
     for mc in $SITES; do
+      if [[ $SITES == 'none' ]]; then
+        echo "Not building any sites."
+        break
+      fi
       licensed=$(jq -r "contains([\"$mc\"])" <<< $endpoints)
       if [[ "${licensed}" == "true" || "${matchany}" == "true" ]]; then
         echo "endpoint $mc found in license!"
@@ -383,7 +387,25 @@ else
   echo "Skipping Azure, no az cli installed"
 fi
 
-# upload linode credentials
+if [[ $DO_TOKEN ]]; then
+  echo "upload digital ocean credentials"
+  tee profiles/digitalocean.yaml >/dev/null << EOF
+---
+Name: "digitalocean"
+Description: "Digital Ocean Credentials"
+Params:
+  "cloud/provider": "digitalocean"
+  "digitalocean/token": "$DO_TOKEN"
+Meta:
+  color: "green"
+  icon: "digital ocean"
+  title: "generated"
+EOF
+else
+  echo "Skipping Digital Ocean, no token"
+fi
+
+echo "upload linode credentials"
 tee profiles/linode.yaml >/dev/null << EOF
 ---
 Name: "linode"
@@ -509,8 +531,13 @@ if ! drpcli extended -l ux_settings exists "user++rocketskates++ux.cosmetic.navb
 }' > /dev/null
 fi
 
+
 for mc in $SITES;
 do
+  if [[ $SITES == "${PREFIX}-none" ]]; then
+    echo "Not building any sites."
+    break
+  fi
   case $mc in
     *-us-east) color="brown" ;;
     *-us-central) color="green" ;;
@@ -536,7 +563,7 @@ do
   fi
 done
 
-if [[ "$PREP" == "true" ]]
+if [[ "$PREP" == "true" && "$SITES" != "${PREFIX}-none" ]]
 then
   echo "VersionSet prep was requested."
   echo "Waiting for regional endpoints to reach 'complete-nobootenv'"
