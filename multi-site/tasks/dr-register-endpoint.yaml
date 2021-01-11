@@ -26,14 +26,14 @@ Templates:
             "Params":{"manager/url": "https://{{ .Machine.Address }}:8092"},
             "Meta":{{ .Machine.Meta | toJson }} }' > /dev/null
           drpcli endpoints set {{ .Machine.Name }} param "manager/username" to "{{ .Param "dr-server/initial-user" }}" > /dev/null
-          drpcli endpoints set {{ .Machine.Name}}  param "manager/password" to "{{ .Param "dr-server/initial-password" }}" > /dev/null
+          drpcli endpoints set {{ .Machine.Name }} param "manager/password" to "{{ .Param "dr-server/initial-password" }}" > /dev/null
+  
+          echo "let's let things settle for 30 seconds"
+          sleep 30
         fi
 
-        echo "let's let things settle for a bit"
-        sleep 30
-
-        if [[ "$(drpcli endpoints show zehicle-us-west | jq -r .Available)" == "true" ]]; then
-          echo "Yes: Endpoint is Available"
+        if [[ "$(drpcli endpoints show {{ .Machine.Name }} | jq -r .Available)" == "true" ]]; then
+          echo "Yes: Endpoint is Available. Setting rocketskates Password"
         else
           echo "WARNING: Endpoint is NOT available"
         fi

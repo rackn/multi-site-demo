@@ -545,6 +545,12 @@ do
     *-us-southeast) color="orange" ;;
     *) color="black"
   esac
+  if ! drpcli users exists $mc 2>/dev/null >/dev/null; then
+    drpcli users create "{\"Name\":\"$mc\", \"Roles\":[\"superuser\"]}"
+    drpcli users password $mc $MGR_PWD
+  else
+    echo "skipping: user $mc already exists"
+  fi
   if ! _drpcli machines exists Name:$mc 2>/dev/null >/dev/null; then
     reg=$mc
     [[ -n "$PREFIX" ]] && reg=$(echo $mc | sed 's/'${PREFIX}'-//g')
@@ -555,7 +561,7 @@ do
       \"BootEnv\":\"sledgehammer\", \
       \"Description\":\"Edge DR Server\", \
       \"Profiles\":[\"$PREFIX\",\"linode\"], \
-      \"Params\":{\"linode/region\": \"${reg}\", \"color\":\"${color}\", \"network\firewall-ports\":[\"22/tcp\",\"8091/tcp\",\"8092/tcp\"] }, \
+      \"Params\":{\"dr-server/initial-user\": \"${mc}\", \"linode/region\": \"${reg}\", \"color\":\"${color}\", \"network\firewall-ports\":[\"22/tcp\",\"8091/tcp\",\"8092/tcp\"] }, \
       \"Meta\":{\"BaseContext\":\"runner\", \"color\":\"${color}\", \"icon\":\"cloud\"}}" >/dev/null
     sleep $LOOP_WAIT
   else

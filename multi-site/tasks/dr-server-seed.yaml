@@ -13,6 +13,9 @@ ExtraClaims:
   - scope: "profiles"
     action: "*"
     specific: "global"
+  - scope: "users"
+    action: "*"
+    specific: "rocketskates"
 Templates:
   - Contents: |-
       #!/bin/bash
@@ -37,13 +40,20 @@ Templates:
         echo "runner context already installed"
       else
         echo "adding local runner context"
-        drpcli -u $EPID contexts create - < runner.json
+        drpcli -u $EPID contexts create - < runner.json  > /dev/null
       fi
 
       {{ if .ParamExists "color "}}
         echo "setting UX color to {{ .Param "color" }}"
         drpcli extended -l ux_settings create '{
           "Target": "user++rocketskates",
+          "Type": "ux_settings",
+          "Option": "ux.cosmetic.navbar_color",
+          "Id": "user++rocketskates++ux.cosmetic.navbar_color",
+          "Value": "\"{{ .Param "color" }}\""
+        }' > /dev/null
+        drpcli extended -l ux_settings create '{
+          "Target": "user++{{ .Machine.Name }}",
           "Type": "ux_settings",
           "Option": "ux.cosmetic.navbar_color",
           "Id": "user++rocketskates++ux.cosmetic.navbar_color",
@@ -56,9 +66,15 @@ Templates:
       for context in $contexts; do
         image=$(jq -r ".[$i].Image" <<< "${raw}")
         echo "Installing Container for $context named from $image"
-        drpcli -u $EPID files upload {{ .ProvisionerURL }}/files/contexts/docker-context/${image} as contexts/docker-context/${image}
+        drpcli -u $EPID files upload {{ .ProvisionerURL }}/files/contexts/docker-context/${image} as contexts/docker-context/${image} > /dev/null
         i=$(($i + 1))
       done
+
+      if drpcli -u {{ .Machine.Name }} users password rocketskates {{ .Param "dr-server/initial-password" }} > /dev/null; then
+        echo "Set rocketskates password for {{ .Machine.Name }}"
+      else
+        echo "WARNING: error setting rocketskates password"
+      fi
 
       echo "done"
       exit 0
