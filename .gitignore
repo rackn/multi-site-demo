@@ -4,6 +4,7 @@ rackn-catalog.json
 v4drp-install.zip
 install.sh
 rackn-license.json
+rackn-license.old
 dangerzone
 *.tar
 *.tar.gz
@@ -29,4 +30,9 @@ endpoint-exec
 static-catalog.zip
 manager.tfvars
 contexts/*
+contexts.yaml
 versions.tf
+us-east.json
+us-west.json
+us-central.json
+us-southeast.json

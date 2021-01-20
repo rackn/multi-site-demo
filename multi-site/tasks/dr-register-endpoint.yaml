@@ -18,24 +18,30 @@ Templates:
       manager="$(drpcli info get | jq -r .manager)"
       if [[ "$manager" == "true" ]] ; then
 
-        if drpcli endpoints exists {{ .Machine.Name }} ; then
-          echo "Endpoint {{ .Machine.Name }} already registered in Manager"
+        {{ if .ParamExists "dr-server/install-drpid" }}
+        DRPID={{ regexFind "[a-zA-Z0-9-]+" (.Param "dr-server/install-drpid") }}
+        {{ else }}
+        DRPID="{{ regexFind "[a-zA-Z0-9-]+" (list "site" .Machine.Name | join "-") }}"
+        {{ end }}
+
+        if drpcli endpoints exists $DRPID >/dev/null ; then
+          echo "Endpoint $DRPID already registered in Manager"
         else
-          echo "Manager, register new endpoint"
-          drpcli endpoints create '{"Id":"{{ .Machine.Name }}",
-            "Params":{"manager/url": "https://{{ .Machine.Address }}:8092"},
-            "Meta":{{ .Machine.Meta | toJson }} }' > /dev/null
-          drpcli endpoints set {{ .Machine.Name }} param "manager/username" to "{{ .Param "dr-server/initial-user" }}" > /dev/null
-          drpcli endpoints set {{ .Machine.Name }} param "manager/password" to "{{ .Param "dr-server/initial-password" }}" > /dev/null
+          echo "Manager, register new endpoint $DRPID (from machine {{.Machine.Name}})"
+          drpcli endpoints create "{\"Id\":\"$DRPID\",
+            \"Params\":{\"manager/url\": \"https://{{ .Machine.Address }}:8092\"},
+            \"Meta\":{{ .Machine.Meta | toJson }} }" > /dev/null
+          drpcli endpoints set $DRPID param "manager/username" to "{{ .Param "dr-server/initial-user" }}" > /dev/null
+          drpcli endpoints set $DRPID param "manager/password" to "{{ .Param "dr-server/initial-password" }}" > /dev/null
   
           echo "let's let things settle for 30 seconds"
           sleep 30
         fi
 
-        if [[ "$(drpcli endpoints show {{ .Machine.Name }} | jq -r .Available)" == "true" ]]; then
-          echo "Yes: Endpoint is Available. Setting rocketskates Password"
+        if [[ "$(drpcli endpoints show $DRPID | jq -r .Available)" == "true" ]]; then
+          echo "Yes: Endpoint $DRPID is Available."
         else
-          echo "WARNING: Endpoint is NOT available"
+          echo "WARNING: Endpoint $DRPID is NOT available"
         fi
 
       else

@@ -1,0 +1,5 @@
+Id: user++rocketskates++ux.cosmetic.navbar_color
+Option: ux.cosmetic.navbar_color
+Target: user++rocketskates
+Type: ux_settings
+Value: '"brown"'

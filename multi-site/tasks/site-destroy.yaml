@@ -18,26 +18,36 @@ Templates:
       set -e
       {{template "setup.tmpl" .}}
 
-      if drpcli endpoints exists {{ .Machine.Name }}; then
+      {{ if .ParamExists "dr-server/install-drpid" }}
+      DRPID={{ regexFind "[a-zA-Z0-9-]+" (.Param "dr-server/install-drpid") }}
+      {{ else }}
+      DRPID="{{ regexFind "[a-zA-Z0-9-]+" (list "site" .Machine.Name | join "-") }}"
+      {{ end }}
+
+      {{ if (.Param "demo/force") }}
+      echo "force enabled - skippig endpoint check"
+      {{ else }}
+      if drpcli endpoints exists $DRPID; then
 
         # get machines on local endpoint
         echo "Collecting machines on edge"
-        UUIDS=$(drpcli -u {{ .Machine.Name }} machines list Context Eq "" | jq -r '.[].Uuid')
+        UUIDS=$(drpcli machines list Endpoint Eq $DRPID Context Eq "" | jq -r '.[].Uuid')
         for uuid in $UUIDS; do
-          drpcli -u {{ .Machine.Name }} machines workflow $uuid "cloud-decommission" > /dev/null
+          drpcli machines workflow $uuid "cloud-decommission" > /dev/null
         done
 
         echo "Waiting for complete"
         for uuid in $UUIDS; do
-          drpcli -u {{ .Machine.Name }} machines wait $uuid WorkflowComplete true 360  > /dev/null
+          drpcli machines wait $uuid WorkflowComplete true 360  > /dev/null
         done
 
         echo "Destroying Endpoint registration"
-        drpcli endpoints destroy {{ .Machine.Name }} > /dev/null
+        drpcli endpoints destroy $DRPID > /dev/null
 
       else
         echo "No action - endpoint is not registered"
       fi
+      {{ end }}
 
       echo "done"
       exit 0

@@ -1,0 +1,11 @@
+---
+Name: "demo/cluster-color"
+Description: "Banner Color"
+Schema:
+  type: "string"
+  default: "#444"
+Meta:
+  type: "config"
+  icon: "tint"
+  color: "blue"
+  title: "Digital Rebar Community Content"

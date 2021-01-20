@@ -30,16 +30,18 @@ Components:
 - Name: multi-site-demo
   Type: ContentPackage
   Version: v2.0.0
+- Name: rackn-license
+  Type: ContentPackage
+  Version: tip
 Plugins:
 - Name: docker-context
   Provider: docker-context
 - Name: ux-views
   Provider: ux-views
 Prefs:
-  defaultBootEnv: local
   defaultStage: none
+  defaultBootEnv: sledgehammer
   defaultWorkflow: discover-base
-  defaultBootEnv: discovery
   unknownBootEnv: discovery
   completeJobsPurgedAfter: never
   failedJobsPurgedAfter: never

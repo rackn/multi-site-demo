@@ -1,0 +1,13 @@
+Name: "bootstrap-edge"
+Description: "Setup Edge DRP for Multi-Site Manager"
+Documentation: |
+  Ensures that sytem can run the contexts that are defined
+  And pulls in other data
+Stages:
+  - "bootstrap-advanced"
+  - "lock-machine"
+  - "complete-nobootenv"
+Meta:
+  color: "purple"
+  icon: "boxes"
+  title: "RackN Content"

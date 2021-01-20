@@ -119,7 +119,9 @@ MGR_IMG="linode/centos8"
 MGR_TYP="g6-standard-4"
 SSH_KEY="$(cat ~/.ssh/id_rsa.pub)"
 LINODE_TOKEN=${LINODE_TOKEN:-""}
-SITES="us-central us-east us-west us-southeast"
+ALLSITES="us-west us-east us-central us-southeast"
+SITES="$ALLSITES"
+
 DBG=0
 LOOP_WAIT=15
 VER_CONTENT="tip"
@@ -294,7 +296,7 @@ if [[ "$(_drpcli profiles get global param access-keys-global)" == "null" ]]; th
 }
 EOF
 else
-   echo "SSH_KEY already installed: \"$(_drpcli profiles get global param access-keys-global)\""
+   echo "SSH_KEY already installed"
 fi
 
 echo "Building Multi-Site Content"
@@ -434,7 +436,6 @@ Meta:
   title: "generated"
 EOF
 
-
 _drpcli contents bundle ../multi-site-demo.json >/dev/null
 cd ..
 
@@ -459,6 +460,17 @@ _drpcli files upload multi-site-demo.json to "rebar-catalog/multi-site-demo/${ms
 
 rlv=$(cat rackn-license.json | jq -r .meta.Version)
 _drpcli files upload rackn-license.json to "rebar-catalog/rackn-license/${rlv}.json"  >/dev/null
+
+echo "uploading site specific context packs"
+for s in $ALLSITES
+do
+  cd "${s}"
+  echo "  bundle $s"
+  _drpcli contents bundle ../${s}.json > /dev/null
+  cd ..
+  v=$(cat ${s}.json | jq -r .meta.Version)
+  _drpcli files upload ${s}.json to "rebar-catalog/site-${s}/${v}.json" >/dev/null
+done
 
 echo "Building catalog"
 ./catalogger.py --items drp,task-library,drp-community-content,docker-context,edge-lab,dev-library,cloud-wrappers > rackn-catalog.json
@@ -520,17 +532,32 @@ echo "Hack to reset stages"
 _drpcli contents show cloud-wrappers | _drpcli contents upload - >/dev/null
 _drpcli contents show multi-site-demo --key=/tmp/keyfile.json | _drpcli contents upload --key=/tmp/keyfile.json - >/dev/null
 
-echo "Setting Banner Color "
-if ! drpcli extended -l ux_settings exists "user++rocketskates++ux.cosmetic.navbar_color" ; then
-  drpcli extended -l ux_settings create '{
-  "Target": "user++rocketskates",
-  "Type": "ux_settings",
-  "Option": "ux.cosmetic.navbar_color",
-  "Id": "user++rocketskates++ux.cosmetic.navbar_color",
-  "Value": "\"blue\""
-}' > /dev/null
+echo "Building Context Files version_set"
+tee contexts.yaml >/dev/null << EOF
+---
+Id: contexts
+Description: "Docker Contexts"
+Apply: true
+Meta:
+  icon: file
+  color: black
+  type: file
+Files:
+EOF
+CONTEXTS="ansible runner terraform"
+for c in $CONTEXTS;
+do
+  sum="$(drpcli files exists contexts/docker-context/digitalrebar-context-$c | awk '/: / {print $2}')"
+  echo "  - Path: \"files/contexts/docker-context/digitalrebar-context-$c\"" >> contexts.yaml
+  echo "    Sha256Sum: \"$sum\"" >> contexts.yaml
+  echo "    Source: \"{{.ProvisionerURL}}/files/contexts/docker-context/digitalrebar-context-$c\"" >> contexts.yaml
+  echo "    Explode: false" >> contexts.yaml
+done
+if _drpcli version_sets exists contexts ; then
+  _drpcli version_sets update contexts - < contexts.yaml > /dev/null
+else
+  _drpcli version_sets create - < contexts.yaml > /dev/null
 fi
-
 
 for mc in $SITES;
 do
@@ -538,22 +565,22 @@ do
     echo "Not building any sites."
     break
   fi
-  case $mc in
-    *-us-east) color="brown" ;;
-    *-us-central) color="green" ;;
-    *-us-west) color="purple" ;;
-    *-us-southeast) color="orange" ;;
+  reg=$mc
+  [[ -n "$PREFIX" ]] && reg=$(echo $mc | sed 's/'${PREFIX}'-//g')
+  case $reg in
+    us-east) color="brown" ;;
+    us-central) color="green" ;;
+    us-west) color="purple" ;;
+    us-southeast) color="orange" ;;
     *) color="black"
   esac
   if ! drpcli users exists $mc 2>/dev/null >/dev/null; then
-    drpcli users create "{\"Name\":\"$mc\", \"Roles\":[\"superuser\"]}"
-    drpcli users password $mc $MGR_PWD
+    drpcli users create "{\"Name\":\"$mc\", \"Roles\":[\"superuser\"]}" > /dev/null
+    drpcli users password $mc $MGR_PWD > /dev/null
   else
     echo "skipping: user $mc already exists"
   fi
   if ! _drpcli machines exists Name:$mc 2>/dev/null >/dev/null; then
-    reg=$mc
-    [[ -n "$PREFIX" ]] && reg=$(echo $mc | sed 's/'${PREFIX}'-//g')
     echo "Creating $mc ($color)"
     echo "drpcli machines create \"{\"Name\":\"${mc}\", ... "
     drpcli machines create "{\"Name\":\"${mc}\", \
@@ -561,7 +588,7 @@ do
       \"BootEnv\":\"sledgehammer\", \
       \"Description\":\"Edge DR Server\", \
       \"Profiles\":[\"$PREFIX\",\"linode\"], \
-      \"Params\":{\"dr-server/initial-user\": \"${mc}\", \"linode/region\": \"${reg}\", \"color\":\"${color}\", \"network\firewall-ports\":[\"22/tcp\",\"8091/tcp\",\"8092/tcp\"] }, \
+      \"Params\":{\"demo/cluster-color\": \"${color}\", \"dr-server/install-drpid\": \"site-${reg}\", \"dr-server/initial-user\": \"${mc}\", \"linode/region\": \"${reg}\", \"network\firewall-ports\":[\"22/tcp\",\"8091/tcp\",\"8092/tcp\"] }, \
       \"Meta\":{\"BaseContext\":\"runner\", \"color\":\"${color}\", \"icon\":\"cloud\"}}" >/dev/null
     sleep $LOOP_WAIT
   else
@@ -588,10 +615,12 @@ then
 
   for mc in $SITES
   do
+    reg=$mc
+    [[ -n "$PREFIX" ]] && reg=$(echo $mc | sed 's/'${PREFIX}'-//g')
     echo "$mc completed bootstrap"
     if drpcli endpoints exists $mc > /dev/null; then
       echo "Setting VersionSets $BASE on $mc"
-      _drpcli endpoints update $mc "{\"VersionSets\":[\"license\",\"$BASE\"]}" > /dev/null
+      _drpcli endpoints update $mc "{\"VersionSets\":[\"license\",\"contexts\",\"$BASE\",\"site-$reg\"]}" > /dev/null
       _drpcli endpoints update $mc '{"Apply":true}' > /dev/null
     fi
   done
@@ -605,15 +634,17 @@ then
   # check if apply set to true
   for mc in $SITES
   do
-    if [[ "$(drpcli endpoints show $mc  | jq -r '.Apply')" == "true" ]]
+    reg=$mc
+    [[ -n "$PREFIX" ]] && reg=$(echo $mc | sed 's/'${PREFIX}'-//g')
+    if [[ "$(drpcli endpoints show site-$reg  | jq -r '.Apply')" == "true" ]]
     then
-      BRKMSG="Actions have been completed on $mc ..."
+      BRKMSG="Actions have been completed on site-$reg ..."
 
       while (( LOOP <= BAIL ))
       do
         COUNTER=$WAIT
         # if Actions object goes away, we've drained the queue of work
-        [[ "$(drpcli endpoints show $mc | jq -r '.Actions')" == "null" ]] && { echo $BRKMSG; break; }
+        [[ "$(drpcli endpoints show site-$reg | jq -r '.Actions')" == "null" ]] && { echo $BRKMSG; break; }
         printf "Waiting for VersionSet Actions to complete ... (sleep $WAIT seconds ) ... "
         while (( COUNTER ))
         do
@@ -622,7 +653,8 @@ then
           (( COUNTER-- ))
         done
         (( LOOP++ ))
-        echo ""
+        echo "setting bootstrap advanced"
+        _drpcli machines workflow site-$reg bootstrap-edge
       done
       (( TOT = BAIL * WAIT ))
 

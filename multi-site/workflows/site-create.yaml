@@ -7,12 +7,6 @@ Documentation: |
 
   Leaves the machines in a Runner Context not on the machine
 Stages:
-  - "cloud-provision"
-  - "context-clear"
-  - "discover-nobootenv"
-  - "cloud-inspect"
-  - "network-firewall"
-  - "runner-service"
   - "site-create"
   - "complete-nobootenv"
 Meta:

@@ -1,0 +1,13 @@
+---
+Id: site-us-east
+Description: "US East Site"
+Apply: true
+Meta:
+  icon: compass
+  color: brown
+Components:
+- Name: site-us-east
+  Type: ContentPackage
+  Version: v1.0.0
+Global:
+  demo/cluster-prefix: "us-east"
