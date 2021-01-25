@@ -251,17 +251,18 @@ if [[ -f rackn-license.json ]]; then
     endpoints=$(cat rackn-license.json | jq -r '.sections.profiles["rackn-license"].Params["rackn/license-object"].Endpoints')
     matchany=$(jq -r "contains([\"MatchAny\"])" <<< $endpoints)
     updated=false
-    for mc in $SITES; do
+    for mc in $ALLSITES; do
       if [[ $SITES == 'none' ]]; then
         echo "Not building any sites."
         break
       fi
+      mc="site-$mc"
       licensed=$(jq -r "contains([\"$mc\"])" <<< $endpoints)
       if [[ "${licensed}" == "true" || "${matchany}" == "true" ]]; then
-        echo "endpoint $mc found in license!"
+        echo "  endpoint $mc found in license!"
       else
         updated=true
-        echo "adding $mc to license"
+        echo "  adding $mc to license"
         curl -X GET "https://1p0q9a8qob.execute-api.us-west-2.amazonaws.com/v40/license" \
           -H "rackn-contactid: ${CONTACTID}" \
           -H "rackn-ownerid: ${OWNERID}" \
@@ -306,7 +307,7 @@ cd multi-site
 # upload aws & google credentials
 mkdir profiles || true
 if [[ -f ~/.aws/credentials ]]; then
-    echo "Adding AWS profile for cloud-wrap"
+    echo "  Adding AWS profile for cloud-wrap"
     tee profiles/aws-credentials.yaml >/dev/null << EOF
 ---
 Name: "aws"
@@ -322,13 +323,13 @@ Meta:
   title: "generated"
 EOF
 else
-  echo "no AWS credentials, skipping"
+  echo "  no AWS credentials, skipping"
 fi
 
 # upload aws & google credentials
 google=$(ls ~/.gconf/desktop/*.json || echo "none")
 if [[ -f $google ]]; then
-    echo "Adding Google profile for cloud-wrap"
+    echo "  Adding Google profile for cloud-wrap"
     gconf=$(cat $google) > /dev/null
     tee profiles/google-credentials.json >/dev/null << EOF
 {
@@ -348,15 +349,15 @@ if [[ -f $google ]]; then
 }
 EOF
 else
-  echo "no Google credentials, skipping"
+  echo "  no Google credentials, skipping"
 fi
 
 if which az > /dev/null ; then
   if az vm list > /dev/null ; then
-    echo "Azure login verified"
+    echo "  Azure login verified"
   else
     if ! az login > /dev/null ; then
-      echo "WARNING: no azure credentials!"
+      echo "  WARNING: no azure credentials!"
     fi
   fi
   if az account list > /dev/null; then
@@ -383,14 +384,14 @@ if which az > /dev/null ; then
 }
 EOF
   else
-    echo "WARNING: az account list failed"
+    echo "  WARNING: az account list failed"
   fi
 else
-  echo "Skipping Azure, no az cli installed"
+  echo "  Skipping Azure, no az cli installed"
 fi
 
 if [[ $DO_TOKEN ]]; then
-  echo "upload digital ocean credentials"
+  echo "  upload digital ocean credentials"
   tee profiles/digitalocean.yaml >/dev/null << EOF
 ---
 Name: "digitalocean"
@@ -404,10 +405,10 @@ Meta:
   title: "generated"
 EOF
 else
-  echo "Skipping Digital Ocean, no token"
+  echo "  Skipping Digital Ocean, no token"
 fi
 
-echo "upload linode credentials"
+echo "  upload linode credentials"
 tee profiles/linode.yaml >/dev/null << EOF
 ---
 Name: "linode"
@@ -439,16 +440,18 @@ EOF
 _drpcli contents bundle ../multi-site-demo.json >/dev/null
 cd ..
 
-items="rackn-license contents task-library multi-site-demo edge-lab dev-library billing ux-views cloud-wrappers"
+echo "Uploading content"
+_drpcli contents upload rackn-license.json >/dev/null
+items="drp-community-content task-library multi-site-demo edge-lab dev-library cloud-wrappers"
 for c in $items; do
   if [[ -f $c.json ]] ; then
-     echo "ALERT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-     echo "overriding catalog with local content $c.json"
+     echo "  ALERT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+     echo "  overriding catalog with local content $c.json"
      _drpcli contents upload $c.json >/dev/null
   fi
   if [[ -f $c.yaml ]] ; then
-     echo "ALERT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-     echo "overriding catalog with local content $c.yaml"
+     echo "  ALERT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+     echo "  overriding catalog with local content $c.yaml"
      _drpcli contents upload $c.yaml >/dev/null
   fi
 done
@@ -589,7 +592,7 @@ do
       \"Description\":\"Edge DR Server\", \
       \"Profiles\":[\"$PREFIX\",\"linode\"], \
       \"Params\":{\"demo/cluster-color\": \"${color}\", \"dr-server/install-drpid\": \"site-${reg}\", \"dr-server/initial-user\": \"${mc}\", \"linode/region\": \"${reg}\", \"network\firewall-ports\":[\"22/tcp\",\"8091/tcp\",\"8092/tcp\"] }, \
-      \"Meta\":{\"BaseContext\":\"runner\", \"color\":\"${color}\", \"icon\":\"cloud\"}}" >/dev/null
+      \"Meta\":{\"BaseContext\":\"drpcli-runner\", \"color\":\"${color}\", \"icon\":\"cloud\"}}" >/dev/null
     sleep $LOOP_WAIT
   else
     echo "machine $mc already exists"
@@ -617,11 +620,11 @@ then
   do
     reg=$mc
     [[ -n "$PREFIX" ]] && reg=$(echo $mc | sed 's/'${PREFIX}'-//g')
-    echo "$mc completed bootstrap"
-    if drpcli endpoints exists $mc > /dev/null; then
-      echo "Setting VersionSets $BASE on $mc"
-      _drpcli endpoints update $mc "{\"VersionSets\":[\"license\",\"contexts\",\"$BASE\",\"site-$reg\"]}" > /dev/null
-      _drpcli endpoints update $mc '{"Apply":true}' > /dev/null
+    echo "mc completed bootstrap (will be site-$reg"
+    if drpcli endpoints exists "site-$reg" > /dev/null; then
+      echo "Setting VersionSets $BASE on site-$reg"
+      _drpcli endpoints update "site-$reg" "{\"VersionSets\":[\"license\",\"contexts\",\"$BASE\",\"site-$reg\"]}" > /dev/null
+      _drpcli endpoints update "site-$reg" '{"Apply":true}' > /dev/null
     fi
   done
 
@@ -653,14 +656,15 @@ then
           (( COUNTER-- ))
         done
         (( LOOP++ ))
-        echo "setting bootstrap advanced"
-        _drpcli machines workflow site-$reg bootstrap-edge
+        echo "setting bootstrap edge for site-$reg"
+        _drpcli machines meta add "Name:site-$reg" key icon val "chess rook" > /dev/null
+        _drpcli machines workflow "Name:site-$reg" bootstrap-edge  > /dev/null
       done
       (( TOT = BAIL * WAIT ))
 
       if [[ $LOOP == $BAIL ]]
       then
-        xiterr 1 "VersionSet apply actions FAILED to complete in $TOT seconds."
+        xiterr 1 "VersionSet apply site-$reg actions FAILED to complete in $TOT seconds."
       fi
     else
       echo "!!! Apply was not found to be 'true', check Endpoints received VersionSets appropriately."

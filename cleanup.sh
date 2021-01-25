@@ -56,7 +56,7 @@ else
   echo "done waiting"
 fi
 
-sites=$(drpcli endpoints list | jq -r .[].Id)
+sites=$(drpcli endpoints list | jq -r .[].Description)
 echo ""
 echo "sites set to:"
 echo $sites
@@ -67,8 +67,8 @@ do
   if drpcli machines exists Name:$mc > /dev/null
   then
     drpcli machines update Name:$mc '{"Locked":false}' > /dev/null
-    drpcli machines meta set Name:$mc key BaseContext to "runner"
-    drpcli machines update Name:$mc '{"Context":"runner"}' > /dev/null
+    drpcli machines meta set Name:$mc key BaseContext to "drpcli-runner"
+    drpcli machines update Name:$mc '{"Context":"drpcli-runner"}' > /dev/null
     drpcli machines workflow Name:$mc site-destroy > /dev/null
     # backslash escape seems to be needed, otherwise it's being intepreted as YAML input
     drpcli machines set Name:$mc param Runnable to true > /dev/null

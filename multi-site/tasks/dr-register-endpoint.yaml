@@ -27,10 +27,18 @@ Templates:
         if drpcli endpoints exists $DRPID >/dev/null ; then
           echo "Endpoint $DRPID already registered in Manager"
         else
+          tee ep.json >/dev/null << EOF
+      {
+        "Id":"$DRPID",
+        "Description": "{{ .Machine.Name }}",
+        "Params":{
+          "manager/url": "https://{{ .Machine.Address }}:8092"
+        },
+        "Meta":{{ .Machine.Meta | toJson }}
+      }
+      EOF
           echo "Manager, register new endpoint $DRPID (from machine {{.Machine.Name}})"
-          drpcli endpoints create "{\"Id\":\"$DRPID\",
-            \"Params\":{\"manager/url\": \"https://{{ .Machine.Address }}:8092\"},
-            \"Meta\":{{ .Machine.Meta | toJson }} }" > /dev/null
+          drpcli endpoints create - < ep.json > /dev/null
           drpcli endpoints set $DRPID param "manager/username" to "{{ .Param "dr-server/initial-user" }}" > /dev/null
           drpcli endpoints set $DRPID param "manager/password" to "{{ .Param "dr-server/initial-password" }}" > /dev/null
   

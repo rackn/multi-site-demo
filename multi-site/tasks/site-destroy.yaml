@@ -31,7 +31,7 @@ Templates:
 
         # get machines on local endpoint
         echo "Collecting machines on edge"
-        UUIDS=$(drpcli machines list Endpoint Eq $DRPID Context Eq "" | jq -r '.[].Uuid')
+        UUIDS=$(drpcli machines list Endpoint Eq $DRPID Locked Eq false Context Eq "" | jq -r '.[].Uuid')
         for uuid in $UUIDS; do
           drpcli machines workflow $uuid "cloud-decommission" > /dev/null
         done
