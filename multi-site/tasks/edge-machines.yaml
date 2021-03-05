@@ -5,6 +5,9 @@ ExtraClaims:
   - scope: "machines"
     action: "*"
     specific: "*"
+  - scope: "profiles"
+    action: "*"
+    specific: "*"
 Templates:
   - Contents: |-
       #!/bin/bash
@@ -13,42 +16,35 @@ Templates:
       set -e
       {{template "setup.tmpl" .}}
 
-      {{ $addr := .Machine.Address -}}
-
-      export RS_KEY="rocketskates:r0cketsk8ts"
-      export RS_ENDPOINT="https://{{$addr}}:8092"
-      unset RS_TOKEN
-      unset RS_LOCAL_PROXY
+      if drpcli profiles exists {{ .Machine.Name }} ; then
+        echo "eponymous profile exists"
+      else
+        echo "creating eponymous profile"
+        drpcli profiles create '{"Name":"{{.Machine.Name}}", 
+          "Params":{"cluster/profile":"{{.Machine.Name}}"},
+          "Meta":{"icon":"map marker"}
+        }' > /dev/null
+        drpcli machines addprofile $RS_UUID "{{.Machine.Name}}"  > /dev/null
+      fi
 
       echo "reviewing machines {{ .Param "demo/machines" }}"
       for mc in {{ .Param "demo/machines" }}
       do
         machine="{{ .Param "demo/cluster-prefix" }}-{{ .Param "linode/region" }}-$mc"
         if drpcli machines exists Name:$machine; then
-          echo "$machine exists, updating workflow"
-          drpcli machines update Name:$machine "{\"Workflow\":\"{{ .Param "demo/workflow" }}\"}"
+          echo "  $machine exists, updating workflow"
+          drpcli machines workflow Name:$machine "{{ .Param "demo/workflow" }}"  > /dev/null
         else
-          echo "no $machine, creating"
+          echo "  no $machine, creating it"
           drpcli machines create "{\"Name\":\"${machine}\", \
             \"Workflow\":\"{{ .Param "demo/workflow" }}\", \
-            \"Description\":\"Worker Server\", \
-            \"Meta\":{\"BaseContext\":\"runner\", \"icon\":\"star\"}}" >/dev/null
+            \"Profiles\":[\"linode\",\"{{ .Machine.Name }}\"], \
+            \"Description\":\"Edge Server\", \
+            \"Meta\":{\"BaseContext\":\"drpcli-runner\", \"color\":\"{{ .Param "demo/cluster-color" }}\", \"icon\":\"star\"}}" >/dev/null
         fi
       done
 
-      echo "waiting for machines to complete"
-      for mc in {{ .Param "demo/machines" }}
-      do
-        machine="{{ .Param "demo/cluster-prefix" }}-{{ .Param "linode/region" }}-$mc"
-        if drpcli machines exists Name:$machine; then
-          echo "$machine exists, updating workflow"
-          drpcli machines wait "Name:$machine" Stage "complete-nobootenv" 360
-        else
-          echo "$machine missing! skip"
-        fi
-      done
-
-      echo "Edge Machines Updated"
+      echo "Edge Machines Created"
       exit 0
 
     Name: "edge-machines"

@@ -53,7 +53,7 @@ while (( i < SCALE )); do
       drpcli machines create "{\"Name\":\"${mc}\", \
         \"Workflow\":\"load-generator\", \
         \"Description\":\"Load Test $i\", \
-        \"Meta\":{\"BaseContext\":\"runner\", \"icon\":\"cloud\"}}" >/dev/null
+        \"Meta\":{\"BaseContext\":\"drpcli-runner\", \"icon\":\"cloud\"}}" >/dev/null
     else
       echo "skipping, $mc does not exist"
     fi
@@ -77,7 +77,7 @@ while (( i < SCALE )); do
         drpcli -u $s machines create "{\"Name\":\"${mc}\", \
           \"Workflow\":\"load-generator\", \
           \"Description\":\"Load Test $i\", \
-          \"Meta\":{\"BaseContext\":\"runner\", \"icon\":\"cloud\"}}" >/dev/null
+          \"Meta\":{\"BaseContext\":\"drpcli-runner\", \"icon\":\"cloud\"}}" >/dev/null
       else
         echo "skipping, $mc does not exist"
       fi

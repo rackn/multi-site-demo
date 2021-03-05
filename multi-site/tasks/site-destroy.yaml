@@ -25,7 +25,7 @@ Templates:
       {{ end }}
 
       {{ if (.Param "demo/force") }}
-      echo "force enabled - skippig endpoint check"
+      echo "force enabled - skipping endpoint check"
       {{ else }}
       if drpcli endpoints exists $DRPID; then
 
@@ -33,11 +33,17 @@ Templates:
         echo "Collecting machines on edge"
         UUIDS=$(drpcli machines list Endpoint Eq $DRPID Locked Eq false Context Eq "" | jq -r '.[].Uuid')
         for uuid in $UUIDS; do
-          drpcli machines workflow $uuid "cloud-decommission" > /dev/null
+          if drpcli machines get $uuid "cloud/dmi-hypervisor" > /dev/null ; then
+            echo "  $uuid running cloud-decommission"
+            drpcli machines workflow $uuid "cloud-decommission" > /dev/null
+          else
+            echo "  $uuid skipping, no cloud/dmi-hypervisor"
+          fi
         done
 
         echo "Waiting for complete"
         for uuid in $UUIDS; do
+          echo "  waiting for $uuid"
           drpcli machines wait $uuid WorkflowComplete true 360  > /dev/null
         done
 

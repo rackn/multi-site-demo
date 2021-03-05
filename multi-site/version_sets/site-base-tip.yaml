@@ -21,6 +21,9 @@ Components:
 - Name: dev-library
   Type: ContentPackage
   Version: tip
+- Name: kube-lib
+  Type: ContentPackage
+  Version: tip
 - Name: task-library
   Type: ContentPackage
   Version: tip
@@ -49,6 +52,15 @@ Prefs:
   knownTokenTimeout: "3600"
   unknownTokenTimeout: "600"
 Global:
+  network/firewall-ports:
+  - "22/tcp"
+  - "8091/tcp"
+  - "8092/tcp"
+  - "6443/tcp"
+  - "8379/tcp"
+  - "8080/tcp"
+  - "8380/tcp"
+  - "10250/tcp"
   dev/wait-icons:
   - "bath"
   - "bed"

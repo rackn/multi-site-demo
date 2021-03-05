@@ -11,3 +11,4 @@ Components:
   Version: v1.0.0
 Global:
   demo/cluster-prefix: "us-southeast"
+  demo/cluster-color: "orange"
