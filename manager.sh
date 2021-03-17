@@ -116,7 +116,7 @@ MGR_LBL="global-manager"
 MGR_PWD="digitalrebar"
 MGR_RGN="us-west"
 MGR_IMG="linode/centos8"
-MGR_TYP="g6-standard-4"
+MGR_TYP="g6-standard-8"
 SSH_KEY="$(cat ~/.ssh/id_rsa.pub)"
 LINODE_TOKEN=${LINODE_TOKEN:-""}
 ALLSITES="us-west us-east us-central us-southeast"
@@ -352,43 +352,6 @@ else
   echo "  no Google credentials, skipping"
 fi
 
-if which az > /dev/null ; then
-  if az vm list > /dev/null ; then
-    echo "  Azure login verified"
-  else
-    if ! az login > /dev/null ; then
-      echo "  WARNING: no azure credentials!"
-    fi
-  fi
-  if az account list > /dev/null; then
-    # see https://www.terraform.io/docs/providers/azurerm/guides/service_principal_client_secret.html
-    azure_subscription_id=$(az account list | jq -r '.[0].id')
-    azure_resource=$(az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/$azure_subscription_id")
-    tee profiles/azure-credentials.json >/dev/null << EOF
-{
-  "Name": "azure",
-  "Description": "Azure Credentials",
-  "Params": {
-    "cloud/provider": "azure",
-    "azure/subscription_id": "$azure_subscription_id",
-    "azure/appId": "$(jq -r .appId <<< "$azure_resource")",
-    "azure/password": "$(jq -r .password <<< "$azure_resource")",
-    "azure/tenant": "$(jq -r .tenant <<< "$azure_resource")",
-    "rsa/key-user": "rob"
-  },
-  "Meta": {
-    "color": "blue",
-    "icon": "microsoft",
-    "title": "generated"
-  }
-}
-EOF
-  else
-    echo "  WARNING: az account list failed"
-  fi
-else
-  echo "  Skipping Azure, no az cli installed"
-fi
 
 if [[ $DO_TOKEN ]]; then
   echo "  upload digital ocean credentials"
@@ -417,7 +380,7 @@ Params:
   "cloud/provider": "linode"
   "linode/token": "$LINODE_TOKEN"
   "linode/instance-image": "linode/centos8"
-  "linode/instance-type": "g6-standard-2"
+  "linode/instance-type": "g6-standard-8"
   "linode/root-password": "r0cketsk8ts"
 Meta:
   color: "blue"
@@ -602,7 +565,7 @@ do
     break
   fi
   if _drpcli machines exists Name:$mc 2>/dev/null >/dev/null; then
-    _drpcli machines workflow Name:$mc site-create >/dev/null
+    _drpcli machines workflow Name:$mc cloud-site-create >/dev/null
   else
     echo "machine $mc does not exist"
   fi
