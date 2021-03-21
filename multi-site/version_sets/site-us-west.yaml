@@ -1,0 +1,13 @@
+---
+Id: site-us-west
+Description: "US West Site"
+Apply: true
+Meta:
+  icon: compass
+  color: purple
+Components:
+- Name: site-us-west
+  Type: ContentPackage
+  Version: v1.0.0
+Global:
+  demo/cluster-prefix: "us-west"

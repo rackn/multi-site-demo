@@ -1,0 +1,13 @@
+---
+Id: site-us-southeast
+Description: "US Southeast Site"
+Apply: true
+Meta:
+  icon: compass
+  color: orange
+Components:
+- Name: site-us-southeast
+  Type: ContentPackage
+  Version: v1.0.0
+Global:
+  demo/cluster-prefix: "us-southeast"

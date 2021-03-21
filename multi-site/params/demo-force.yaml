@@ -1,0 +1,11 @@
+---
+Name: "demo/force"
+Description: "bypass safety checks"
+Schema:
+  type: "boolean"
+  default: false
+Meta:
+  type: "config"
+  icon: "gavel"
+  color: "grey"
+  title: "RackN Content"

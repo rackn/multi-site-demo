@@ -10,9 +10,6 @@ ExtraClaims:
   - scope: "contexts"
     action: "*"
     specific: "*"
-  - scope: "profiles"
-    action: "*"
-    specific: "global"
 Templates:
   - Contents: |-
       #!/bin/bash
@@ -23,40 +20,30 @@ Templates:
 
       # local endpoint
       echo "Collecting info from manager"
-      drpcli contexts show runner > runner.json
-      raw=$(drpcli contexts list Engine=docker-context)
-      contexts=$(jq -r ".[].Name" <<< "${raw}")
 
       echo "Pointing DRPCLI to Proxy Endpoint $EPID"
       EPID={{ .Machine.Name }}
 
-      echo "copy over Prefix to {{ .Param "demo/cluster-prefix" }}"
-      drpcli -u $EPID profiles set global set "demo/cluster-prefix" to "{{ .Param "demo/cluster-prefix" }}" >/dev/null
-
       if drpcli -u $EPID contexts exists runner ; then
-        echo "runner context already installed"
+        echo "skipping: runner context already installed"
       else
         echo "adding local runner context"
-        drpcli -u $EPID contexts create - < runner.json
+        drpcli contexts show runner > runner.json
+        drpcli -u $EPID contexts create - < runner.json  > /dev/null
       fi
 
-      {{ if .ParamExists "color "}}
-        echo "setting UX color to {{ .Param "color" }}"
-        drpcli extended -l ux_settings create '{
-          "Target": "user++rocketskates",
-          "Type": "ux_settings",
-          "Option": "ux.cosmetic.navbar_color",
-          "Id": "user++rocketskates++ux.cosmetic.navbar_color",
-          "Value": "\"{{ .Param "color" }}\""
-        }' > /dev/null
-      {{ end }}
-
-      echo "Populate the contexts from local"
+      echo "BACKUP APPROACH: Populate the contexts from local"
+      raw=$(drpcli contexts list Engine=docker-context)
+      contexts=$(jq -r ".[].Name" <<< "${raw}")
       i=0
       for context in $contexts; do
         image=$(jq -r ".[$i].Image" <<< "${raw}")
-        echo "Installing Container for $context named from $image"
-        drpcli -u $EPID files upload {{ .ProvisionerURL }}/files/contexts/docker-context/${image} as contexts/docker-context/${image}
+        if drpcli -u $EPID files exists contexts/docker-context/${image} ; then
+          echo "skipping: $context already uploaded"
+        else
+          echo "Installing Container for $context named from $image"
+          drpcli -u $EPID files upload {{ .ProvisionerURL }}/files/contexts/docker-context/${image} as contexts/docker-context/${image} > /dev/null
+        fi
         i=$(($i + 1))
       done
 

@@ -29,7 +29,7 @@ export RS_ENDPOINT=$(terraform output drp_manager)
 export RS_KEY="rocketskates:${PASSWORD}"
 echo "Using RS_ENDPOINT=$RS_ENDPOINT and RS_KEY=$RS_KEY"
 
-pools="linode aws google testing"
+pools="linode aws google azure digitalocean testing"
 if [[ -r manager.tfvars ]]
 then
   for P in $pools
@@ -56,7 +56,7 @@ else
   echo "done waiting"
 fi
 
-sites=$(drpcli endpoints list | jq -r .[].Id)
+sites=$(drpcli endpoints list | jq -r .[].Description)
 echo ""
 echo "sites set to:"
 echo $sites
@@ -67,8 +67,8 @@ do
   if drpcli machines exists Name:$mc > /dev/null
   then
     drpcli machines update Name:$mc '{"Locked":false}' > /dev/null
-    drpcli machines meta set Name:$mc key BaseContext to "runner"
-    drpcli machines update Name:$mc '{"Context":"runner"}' > /dev/null
+    drpcli machines meta set Name:$mc key BaseContext to "drpcli-runner"
+    drpcli machines update Name:$mc '{"Context":"drpcli-runner"}' > /dev/null
     drpcli machines workflow Name:$mc site-destroy > /dev/null
     # backslash escape seems to be needed, otherwise it's being intepreted as YAML input
     drpcli machines set Name:$mc param Runnable to true > /dev/null
@@ -97,9 +97,9 @@ if [ "$FORCE" == "true" ] || [ $(drpcli machines count Context Eq "") -eq 1 ]; t
   if [[ -e "multi-site-demo.json" ]]; then
     rm multi-site-demo.json
   fi
+  rm -f multi-site/profiles/*
 
   rm -f terraform.tfstate terraform.tfstate.backup
-
 else
   echo "WARNING provisioned machines still exist - did not destroy manager.  Call with -f to force!"
 fi

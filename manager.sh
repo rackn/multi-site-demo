@@ -119,7 +119,9 @@ MGR_IMG="linode/centos8"
 MGR_TYP="g6-standard-4"
 SSH_KEY="$(cat ~/.ssh/id_rsa.pub)"
 LINODE_TOKEN=${LINODE_TOKEN:-""}
-SITES="us-central us-east us-west us-southeast"
+ALLSITES="us-west us-east us-central us-southeast"
+SITES="$ALLSITES"
+
 DBG=0
 LOOP_WAIT=15
 VER_CONTENT="tip"
@@ -249,13 +251,18 @@ if [[ -f rackn-license.json ]]; then
     endpoints=$(cat rackn-license.json | jq -r '.sections.profiles["rackn-license"].Params["rackn/license-object"].Endpoints')
     matchany=$(jq -r "contains([\"MatchAny\"])" <<< $endpoints)
     updated=false
-    for mc in $SITES; do
+    for mc in $ALLSITES; do
+      if [[ $SITES == 'none' ]]; then
+        echo "Not building any sites."
+        break
+      fi
+      mc="site-$mc"
       licensed=$(jq -r "contains([\"$mc\"])" <<< $endpoints)
       if [[ "${licensed}" == "true" || "${matchany}" == "true" ]]; then
-        echo "endpoint $mc found in license!"
+        echo "  endpoint $mc found in license!"
       else
         updated=true
-        echo "adding $mc to license"
+        echo "  adding $mc to license"
         curl -X GET "https://1p0q9a8qob.execute-api.us-west-2.amazonaws.com/v40/license" \
           -H "rackn-contactid: ${CONTACTID}" \
           -H "rackn-ownerid: ${OWNERID}" \
@@ -290,7 +297,7 @@ if [[ "$(_drpcli profiles get global param access-keys-global)" == "null" ]]; th
 }
 EOF
 else
-   echo "SSH_KEY already installed: \"$(_drpcli profiles get global param access-keys-global)\""
+   echo "SSH_KEY already installed"
 fi
 
 echo "Building Multi-Site Content"
@@ -300,7 +307,7 @@ cd multi-site
 # upload aws & google credentials
 mkdir profiles || true
 if [[ -f ~/.aws/credentials ]]; then
-    echo "Adding AWS profile for cloud-wrap"
+    echo "  Adding AWS profile for cloud-wrap"
     tee profiles/aws-credentials.yaml >/dev/null << EOF
 ---
 Name: "aws"
@@ -316,13 +323,13 @@ Meta:
   title: "generated"
 EOF
 else
-  echo "no AWS credentials, skipping"
+  echo "  no AWS credentials, skipping"
 fi
 
 # upload aws & google credentials
 google=$(ls ~/.gconf/desktop/*.json || echo "none")
 if [[ -f $google ]]; then
-    echo "Adding Google profile for cloud-wrap"
+    echo "  Adding Google profile for cloud-wrap"
     gconf=$(cat $google) > /dev/null
     tee profiles/google-credentials.json >/dev/null << EOF
 {
@@ -342,15 +349,15 @@ if [[ -f $google ]]; then
 }
 EOF
 else
-  echo "no Google credentials, skipping"
+  echo "  no Google credentials, skipping"
 fi
 
 if which az > /dev/null ; then
   if az vm list > /dev/null ; then
-    echo "Azure login verified"
+    echo "  Azure login verified"
   else
     if ! az login > /dev/null ; then
-      echo "WARNING: no azure credentials!"
+      echo "  WARNING: no azure credentials!"
     fi
   fi
   if az account list > /dev/null; then
@@ -377,13 +384,31 @@ if which az > /dev/null ; then
 }
 EOF
   else
-    echo "WARNING: az account list failed"
+    echo "  WARNING: az account list failed"
   fi
 else
-  echo "Skipping Azure, no az cli installed"
+  echo "  Skipping Azure, no az cli installed"
 fi
 
-# upload linode credentials
+if [[ $DO_TOKEN ]]; then
+  echo "  upload digital ocean credentials"
+  tee profiles/digitalocean.yaml >/dev/null << EOF
+---
+Name: "digitalocean"
+Description: "Digital Ocean Credentials"
+Params:
+  "cloud/provider": "digitalocean"
+  "digitalocean/token": "$DO_TOKEN"
+Meta:
+  color: "green"
+  icon: "digital ocean"
+  title: "generated"
+EOF
+else
+  echo "  Skipping Digital Ocean, no token"
+fi
+
+echo "  upload linode credentials"
 tee profiles/linode.yaml >/dev/null << EOF
 ---
 Name: "linode"
@@ -412,20 +437,21 @@ Meta:
   title: "generated"
 EOF
 
-
 _drpcli contents bundle ../multi-site-demo.json >/dev/null
 cd ..
 
-items="rackn-license contents task-library multi-site-demo edge-lab dev-library billing ux-views cloud-wrappers"
+echo "Uploading content"
+_drpcli contents upload rackn-license.json >/dev/null
+items="drp-community-content task-library multi-site-demo edge-lab dev-library cloud-wrappers"
 for c in $items; do
   if [[ -f $c.json ]] ; then
-     echo "ALERT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-     echo "overriding catalog with local content $c.json"
+     echo "  ALERT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+     echo "  overriding catalog with local content $c.json"
      _drpcli contents upload $c.json >/dev/null
   fi
   if [[ -f $c.yaml ]] ; then
-     echo "ALERT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-     echo "overriding catalog with local content $c.yaml"
+     echo "  ALERT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+     echo "  overriding catalog with local content $c.yaml"
      _drpcli contents upload $c.yaml >/dev/null
   fi
 done
@@ -437,6 +463,17 @@ _drpcli files upload multi-site-demo.json to "rebar-catalog/multi-site-demo/${ms
 
 rlv=$(cat rackn-license.json | jq -r .meta.Version)
 _drpcli files upload rackn-license.json to "rebar-catalog/rackn-license/${rlv}.json"  >/dev/null
+
+echo "uploading site specific context packs"
+for s in $ALLSITES
+do
+  cd "${s}"
+  echo "  bundle $s"
+  _drpcli contents bundle ../${s}.json > /dev/null
+  cd ..
+  v=$(cat ${s}.json | jq -r .meta.Version)
+  _drpcli files upload ${s}.json to "rebar-catalog/site-${s}/${v}.json" >/dev/null
+done
 
 echo "Building catalog"
 ./catalogger.py --items drp,task-library,drp-community-content,docker-context,edge-lab,dev-library,cloud-wrappers > rackn-catalog.json
@@ -498,29 +535,55 @@ echo "Hack to reset stages"
 _drpcli contents show cloud-wrappers | _drpcli contents upload - >/dev/null
 _drpcli contents show multi-site-demo --key=/tmp/keyfile.json | _drpcli contents upload --key=/tmp/keyfile.json - >/dev/null
 
-echo "Setting Banner Color "
-if ! drpcli extended -l ux_settings exists "user++rocketskates++ux.cosmetic.navbar_color" ; then
-  drpcli extended -l ux_settings create '{
-  "Target": "user++rocketskates",
-  "Type": "ux_settings",
-  "Option": "ux.cosmetic.navbar_color",
-  "Id": "user++rocketskates++ux.cosmetic.navbar_color",
-  "Value": "\"blue\""
-}' > /dev/null
+echo "Building Context Files version_set"
+tee contexts.yaml >/dev/null << EOF
+---
+Id: contexts
+Description: "Docker Contexts"
+Apply: true
+Meta:
+  icon: file
+  color: black
+  type: file
+Files:
+EOF
+CONTEXTS="ansible runner terraform"
+for c in $CONTEXTS;
+do
+  sum="$(drpcli files exists contexts/docker-context/digitalrebar-context-$c | awk '/: / {print $2}')"
+  echo "  - Path: \"files/contexts/docker-context/digitalrebar-context-$c\"" >> contexts.yaml
+  echo "    Sha256Sum: \"$sum\"" >> contexts.yaml
+  echo "    Source: \"{{.ProvisionerURL}}/files/contexts/docker-context/digitalrebar-context-$c\"" >> contexts.yaml
+  echo "    Explode: false" >> contexts.yaml
+done
+if _drpcli version_sets exists contexts ; then
+  _drpcli version_sets update contexts - < contexts.yaml > /dev/null
+else
+  _drpcli version_sets create - < contexts.yaml > /dev/null
 fi
 
 for mc in $SITES;
 do
-  case $mc in
-    *-us-east) color="brown" ;;
-    *-us-central) color="green" ;;
-    *-us-west) color="purple" ;;
-    *-us-southeast) color="orange" ;;
+  if [[ $SITES == "${PREFIX}-none" ]]; then
+    echo "Not building any sites."
+    break
+  fi
+  reg=$mc
+  [[ -n "$PREFIX" ]] && reg=$(echo $mc | sed 's/'${PREFIX}'-//g')
+  case $reg in
+    us-east) color="brown" ;;
+    us-central) color="green" ;;
+    us-west) color="purple" ;;
+    us-southeast) color="orange" ;;
     *) color="black"
   esac
+  if ! drpcli users exists $mc 2>/dev/null >/dev/null; then
+    drpcli users create "{\"Name\":\"$mc\", \"Roles\":[\"superuser\"]}" > /dev/null
+    drpcli users password $mc $MGR_PWD > /dev/null
+  else
+    echo "skipping: user $mc already exists"
+  fi
   if ! _drpcli machines exists Name:$mc 2>/dev/null >/dev/null; then
-    reg=$mc
-    [[ -n "$PREFIX" ]] && reg=$(echo $mc | sed 's/'${PREFIX}'-//g')
     echo "Creating $mc ($color)"
     echo "drpcli machines create \"{\"Name\":\"${mc}\", ... "
     drpcli machines create "{\"Name\":\"${mc}\", \
@@ -528,15 +591,15 @@ do
       \"BootEnv\":\"sledgehammer\", \
       \"Description\":\"Edge DR Server\", \
       \"Profiles\":[\"$PREFIX\",\"linode\"], \
-      \"Params\":{\"linode/region\": \"${reg}\", \"color\":\"${color}\", \"network\firewall-ports\":[\"22/tcp\",\"8091/tcp\",\"8092/tcp\"] }, \
-      \"Meta\":{\"BaseContext\":\"runner\", \"color\":\"${color}\", \"icon\":\"cloud\"}}" >/dev/null
+      \"Params\":{\"demo/cluster-color\": \"${color}\", \"dr-server/install-drpid\": \"site-${reg}\", \"dr-server/initial-user\": \"${mc}\", \"linode/region\": \"${reg}\", \"network\firewall-ports\":[\"22/tcp\",\"8091/tcp\",\"8092/tcp\"] }, \
+      \"Meta\":{\"BaseContext\":\"drpcli-runner\", \"color\":\"${color}\", \"icon\":\"cloud\"}}" >/dev/null
     sleep $LOOP_WAIT
   else
     echo "machine $mc already exists"
   fi
 done
 
-if [[ "$PREP" == "true" ]]
+if [[ "$PREP" == "true" && "$SITES" != "${PREFIX}-none" ]]
 then
   echo "VersionSet prep was requested."
   echo "Waiting for regional endpoints to reach 'complete-nobootenv'"
@@ -555,11 +618,13 @@ then
 
   for mc in $SITES
   do
-    echo "$mc completed bootstrap"
-    if drpcli endpoints exists $mc > /dev/null; then
-      echo "Setting VersionSets $BASE on $mc"
-      _drpcli endpoints update $mc "{\"VersionSets\":[\"license\",\"$BASE\"]}" > /dev/null
-      _drpcli endpoints update $mc '{"Apply":true}' > /dev/null
+    reg=$mc
+    [[ -n "$PREFIX" ]] && reg=$(echo $mc | sed 's/'${PREFIX}'-//g')
+    echo "mc completed bootstrap (will be site-$reg"
+    if drpcli endpoints exists "site-$reg" > /dev/null; then
+      echo "Setting VersionSets $BASE on site-$reg"
+      _drpcli endpoints update "site-$reg" "{\"VersionSets\":[\"license\",\"contexts\",\"$BASE\",\"site-$reg\"]}" > /dev/null
+      _drpcli endpoints update "site-$reg" '{"Apply":true}' > /dev/null
     fi
   done
 
@@ -572,15 +637,17 @@ then
   # check if apply set to true
   for mc in $SITES
   do
-    if [[ "$(drpcli endpoints show $mc  | jq -r '.Apply')" == "true" ]]
+    reg=$mc
+    [[ -n "$PREFIX" ]] && reg=$(echo $mc | sed 's/'${PREFIX}'-//g')
+    if [[ "$(drpcli endpoints show site-$reg  | jq -r '.Apply')" == "true" ]]
     then
-      BRKMSG="Actions have been completed on $mc ..."
+      BRKMSG="Actions have been completed on site-$reg ..."
 
       while (( LOOP <= BAIL ))
       do
         COUNTER=$WAIT
         # if Actions object goes away, we've drained the queue of work
-        [[ "$(drpcli endpoints show $mc | jq -r '.Actions')" == "null" ]] && { echo $BRKMSG; break; }
+        [[ "$(drpcli endpoints show site-$reg | jq -r '.Actions')" == "null" ]] && { echo $BRKMSG; break; }
         printf "Waiting for VersionSet Actions to complete ... (sleep $WAIT seconds ) ... "
         while (( COUNTER ))
         do
@@ -589,13 +656,15 @@ then
           (( COUNTER-- ))
         done
         (( LOOP++ ))
-        echo ""
+        echo "setting bootstrap edge for site-$reg"
+        _drpcli machines meta add "Name:site-$reg" key icon val "chess rook" > /dev/null
+        _drpcli machines workflow "Name:site-$reg" bootstrap-edge  > /dev/null
       done
       (( TOT = BAIL * WAIT ))
 
       if [[ $LOOP == $BAIL ]]
       then
-        xiterr 1 "VersionSet apply actions FAILED to complete in $TOT seconds."
+        xiterr 1 "VersionSet apply site-$reg actions FAILED to complete in $TOT seconds."
       fi
     else
       echo "!!! Apply was not found to be 'true', check Endpoints received VersionSets appropriately."

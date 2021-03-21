@@ -8,7 +8,7 @@ Params:
   demo/machines: ""
   demo/workflow: "discover-base"
 Tasks:
-  - "context:runner"
+  - "context:drpcli-runner"
   - "site-destroy"
 Meta:
   icon: "bus"

@@ -1,0 +1,13 @@
+---
+Id: site-us-central
+Description: "US Central Site"
+Apply: true
+Meta:
+  icon: compass
+  color: green
+Components:
+- Name: site-us-central
+  Type: ContentPackage
+  Version: v1.0.0
+Global:
+  demo/cluster-prefix: "us-central"
