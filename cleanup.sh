@@ -79,18 +79,24 @@ done
 echo "waiting for machines to destroy"
 for s in $sites; do
   mc=$(drpcli endpoints show $s | jq -r .Meta.Uuid)
-  if drpcli machines exists $mc > /dev/null; then
-    echo "  waiting for removal of $s via $mc"
-    if drpcli machines wait $mc WorkflowComplete true 120 ; then
-      drpcli machines destroy $mc
-      drpcli endpoints destroy $s >/dev/null 2>/dev/null || :
+  if [[ -z "$mc" ]] ; then
+    echo "  endpoint $s already removed, no action required"
+  else
+    if drpcli machines exists $mc > /dev/null; then
+      echo "  waiting for removal of $s via $mc"
+      if drpcli machines wait $mc WorkflowComplete true 120 ; then
+        echo "  all clear, destroy $mc"
+        sleep 1
+        drpcli machines destroy $mc
+        drpcli endpoints destroy $s >/dev/null 2>/dev/null || :
+      else
+        echo "  WARNING workflow for $s on $mc did not complete!"
+        exit 1
+      fi
     else
-      echo "  WARNING workflow for $s on $mc did not complete!"
+      echo "  MANUAL CLEANUP! site $s does not have a managed machine $mc"
       exit 1
     fi
-  else
-    echo "  MANUAL CLEANUP! site $s does not have a managed machine $mc"
-    exit 1
   fi
 done
 

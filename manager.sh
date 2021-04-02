@@ -38,7 +38,7 @@ usage() {
           -I image           set Manager Image name as supported by Linode
                              defaults to 'linode/centos8'
           -T type            set Manager Type of virtual machine
-                             defaults to 'g6-standard-2'
+                             defaults to 'g6-standard-8'
           -S sites           list of Sites to build regional controllers in
                              (comma, semi-colon, colon, dash, underscore, or
                              space separated list - normal shell rules apply
@@ -352,6 +352,45 @@ else
   echo "  no Google credentials, skipping"
 fi
 
+if which az > /dev/null ; then
+  if az vm list > /dev/null ; then
+    echo "  Azure login verified"
+  else
+    if az login > /dev/null ; then
+      echo "  Azure login succesful"
+    else
+      echo "  WARNING: no Azure credentials! (you may need: 'az account clear')"
+    fi
+  fi
+  if az account list > /dev/null; then
+    # see https://www.terraform.io/docs/providers/azurerm/guides/service_principal_client_secret.html
+    azure_subscription_id=$(az account list | jq -r '.[0].id')
+    azure_resource=$(az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/$azure_subscription_id")
+    tee profiles/azure-credentials.json >/dev/null << EOF
+{
+  "Name": "azure",
+  "Description": "Azure Credentials",
+  "Params": {
+    "cloud/provider": "azure",
+    "azure/subscription_id": "$azure_subscription_id",
+    "azure/appId": "$(jq -r .appId <<< "$azure_resource")",
+    "azure/password": "$(jq -r .password <<< "$azure_resource")",
+    "azure/tenant": "$(jq -r .tenant <<< "$azure_resource")",
+    "rsa/key-user": "rob"
+  },
+  "Meta": {
+    "color": "blue",
+    "icon": "microsoft",
+    "title": "generated"
+  }
+}
+EOF
+  else
+    echo "  WARNING: az account list failed"
+  fi
+else
+  echo "  Skipping Azure, no az cli installed"
+fi
 
 if [[ $DO_TOKEN ]]; then
   echo "  upload digital ocean credentials"
@@ -380,7 +419,7 @@ Params:
   "cloud/provider": "linode"
   "linode/token": "$LINODE_TOKEN"
   "linode/instance-image": "linode/centos8"
-  "linode/instance-type": "g6-standard-8"
+  "linode/instance-type": "$MGR_TYP"
   "linode/root-password": "r0cketsk8ts"
 Meta:
   color: "blue"
@@ -596,7 +635,7 @@ then
     echo "  $mc completed bootstrap (will be site-$reg)"
     if drpcli endpoints exists "site-$reg" > /dev/null; then
       echo "  Setting VersionSets $BASE on site-$reg"
-      _drpcli endpoints update "site-$reg" "{\"VersionSets\":[\"license\",\"contexts\",\"$BASE\",\"site-$reg\"]}" > /dev/null
+      _drpcli endpoints update "site-$reg" "{\"VersionSets\":[\"license\",\"$BASE\",\"contexts\",\"site-$reg\"]}" > /dev/null
       _drpcli endpoints update "site-$reg" '{"Apply":true}' > /dev/null
     fi
   done
