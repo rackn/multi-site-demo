@@ -6,12 +6,10 @@ Documentation: |
   * Run Machine-Create Workflow
 Params:
   demo/machines: "001 002 003"
-  demo/workflow: "discover-base"
+  demo/workflow: "load-generator"
 Tasks:
   - "context:"
-  - "dr-server-install"
   - "edge-machines"
-  - "lock-machine"
 Meta:
   icon: "bus"
   color: "green"

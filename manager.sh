@@ -38,7 +38,7 @@ usage() {
           -I image           set Manager Image name as supported by Linode
                              defaults to 'linode/centos8'
           -T type            set Manager Type of virtual machine
-                             defaults to 'g6-standard-2'
+                             defaults to 'g6-standard-8'
           -S sites           list of Sites to build regional controllers in
                              (comma, semi-colon, colon, dash, underscore, or
                              space separated list - normal shell rules apply
@@ -116,7 +116,7 @@ MGR_LBL="global-manager"
 MGR_PWD="digitalrebar"
 MGR_RGN="us-west"
 MGR_IMG="linode/centos8"
-MGR_TYP="g6-standard-4"
+MGR_TYP="g6-standard-8"
 SSH_KEY="$(cat ~/.ssh/id_rsa.pub)"
 LINODE_TOKEN=${LINODE_TOKEN:-""}
 ALLSITES="us-west us-east us-central us-southeast"
@@ -356,8 +356,10 @@ if which az > /dev/null ; then
   if az vm list > /dev/null ; then
     echo "  Azure login verified"
   else
-    if ! az login > /dev/null ; then
-      echo "  WARNING: no azure credentials!"
+    if az login > /dev/null ; then
+      echo "  Azure login succesful"
+    else
+      echo "  WARNING: no Azure credentials! (you may need: 'az account clear')"
     fi
   fi
   if az account list > /dev/null; then
@@ -417,7 +419,7 @@ Params:
   "cloud/provider": "linode"
   "linode/token": "$LINODE_TOKEN"
   "linode/instance-image": "linode/centos8"
-  "linode/instance-type": "g6-standard-2"
+  "linode/instance-type": "$MGR_TYP"
   "linode/root-password": "r0cketsk8ts"
 Meta:
   color: "blue"
@@ -562,14 +564,10 @@ else
   _drpcli version_sets create - < contexts.yaml > /dev/null
 fi
 
-for mc in $SITES;
+echo "Building ALL SITES (will not deploy them all)"
+for reg in $ALLSITES;
 do
-  if [[ $SITES == "${PREFIX}-none" ]]; then
-    echo "Not building any sites."
-    break
-  fi
-  reg=$mc
-  [[ -n "$PREFIX" ]] && reg=$(echo $mc | sed 's/'${PREFIX}'-//g')
+  mc="${PREFIX}-$reg"
   case $reg in
     us-east) color="brown" ;;
     us-central) color="green" ;;
@@ -587,15 +585,28 @@ do
     echo "Creating $mc ($color)"
     echo "drpcli machines create \"{\"Name\":\"${mc}\", ... "
     drpcli machines create "{\"Name\":\"${mc}\", \
-      \"Workflow\":\"site-create\", \
+      \"Workflow\":\"discover-base\", \
       \"BootEnv\":\"sledgehammer\", \
       \"Description\":\"Edge DR Server\", \
       \"Profiles\":[\"$PREFIX\",\"linode\"], \
-      \"Params\":{\"demo/cluster-color\": \"${color}\", \"dr-server/install-drpid\": \"site-${reg}\", \"dr-server/initial-user\": \"${mc}\", \"linode/region\": \"${reg}\", \"network\firewall-ports\":[\"22/tcp\",\"8091/tcp\",\"8092/tcp\"] }, \
+      \"Params\":{\"demo/cluster-color\": \"${color}\", \"dr-server/install-drpid\": \"site-${reg}\", \"dr-server/initial-user\": \"${mc}\", \"linode/region\": \"${reg}\", \"network/firewall-ports\":[\"22/tcp\",\"8091/tcp\",\"8092/tcp\"] }, \
       \"Meta\":{\"BaseContext\":\"drpcli-runner\", \"color\":\"${color}\", \"icon\":\"cloud\"}}" >/dev/null
     sleep $LOOP_WAIT
   else
     echo "machine $mc already exists"
+  fi
+done
+
+for mc in $SITES;
+do
+  if [[ $SITES == "${PREFIX}-none" ]]; then
+    echo "Not building any sites."
+    break
+  fi
+  if _drpcli machines exists Name:$mc 2>/dev/null >/dev/null; then
+    _drpcli machines workflow Name:$mc cloud-site-create >/dev/null
+  else
+    echo "machine $mc does not exist"
   fi
 done
 
@@ -606,8 +617,8 @@ then
   # wait for the regional controllers to finish up before trying to do VersionSets
   for mc in $SITES
   do
-    if drpcli machines exists Name:$mc ; then
-      drpcli machines wait Name:$mc WorkflowComplete true 600 &
+    if _drpcli machines exists Name:$mc ; then
+      _drpcli machines wait Name:$mc WorkflowComplete true 600 &
     fi
   done
 
@@ -616,14 +627,15 @@ then
   # Manager should have a catalog in good state before running version sets
   _drpcli machines wait "Name:$MGR_LBL" WorkflowComplete true 360
 
+  echo "Starting Endpoint Setup"
   for mc in $SITES
   do
     reg=$mc
     [[ -n "$PREFIX" ]] && reg=$(echo $mc | sed 's/'${PREFIX}'-//g')
-    echo "mc completed bootstrap (will be site-$reg"
+    echo "  $mc completed bootstrap (will be site-$reg)"
     if drpcli endpoints exists "site-$reg" > /dev/null; then
-      echo "Setting VersionSets $BASE on site-$reg"
-      _drpcli endpoints update "site-$reg" "{\"VersionSets\":[\"license\",\"contexts\",\"$BASE\",\"site-$reg\"]}" > /dev/null
+      echo "  Setting VersionSets $BASE on site-$reg"
+      _drpcli endpoints update "site-$reg" "{\"VersionSets\":[\"license\",\"$BASE\",\"contexts\",\"site-$reg\"]}" > /dev/null
       _drpcli endpoints update "site-$reg" '{"Apply":true}' > /dev/null
     fi
   done
@@ -635,6 +647,7 @@ then
 
   # need to "wait" - monitor that we've finish applying this ...
   # check if apply set to true
+  echo "Starting Endpoint bootstrap"
   for mc in $SITES
   do
     reg=$mc
@@ -648,7 +661,7 @@ then
         COUNTER=$WAIT
         # if Actions object goes away, we've drained the queue of work
         [[ "$(drpcli endpoints show site-$reg | jq -r '.Actions')" == "null" ]] && { echo $BRKMSG; break; }
-        printf "Waiting for VersionSet Actions to complete ... (sleep $WAIT seconds ) ... "
+        printf "  Waiting for VersionSet Actions to complete ... (sleep $WAIT seconds ) ... "
         while (( COUNTER ))
         do
           sleep $WAIT
@@ -656,9 +669,6 @@ then
           (( COUNTER-- ))
         done
         (( LOOP++ ))
-        echo "setting bootstrap edge for site-$reg"
-        _drpcli machines meta add "Name:site-$reg" key icon val "chess rook" > /dev/null
-        _drpcli machines workflow "Name:site-$reg" bootstrap-edge  > /dev/null
       done
       (( TOT = BAIL * WAIT ))
 
@@ -668,6 +678,13 @@ then
       fi
     else
       echo "!!! Apply was not found to be 'true', check Endpoints received VersionSets appropriately."
+    fi
+    if _drpcli machines exists "Name:site-$reg" ; then
+      echo "  Setting bootstrap edge for site-$reg"
+      _drpcli machines meta set Name:site-$reg key icon val sitemap > /dev/null
+      _drpcli machines workflow Name:site-$reg bootstrap-edge  > /dev/null
+    else
+      echo "  WARNING: expected site-$reg does not exist.  Complete bootstrap manually!!"
     fi
   done
 fi # end if PREP

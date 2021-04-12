@@ -9,6 +9,7 @@ PATH=$PATH:.
 export RS_ENDPOINT=$(terraform output drp_manager)
 
 REMOVE="false"
+MANAGER="false"
 SCALE=10
 while getopts ":s:r" CmdLineOpts
 do
@@ -30,9 +31,19 @@ else
   echo "icons already set"
 fi
 
+if [ "$REMOVE" != "true" ] ; then
+  echo "First, checking for stuck machines"
+  stuck=$(drpcli machines list WorkflowComplete=false Runnable=true | jq -r .[].Name)
+  for x in $stuck; do
+    echo "  poking $x"
+    drpcli machines meta remove Name:$x param "BaseContext" || true >/dev/null 2>/dev/null
+    drpcli machines update Name:$x '{"Context":"" }' > /dev/null
+    drpcli machines update Name:$x '{"Context":"drpcli-runner"}' > /dev/null
+  done
+fi
+
 sites=$(drpcli endpoints list Apply Eq true | jq -r .[].Id)
-echo "sites set to:"
-echo $sites
+echo "sites set to: $sites"
 
 echo "create $SCALE load test machines"
 i=1
@@ -48,12 +59,16 @@ while (( i < SCALE )); do
     fi
   else
     if [ "$REMOVE" != "true" ] ; then
-      echo "creating $mc in manager"
-      sleep 1
-      drpcli machines create "{\"Name\":\"${mc}\", \
-        \"Workflow\":\"load-generator\", \
-        \"Description\":\"Load Test $i\", \
-        \"Meta\":{\"BaseContext\":\"runner\", \"icon\":\"cloud\"}}" >/dev/null
+      if [ "$MANAGER" == "true" ] ; then
+        echo "creating $mc in manager"
+        sleep 1
+        drpcli machines create "{\"Name\":\"${mc}\", \
+          \"Workflow\":\"load-generator\", \
+          \"Description\":\"Load Test $i\", \
+          \"Meta\":{\"BaseContext\":\"drpcli-runner\", \"icon\":\"cloud\"}}" >/dev/null
+      else
+        echo "not creating manager machine $mc (start with -m to include manager)"
+      fi
     else
       echo "skipping, $mc does not exist"
     fi
@@ -77,7 +92,7 @@ while (( i < SCALE )); do
         drpcli -u $s machines create "{\"Name\":\"${mc}\", \
           \"Workflow\":\"load-generator\", \
           \"Description\":\"Load Test $i\", \
-          \"Meta\":{\"BaseContext\":\"runner\", \"icon\":\"cloud\"}}" >/dev/null
+          \"Meta\":{\"BaseContext\":\"drpcli-runner\", \"icon\":\"cloud\"}}" >/dev/null
       else
         echo "skipping, $mc does not exist"
       fi

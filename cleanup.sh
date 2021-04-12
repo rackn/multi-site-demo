@@ -48,43 +48,55 @@ if [[ "$FORCE" == "true" ]]; then
   echo "WARNING: potential orphaned servers!! skipping WorkflowComplete test"
 else
   echo "waiting for all machines to be WorkflowComplete"
-  while [[ $(drpcli machines count WorkflowComplete Eq false) -gt 0 ]]; do
-    suspects=$(drpcli machines list WorkflowComplete Eq false | jq -r .[].Name)
+  while [[ $(drpcli machines count WorkflowComplete Eq false Workflow Ne "") -gt 0 ]]; do
+    suspects=$(drpcli machines list WorkflowComplete Eq false Workflow Ne "" | jq -r .[].Name)
     echo "... waiting 5 seconds.  Working Machines are [$suspects]"
     sleep 5
   done
   echo "done waiting"
 fi
 
-sites=$(drpcli endpoints list | jq -r .[].Description)
+sites=$(drpcli endpoints list | jq -r .[].Id)
 echo ""
-echo "sites set to:"
-echo $sites
-
+echo "Sites list: $sites"
+echo ""
 echo "setting machines to destroy"
-for mc in $sites;
-do
-  if drpcli machines exists Name:$mc > /dev/null
-  then
-    drpcli machines update Name:$mc '{"Locked":false}' > /dev/null
-    drpcli machines meta set Name:$mc key BaseContext to "drpcli-runner"
-    drpcli machines update Name:$mc '{"Context":"drpcli-runner"}' > /dev/null
-    drpcli machines workflow Name:$mc site-destroy > /dev/null
+for s in $sites; do
+  mc=$(drpcli endpoints show $s | jq -r .Meta.Uuid)
+  if drpcli machines exists $mc > /dev/null; then
+    echo "  destroy site $s machine $mc via workflow"
+    drpcli machines update $mc '{"Locked":false}' > /dev/null
+    drpcli machines meta set $mc key BaseContext to "drpcli-runner" > /dev/null
+    drpcli machines update $mc '{"Context":"drpcli-runner"}' > /dev/null
+    drpcli machines workflow $mc cloud-site-destroy > /dev/null
     # backslash escape seems to be needed, otherwise it's being intepreted as YAML input
-    drpcli machines set Name:$mc param Runnable to true > /dev/null
+    drpcli machines run $mc > /dev/null
   else
-    echo "machine $mc already does not exist"
+    echo "  site $s machine $mc already does not exist"
   fi
 done
 
 echo "waiting for machines to destroy"
-for mc in $sites;
-do
-  if drpcli machines exists Name:$mc > /dev/null
-  then
-    drpcli machines wait Name:$mc WorkflowComplete true 120
-    drpcli machines destroy Name:$mc
-    drpcli endpoints destroy $mc >/dev/null 2>/dev/null || :
+for s in $sites; do
+  mc=$(drpcli endpoints show $s | jq -r .Meta.Uuid)
+  if [[ -z "$mc" ]] ; then
+    echo "  endpoint $s already removed, no action required"
+  else
+    if drpcli machines exists $mc > /dev/null; then
+      echo "  waiting for removal of $s via $mc"
+      if drpcli machines wait $mc WorkflowComplete true 120 ; then
+        echo "  all clear, destroy $mc"
+        sleep 1
+        drpcli machines destroy $mc
+        drpcli endpoints destroy $s >/dev/null 2>/dev/null || :
+      else
+        echo "  WARNING workflow for $s on $mc did not complete!"
+        exit 1
+      fi
+    else
+      echo "  MANUAL CLEANUP! site $s does not have a managed machine $mc"
+      exit 1
+    fi
   fi
 done
 

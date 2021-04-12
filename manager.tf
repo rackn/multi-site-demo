@@ -63,8 +63,8 @@ resource "linode_instance" "drp_manager" {
     "drp_id" = var.manager_label
     "initial_workflow" = "universal-bootstrap"
     "initial_contents" = "universal,edge-lab"
-    "initial_plugins" = "filebeat"
-    "initial_profiles" = "bootstrap-contexts,bootstrap-elasticsearch,bootstrap-kibana,bootstrap-filebeat"
+    "initial_plugins" = ""
+    "initial_profiles" = "bootstrap-contexts"
     "initial_catalog" = "https://rebar-catalog.s3-us-west-2.amazonaws.com/jpmc-catalog.json"
     "open_ports" = "8091/tcp,8092/tcp,9300/tcp,9200/tcp,5601/tcp"
   }
