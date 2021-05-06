@@ -100,6 +100,18 @@ for s in $sites; do
   fi
 done
 
+if [[ "$FORCE" == "true" ]]; then
+  echo "WARNING: potential orphaned servers!! skipping WorkflowComplete test"
+else
+  echo "waiting for all machines to be WorkflowComplete"
+  while [[ $(drpcli machines count WorkflowComplete Eq false Workflow Ne "") -gt 0 ]]; do
+    suspects=$(drpcli machines list WorkflowComplete Eq false Workflow Ne "" | jq -r .[].Name)
+    echo "... waiting 5 seconds.  Working Machines are [$suspects]"
+    sleep 5
+  done
+  echo "done waiting"
+fi
+
 if [ "$FORCE" == "true" ] || [ $(drpcli machines count Context Eq "") -eq 1 ]; then
 
   echo "removing manager"

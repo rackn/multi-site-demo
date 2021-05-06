@@ -220,7 +220,7 @@ echo "Terraform Finished, expecting: export RS_ENDPOINT=${RS_ENDPOINT} && export
 echo "Script is idempotent - restart if needed!"
 
 echo "Waiting for API to be available"
-timeout 360 bash -c 'while [[ "$(curl -fsSL -o /dev/null -w %{http_code} http://$RS_IP:8091)" != "200" ]]; do sleep 3; done' || false
+timeout 360 bash -c 'while [[ "$(curl -fsSL --insecure -o /dev/null -w %{http_code} https://$RS_IP:8092)" != "200" ]]; do sleep 3; done' || false
 
 attempt=1
 while (( $attempt < 50 )); do
@@ -242,11 +242,7 @@ if [[ -f rackn-license.json ]]; then
   if [[ "$VALIDATE_LIC" == "true" ]] ; then
     echo "Checking Online License for rackn-license updates"
     LICENSE=$(cat rackn-license.json)
-    LICENSEBASE=$(jq -r '.sections.profiles["rackn-license"].Params["rackn/license-object"]' <<< ${LICENSE})
-    CONTACTID="$(jq -r .ContactId <<< ${LICENSEBASE})"
-    OWNERID="$(jq -r .OwnerId <<< ${LICENSEBASE})"
     KEY="$(jq -r '.sections.profiles["rackn-license"].Params["rackn/license"]' <<< ${LICENSE})"
-    VERSION="$(jq -r .Version <<< ${LICENSEBASE})"
     # first, add the leaf endpoints
     endpoints=$(cat rackn-license.json | jq -r '.sections.profiles["rackn-license"].Params["rackn/license-object"].Endpoints')
     matchany=$(jq -r "contains([\"MatchAny\"])" <<< $endpoints)
@@ -258,31 +254,26 @@ if [[ -f rackn-license.json ]]; then
       fi
       mc="site-$mc"
       licensed=$(jq -r "contains([\"$mc\"])" <<< $endpoints)
+      echo "  looking for $mc - licensed $licensed"
       if [[ "${licensed}" == "true" || "${matchany}" == "true" ]]; then
         echo "  endpoint $mc found in license!"
       else
+        echo "  adding $mc to license (returned)"
+        curl -X POST -H "rackn-endpointid: $mc" \
+          -H "Authorization: $KEY" \
+          https://cloudia.rackn.io/api/v1/license/update > /dev/null
         updated=true
-        echo "  adding $mc to license"
-        curl -X GET "https://1p0q9a8qob.execute-api.us-west-2.amazonaws.com/v40/license" \
-          -H "rackn-contactid: ${CONTACTID}" \
-          -H "rackn-ownerid: ${OWNERID}" \
-          -H "rackn-endpointid: ${mc}" \
-          -H "rackn-key: ${KEY}" \
-          -H "rackn-version: ${VERSION}" \
-          >/dev/null
       fi
     done
     if [[ "$updated" == "true" ]] ; then
+      echo "  Getting updated license"
       cp rackn-license.json rackn-license.old
-      curl -X GET "https://1p0q9a8qob.execute-api.us-west-2.amazonaws.com/v40/license" \
-        -H "rackn-contactid: ${CONTACTID}" \
-        -H "rackn-ownerid: ${OWNERID}" \
-        -H "rackn-endpointid: ${MGR_LBL}" \
-        -H "rackn-key: ${KEY}" \
-        -H "rackn-version: ${VERSION}" \
-        -o rackn-license.json
-      echo "License Verified"
+      curl -X POST -H "rackn-endpointid: $MGR_LBL" \
+        -H "Authorization: $KEY" \
+        -o rackn-license.json \
+        https://cloudia.rackn.io/api/v1/license/update > /dev/null
     fi
+    echo "License Verified"
   fi
 else
   echo "MISSING REQUIRED RACKN-LICENSE FILE"
@@ -427,6 +418,24 @@ Meta:
   title: "generated"
 EOF
 
+if [[ -f ~/.pnap/config.yaml ]]; then
+tee profiles/pnap.yaml >/dev/null << EOF
+---
+Name: "pnap"
+Description: "Phoenix NAP Credentials"
+Params:
+  "cloud/provider": "pnap"
+  "rsa/key-user": "ubuntu"
+  "pnap/client-id": "$(cat ~/.pnap/config.yaml | grep "clientId:" | awk '{split($0,a,": "); print a[2]}')"
+  "pnap/client-secret": "$(cat ~/.pnap/config.yaml | grep "clientSecret:" | awk '{split($0,a,": "); print a[2]}')"
+Meta:
+  color: "green"
+  icon: "cloud"
+  title: "generated"
+EOF
+else
+  echo "  Skipping Phoenix NAP, no ~/.pnap/config.yaml"
+fi
 
 echo "Setting the cluster-prefix profile ($PREFIX)"
 # upload linode credentials
@@ -500,7 +509,7 @@ if [[ "$(_drpcli profiles get global param "demo/cluster-prefix")" != "$PREFIX" 
 fi
 echo "drpcli profiles set global param network/firewall-ports to ... "
 drpcli profiles set global param "network/firewall-ports" to '[
-  "22/tcp", "8091/tcp", "8092/tcp", "6443/tcp", "8379/tcp", "8080/tcp", "8380/tcp", "10250/tcp"
+  "22/tcp", "6443/tcp", "8379/tcp", "8080/tcp", "8380/tcp", "10250/tcp"
 ]' >/dev/null
 
 
@@ -589,7 +598,7 @@ do
       \"BootEnv\":\"sledgehammer\", \
       \"Description\":\"Edge DR Server\", \
       \"Profiles\":[\"$PREFIX\",\"linode\"], \
-      \"Params\":{\"demo/cluster-color\": \"${color}\", \"dr-server/install-drpid\": \"site-${reg}\", \"dr-server/initial-user\": \"${mc}\", \"linode/region\": \"${reg}\", \"network/firewall-ports\":[\"22/tcp\",\"8091/tcp\",\"8092/tcp\"] }, \
+      \"Params\":{\"demo/cluster-color\": \"${color}\", \"dr-server/install-drpid\": \"site-${reg}\", \"dr-server/initial-user\": \"${mc}\", \"linode/region\": \"${reg}\", \"network/firewall-ports\":[\"22/tcp\"] }, \
       \"Meta\":{\"BaseContext\":\"drpcli-runner\", \"color\":\"${color}\", \"icon\":\"cloud\"}}" >/dev/null
     sleep $LOOP_WAIT
   else
