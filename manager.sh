@@ -116,7 +116,7 @@ MGR_LBL="global-manager"
 MGR_PWD="digitalrebar"
 MGR_RGN="us-west"
 MGR_IMG="linode/centos8"
-MGR_TYP="g6-standard-8"
+MGR_TYP="g6-standard-4"
 SSH_KEY="$(cat ~/.ssh/id_rsa.pub)"
 LINODE_TOKEN=${LINODE_TOKEN:-""}
 ALLSITES="us-west us-east us-central us-southeast"
@@ -228,6 +228,12 @@ while (( $attempt < 50 )); do
   if _drpcli -P ${MGR_PWD} info get > /dev/null ; then
     echo "no change: password already set to $MGR_PWD"
     break
+  else
+    if _drpcli -P r0cketsk8ts users password rocketskates ${MGR_PWD} > /dev/null ; then
+      echo "  setting password"
+    else
+      echo "  waiting for API..."
+    fi
   fi
   attempt=$(( attempt + 1 ))
 done
@@ -399,6 +405,13 @@ Meta:
 EOF
 else
   echo "  Skipping Digital Ocean, no token"
+fi
+
+if [[ $MIST_TOKEN ]]; then
+  echo "  setting Mist.io API Token"
+  drpcli profiles set global param "mist/api-token" to "$MIST_TOKEN" > /dev/null
+else
+  echo "  Skipping Mist.io Synch, no exported MIST_TOKEN"
 fi
 
 echo "  upload linode credentials"
