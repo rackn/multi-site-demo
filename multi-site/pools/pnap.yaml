@@ -1,0 +1,17 @@
+---
+Id: pnap
+Description: Phoenix NAP provisioning operations
+Meta:
+  color: blue
+  icon: cloud
+  title: Phoenix NAP Profile
+EnterActions:
+  AddProfiles:
+    - pnap
+ExitActions:
+  RemoveProfiles:
+    - pnap
+AllocateActions:
+  Workflow: cloud-provision
+ReleaseActions:
+  Workflow: cloud-decommission
